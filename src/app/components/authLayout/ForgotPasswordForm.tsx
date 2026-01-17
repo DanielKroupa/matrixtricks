@@ -3,41 +3,56 @@
 import Link from "next/link";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import type { ForgotPasswordFormData } from "@/app/helpers/forgot-password-schema";
 import { forgotPasswordSchema } from "@/app/helpers/forgot-password-schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "@/context/AuthContext";
+import { authClient } from "@/lib/auth-client";
 
 export default function ForgotPasswordForm() {
-  const [email, setEmail] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof ForgotPasswordFormData, string>>
-  >({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-    setIsSubmitted(false);
+  const { closeModal } = useAuth();
+  const router = useRouter();
 
-    const result = forgotPasswordSchema.safeParse({ email });
-    if (!result.success) {
-      const validationErrors: Partial<
-        Record<keyof ForgotPasswordFormData, string>
-      > = {};
-      result.error.issues.forEach((err) => {
-        const field = err.path[0] as keyof ForgotPasswordFormData;
-        validationErrors[field] = err.message;
+  const form = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: "" },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
+  async function onSubmit({ email }: ForgotPasswordFormData) {
+    setError("");
+    setSuccess(false);
+    setLoading(true);
+    try {
+      const result = await authClient.requestPasswordReset({
+        email,
+        redirectTo: "/reset-password",
       });
-      setErrors(validationErrors);
-      return;
-    }
 
-    console.log("Forgot Password:", result.data);
-    setIsSubmitted(true);
-    setEmail("");
-  };
+      if (result.error) {
+        setError(result.error.message || "Failed to send reset link");
+      } else {
+        setSuccess(true);
+        console.log("Reset link sent successfully");
+      }
+    } catch (err: any) {
+      setError(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -52,31 +67,38 @@ export default function ForgotPasswordForm() {
       </div>
 
       {/* Reset Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {success && (
+          <p className="text-green-600 bg-green-100 p-3 rounded-lg border-2 border-green-300">
+            Password reset link has been sent to your email. Please check your
+            inbox or spam folder
+          </p>
+        )}
         {/* Email Input */}
         <div>
           <input
             type="email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
             placeholder="Enter your email address"
             className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
               errors.email ? "border border-red-500" : ""
             }`}
+            required
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
           )}
+          {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
         </div>
 
         {/* Send Reset Link Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-cyan-800 py-2 font-semibold text-white transition-colors hover:bg-cyan-900  cursor-pointer"
+          className={`w-full rounded-lg bg-cyan-800 py-2 font-semibold text-white transition-colors hover:bg-cyan-900 
+            ${loading ? "opacity-50 cursor-not-allowed bg-cyan-900" : "cursor-pointer"}`}
         >
-          Send Reset Link
+          {loading ? "Sending..." : "Send Reset Link"}
         </button>
       </form>
 

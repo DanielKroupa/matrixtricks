@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
-import { LoginModal } from "./components/layout/LoginModal";
+import { LoginModal } from "./components/authLayout/LoginModal";
 import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({

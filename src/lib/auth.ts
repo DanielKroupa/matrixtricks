@@ -6,6 +6,8 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
 import { PrismaClient } from "../app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { EmailTemplate } from "@/app/components/email-template";
+import { resend } from "./resend";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL as string,
@@ -27,7 +29,16 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      console.log("Reset password URL:", user.email, ":", url);
+      // try {
+      //   const emailHtml = EmailTemplate({ firstName: user.email });
+      // } catch (err: any) {
+      //   console.error(err);
+      // }
+    },
   },
+
   user: {
     additionalFields: {
       role: {

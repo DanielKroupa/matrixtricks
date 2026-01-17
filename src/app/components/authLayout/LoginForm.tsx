@@ -14,6 +14,7 @@ import { authClient } from "@/lib/auth-client";
 
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import PrimaryButton from "@/components/ui/PrimaryButton";
 
 type Provider = "google" | "facebook" | "apple";
 
@@ -181,14 +182,13 @@ export default function LoginForm() {
         )}
 
         {/* Sign In Button */}
-        <button
+        <PrimaryButton
           type="submit"
-          disabled={loading}
-          className={`w-full rounded-lg bg-cyan-800 py-2.5 font-semibold text-white shadow-md transition-colors hover:bg-cyan-900 
-          ${loading ? "opacity-50 cursor-not-allowed bg-cyan-900" : "cursor-pointer"}`}
+          loading={loading}
+          loadingText="Signing in..."
         >
-          {loading ? "Signing In..." : "Sign In"}
-        </button>
+          Sign In
+        </PrimaryButton>
         <Link
           href="/forgot-password"
           className="block w-full text-center text-sm dark:text-cyan-500 text-cyan-700 hover:text-cyan-900 dark:hover:text-cyan-600 cursor-pointer"
