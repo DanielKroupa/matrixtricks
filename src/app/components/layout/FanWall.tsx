@@ -1,13 +1,15 @@
 import Image from "next/image";
+import { User } from "@/lib/auth";
+import ProfileInformation from "./ProfileInformation";
 
 export function FanWall() {
   return (
-    <div className="w-full md:block mx-auto my-3 text-white px-1 md:px-0">
-      <p className="text-lg text-center md:px-4  bg-cyan-700 py-2 rounded-t-lg">
+    <div className="w-full md:block mx-auto my-3 px-1 md:px-0">
+      <p className="text-lg text-center md:px-4 text-white  bg-cyan-700 py-2 rounded-t-lg">
         FanWall
       </p>
       {/* Pinned comment */}
-      <div className="bg-[#444444] py-4">
+      <div className="dark:bg-[#444444] bg-neutral-200 py-4">
         <div className="flex flex-row justify-baseline items-center md:gap-4 gap-2 md:px-6 px-2">
           <div className="">
             <Image
@@ -20,11 +22,15 @@ export function FanWall() {
             <span className="absolute ml-8 text-sm select-none font-medium -mt-2 bg-yellow-600 px-2.5 py-0.5 rounded-full">
               VIP
             </span>
+            {/* <ProfileInformation user={user} /> */}
           </div>
           <div className="flex flex-col space-y-1">
             <h5 className="font-medium">Title - optional</h5>
             <p>Alien</p>
-            <div className="bg-neutral-500 py-2 px-4 rounded-lg shadow-md">
+            <div
+              className="dark:bg-neutral-500 bg-neutral-300 py-2 px-4 rounded-lg shadow
+            "
+            >
               <p className="font-light md:text-base text-sm">
                 Lorem ipsum maecenas viverra diam eget aliquet...
                 <span className="font-medium"> Read more</span>
@@ -34,7 +40,7 @@ export function FanWall() {
         </div>
       </div>
       {/* Message section */}
-      <div className="bg-gray-700 py-4">
+      <div className="dark:bg-neutral-700 bg-neutral-200 py-4">
         <div className="flex flex-row justify-baseline items-center md:gap-4 gap-2 md:px-6 px-2 py-4">
           <div className="w-1/4 md:w-auto">
             <Image

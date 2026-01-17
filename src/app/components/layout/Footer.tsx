@@ -17,20 +17,19 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="flex flex-col items-center text-white w-full bg-gray-700">
+    <footer className="flex flex-col items-center bg:text-dark w-full bg-neutral-300 dark:bg-neutral-700">
       <p className="text-base text-center pt-4">Follow me on</p>
 
-      <div className="flex justify-center gap-6 py-4  w-full">
+      <div className="flex justify-center gap-6 py-4 text-black w-full">
         {socialLinks.map(({ label, href, icon: Icon }, i) => (
           <Tooltip key={i} text={label}>
             <a
               href={href}
-              className="rounded-full group focus:border-white transition-colors hover:border-white flex justify-center items-center border-2 border-neutral-400 p-3"
+              className="rounded-full group dark:focus:border-white focus:border-neutral-800  transition-colors dark:hover:border-white hover:border-neutral-700 flex justify-center items-center border-2 border-neutral-400 p-3"
             >
               <Icon
                 size={24}
-                className="group-hover:fill-white transition-colors group-focus:fill-white "
-                color="#aaaaaa"
+                className="group-hover:fill-black dark:group-hover:fill-white dark:text-neutral-300 text-neutral-700 transition-colors group-focus:fill-white dark:group-focus:fill-white "
               />
             </a>
           </Tooltip>
@@ -42,7 +41,7 @@ export function Footer() {
         <Link href="/">Cookies settings</Link>
       </div>
 
-      <div className="py-2">
+      <div className="py-2 dark:bg-neutral-800 bg-neutral-400 w-full flex justify-center">
         <p>© 2025 MatrixTricks.com</p>
       </div>
     </footer>

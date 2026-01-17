@@ -1,8 +1,10 @@
+// biome-ignore assist/source/organizeImports: <explanation>
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { LoginModal } from "./components/layout/LoginModal";
+import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -17,14 +19,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+  modal,
+}: {
   children: React.ReactNode;
-}>) {
+  modal: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} xl:container mx-auto antialiased`}>
+    <html suppressHydrationWarning lang="en">
+      <body
+        className={`${poppins.variable} xl:container mx-auto antialiased  `}
+      >
         <AuthProvider>
-          {children}
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            {modal}
+          </ThemeProvider>
+
           <LoginModal />
         </AuthProvider>
       </body>

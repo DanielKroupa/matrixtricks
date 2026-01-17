@@ -1,8 +1,9 @@
+import { createAuthClient } from "better-auth/client";
 import { nextCookies } from "better-auth/next-js";
-import { createAuthClient } from "better-auth/react";
+import { inferAdditionalFields } from "better-auth/client/plugins";
+import { auth } from "./auth";
 
-export const { signIn, signUp, signOut, useSession } = createAuthClient({
-  /** The base URL of the server (optional if you're using the same domain) */
-  baseURL: "http://localhost:3000",
-  plugins: [nextCookies()],
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  plugins: [inferAdditionalFields<typeof auth>(), nextCookies()],
 });

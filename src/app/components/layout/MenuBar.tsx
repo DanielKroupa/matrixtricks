@@ -1,5 +1,5 @@
-import { GoalBar } from './GoalBar'
-import { PostSettings } from './PostSettings'
+import { GoalBar } from "./GoalBar";
+import { PostSettings } from "./PostSettings";
 
 export function MenuBar() {
   return (
@@ -9,8 +9,7 @@ export function MenuBar() {
       </div>
       <div className="flex gap-2 w-full md:w-auto justify-between md:justify-baseline">
         <PostSettings />
-        <FilterBtn />
       </div>
     </div>
-  )
+  );
 }

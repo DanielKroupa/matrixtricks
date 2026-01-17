@@ -27,7 +27,7 @@ export function LoginModal() {
         {/* Close Button */}
         <button
           onClick={closeModal}
-          className="absolute rounded-full bg-neutral-700 shadow-md p-1.5 right-4 top-4 text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+          className="absolute rounded-full bg-neutral-300 dark:bg-neutral-700 dark:shadow-md p-1.5 right-4 top-4 text-gray-500 transition-colors hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300 cursor-pointer"
           aria-label="Close modal"
           title="Close"
         >

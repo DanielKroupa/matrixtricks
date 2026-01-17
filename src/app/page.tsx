@@ -1,7 +1,11 @@
+// biome-ignore assist/source/organizeImports: <explanation>
 import { Banner } from "./components/Banner";
 import { Bio } from "./components/Bio";
+import { FanWall } from "./components/layout/FanWall";
+import { Footer } from "./components/layout/Footer";
 import { GoalBar } from "./components/layout/GoalBar";
 import { Navbar } from "./components/layout/Navbar";
+import { OtherProjects } from "./components/layout/OtherProjects";
 import { Posts } from "./components/layout/Posts";
 import { PostSettings } from "./components/layout/PostSettings";
 import { Rubrics } from "./components/layout/Rubrics";
@@ -24,6 +28,9 @@ export default function Home() {
         <PostSettings />
       </div>
       <Posts />
+      <FanWall />
+      <OtherProjects />
+      <Footer />
     </>
   );
 }

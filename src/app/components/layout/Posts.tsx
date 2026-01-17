@@ -1,79 +1,87 @@
 import Image from "next/image";
 
+import { TextPost } from "./TextPost";
+
 export function Posts() {
+  const textPosts = [
+    {
+      title:
+        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
+      body: (
+        <>
+          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
+          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
+          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
+          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
+          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
+          amet leo odio scelerisque amet. At ut mollis turpis etiam
+          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
+          eget facilisi porttitor eu sociis diam.
+        </>
+      ),
+    },
+    {
+      title:
+        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
+      body: (
+        <>
+          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
+          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
+          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
+          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
+          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
+          amet leo odio scelerisque amet. At ut mollis turpis etiam
+          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
+          eget facilisi porttitor eu sociis diam.
+        </>
+      ),
+    },
+    {
+      title:
+        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
+      body: (
+        <>
+          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
+          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
+          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
+          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
+          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
+          amet leo odio scelerisque amet. At ut mollis turpis etiam
+          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
+          eget facilisi porttitor eu sociis diam.
+        </>
+      ),
+    },
+    {
+      title:
+        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
+      body: (
+        <>
+          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
+          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
+          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
+          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
+          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
+          amet leo odio scelerisque amet. At ut mollis turpis etiam
+          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
+          eget facilisi porttitor eu sociis diam.
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
       {/* Texts */}
-      <div className="p-2 w-full grid gap-4">
-        <div className="bg-neutral-700 py-2 px-4">
-          <h3 className="text-xl py-4 px-2">
-            Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo
-            dignissim elementum pharetra.
-          </h3>
-          <p className="text-normal p-2">
-            Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta
-            a ultrices fermentum. In id tellus cras tristique. Tempus porttitor
-            ut mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra.
-            Donec diam aenean eu est. Adipiscing habitant suscipit ut mattis
-            malesuada nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A
-            eget egestas amet leo odio scelerisque amet. At ut mollis turpis
-            etiam pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis
-            lorem eget facilisi porttitor eu sociis diam.
-          </p>
-        </div>
-        <div className="bg-neutral-700 py-2 px-4">
-          <h3 className="text-xl py-4 px-2">
-            Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo
-            dignissim elementum pharetra.
-          </h3>
-          <p className="text-normal p-2">
-            Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta
-            a ultrices fermentum. In id tellus cras tristique. Tempus porttitor
-            ut mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra.
-            Donec diam aenean eu est. Adipiscing habitant suscipit ut mattis
-            malesuada nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A
-            eget egestas amet leo odio scelerisque amet. At ut mollis turpis
-            etiam pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis
-            lorem eget facilisi porttitor eu sociis diam.
-          </p>
-        </div>
-        <div className="bg-neutral-700 py-2 px-4">
-          <h3 className="text-xl py-4 px-2">
-            Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo
-            dignissim elementum pharetra.
-          </h3>
-          <p className="text-normal p-2">
-            Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta
-            a ultrices fermentum. In id tellus cras tristique. Tempus porttitor
-            ut mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra.
-            Donec diam aenean eu est. Adipiscing habitant suscipit ut mattis
-            malesuada nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A
-            eget egestas amet leo odio scelerisque amet. At ut mollis turpis
-            etiam pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis
-            lorem eget facilisi porttitor eu sociis diam.
-          </p>
-        </div>
-        <div className="bg-neutral-700 py-2 px-4">
-          <h3 className="text-xl py-4 px-2">
-            Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo
-            dignissim elementum pharetra.
-          </h3>
-          <p className="text-normal p-2">
-            Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta
-            a ultrices fermentum. In id tellus cras tristique. Tempus porttitor
-            ut mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra.
-            Donec diam aenean eu est. Adipiscing habitant suscipit ut mattis
-            malesuada nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A
-            eget egestas amet leo odio scelerisque amet. At ut mollis turpis
-            etiam pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis
-            lorem eget facilisi porttitor eu sociis diam.
-          </p>
-        </div>
+      <div className="p-2 w-full grid gap-4 dark:text-white text-black">
+        {textPosts.map((post, index) => (
+          <TextPost key={index} title={post.title} body={post.body} />
+        ))}
       </div>
       {/* VideoList */}
       <div className="grid lg:grid-cols-5 md:grid-cols-4 grid-cols-3 gap-2 p-2">
         {/* Video */}
-        <div className="bg-neutral-700 rounded">
+        <div className="dark:bg-neutral-700 rounded bg-neutral-300">
           <div className=" flex justify-between h-64 ">
             <div className="p-2.5">
               <p className="text-sm"> Basketbal Shaolin</p>

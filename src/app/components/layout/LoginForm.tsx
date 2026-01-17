@@ -1,55 +1,87 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+
+import { loginSchema, LoginFormData } from "@/app/helpers/login-schema";
 
 import Image from "next/image";
-import { FaApple, FaCheck } from "react-icons/fa6";
+import { FaApple, FaCheck, FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { signIn } from "@/lib/auth-client";
-import type { LoginFormData } from "@/app/helpers/login-schema";
-import { loginSchema } from "@/app/helpers/login-schema";
+import { authClient } from "@/lib/auth-client";
 
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 type Provider = "google" | "facebook" | "apple";
 
 export default function LoginForm() {
   const { switchForm } = useAuth();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [staySignedIn, setStaySignedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(false);
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof LoginFormData, string>>
-  >({});
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSocialSignIn = async (provider: Provider) => {
     try {
       setSocialLoading(true);
-      await signIn.social({ provider });
+      await authClient.signIn.social({ provider });
     } catch (err) {
       console.error("Social sign-in error:", err);
     } finally {
       setSocialLoading(false);
     }
   };
+  const router = useRouter();
+  const { closeModal } = useAuth();
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setErrors({});
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
-    const result = loginSchema.safeParse({ username, password });
-    if (!result.success) {
-      const validationErrors: Partial<Record<keyof LoginFormData, string>> = {};
-      result.error.issues.forEach((err) => {
-        const field = err.path[0] as keyof LoginFormData;
-        validationErrors[field] = err.message;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = form;
+
+  async function onSubmit({ email, password, rememberMe }: LoginFormData) {
+    setServerError(null);
+    setLoading(true);
+    try {
+      const { error } = await authClient.signIn.email({
+        email,
+        password,
+        rememberMe: rememberMe ?? false,
+        callbackURL: "/",
       });
-      setErrors(validationErrors || "Something Went wrong.");
-      return;
-    }
 
-    console.log("Login:", { ...result.data, staySignedIn });
+      if (error) {
+        setServerError(
+          typeof error === "string"
+            ? error
+            : error.message || "Something went wrong",
+        );
+        console.log(error);
+      } else {
+        // close modal, navigate home and refresh to update session state
+        closeModal();
+        router.push("/");
+        router.refresh();
+      }
+    } catch (err: any) {
+      setServerError(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -62,38 +94,59 @@ export default function LoginForm() {
       </div>
 
       {/* Login Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Username Input */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Email Input */}
         <div>
           <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Nickname"
-            className={`mt-2 w-full rounded-lg bg-neutral-700 px-4 py-2.5 text-neutral-300  placeholder-neutral-500 transition-colors outline-none shadow-md ${
-              errors.username ? "border border-red-500" : ""
+            type="email"
+            {...register("email")}
+            autoFocus
+            placeholder="Email"
+            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+              errors.email ? "border border-red-500" : ""
             }`}
             required
           />
-          {errors.username && (
-            <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
           )}
         </div>
 
         {/* Password Input */}
-        <div>
+        <div className="relative">
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type={showPassword ? "text" : "password"}
+            {...register("password")}
             placeholder="Password"
-            className={`mt-2 w-full rounded-lg bg-neutral-700 px-4 py-2.5 text-neutral-300 placeholder-neutral-500 transition-colors outline-none shadow-md ${
+            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 pr-10 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
               errors.password ? "border border-red-500" : ""
             }`}
             required
           />
+          <button
+            type="button"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((s) => !s)}
+            className="absolute right-3 top-7.5 -translate-y-1/2 text-neutral-600 hover:text-neutral-900"
+          >
+            {showPassword ? (
+              <FaEyeSlash
+                size={20}
+                className="cursor-pointer dark:text-neutral-500 dark:hover:text-neutral-400"
+                title="Show password"
+              />
+            ) : (
+              <FaEye
+                size={20}
+                className="cursor-pointer dark:text-neutral-500 dark:hover:text-neutral-400"
+                title="Hide password"
+              />
+            )}
+          </button>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            <p className="mt-1 text-sm text-red-500">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -106,42 +159,53 @@ export default function LoginForm() {
             <input
               id="stay-signed-in"
               type="checkbox"
-              checked={staySignedIn}
-              onChange={(e) => setStaySignedIn(e.target.checked)}
+              {...register("rememberMe")}
               className="sr-only peer"
-              aria-checked={staySignedIn}
+              aria-checked={watch("rememberMe")}
             />
 
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-gray-600 bg-neutral-800 transition-colors peer-checked:bg-cyan-700 peer-checked:border-cyan-700">
-              {staySignedIn && <FaCheck size={14} />}
+            <span className="inline-flex h-5 w-5 items-center justify-center border-gray-400 rounded border dark:border-gray-600 dark:bg-neutral-800 bg-neutral-300 transition-colors peer-checked:bg-cyan-700 peer-checked:border-cyan-700">
+              {watch("rememberMe") && (
+                <FaCheck size={14} className="text-white" />
+              )}
             </span>
 
-            <span className="text-sm text-neutral-300">Stay signed in</span>
+            <span className="text-sm dark:text-neutral-300 text-neutral-700">
+              Stay signed in
+            </span>
           </label>
         </div>
+
+        {serverError && (
+          <p className="mt-1 text-sm text-red-500">{serverError}</p>
+        )}
 
         {/* Sign In Button */}
         <button
           type="submit"
-          className="w-full rounded-lg bg-cyan-800 py-2.5 font-semibold text-white shadow-md transition-colors hover:bg-cyan-900 cursor-pointer"
+          disabled={loading}
+          className={`w-full rounded-lg bg-cyan-800 py-2.5 font-semibold text-white shadow-md transition-colors hover:bg-cyan-900 
+          ${loading ? "opacity-50 cursor-not-allowed bg-cyan-900" : "cursor-pointer"}`}
         >
-          Sign In
+          {loading ? "Signing In..." : "Sign In"}
         </button>
-        <button
-          onClick={() => switchForm("forgot")}
-          className="block w-full text-sm text-cyan-500 transition-colors hover:text-cyan-600 cursor-pointer"
+        <Link
+          href="/forgot-password"
+          className="block w-full text-center text-sm dark:text-cyan-500 text-cyan-700 hover:text-cyan-900 dark:hover:text-cyan-600 cursor-pointer"
         >
-          Forgot Password?
-        </button>
+          Forgot your Password?
+        </Link>
       </form>
 
       {/* Divider */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t dark:border-neutral-600"></div>
+          <div className="w-full border-t border-neutral-300 dark:border-neutral-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-neutral-800 text-neutral-400">Or also</span>
+          <span className="px-2 dark:bg-neutral-800 bg-white text-neutral-400">
+            Or also
+          </span>
         </div>
       </div>
 
@@ -151,7 +215,7 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => handleSocialSignIn("facebook")}
-          className="flex w-64 items-center px-4 rounded-lg border border-neutral-500 py-2 transition-colors bg-neutral-700 hover:bg-neutral-600 cursor-pointer gap-3"
+          className="flex w-64 cursor-pointer items-center px-4 border-neutral-400 hover:bg-neutral-300 rounded-lg border text-black py-2 transition-colors bg-neutral-200 gap-3 disabled:opacity-60  dark:text-white  dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-500"
         >
           <Image
             src="/icons/facebook.svg"
@@ -166,7 +230,7 @@ export default function LoginForm() {
           type="button"
           onClick={() => handleSocialSignIn("google")}
           disabled={socialLoading}
-          className={`flex w-64 items-center px-4 rounded-lg border border-neutral-500 py-2 transition-colors bg-neutral-700 hover:bg-neutral-600  gap-3 disabled:opacity-60 ${
+          className={`flex w-64 items-center px-4 border-neutral-400 hover:bg-neutral-300 rounded-lg border text-black py-2 transition-colors bg-neutral-200 gap-3 disabled:opacity-60  dark:text-white  dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-500 ${
             socialLoading
               ? "cursor-not-allowed pointer-events-none"
               : "cursor-pointer"
@@ -180,7 +244,7 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => handleSocialSignIn("apple")}
-          className="flex w-64 items-center px-4 rounded-lg border border-neutral-500 py-2 transition-colors bg-neutral-700 hover:bg-neutral-600 cursor-pointer gap-3 disabled:opacity-60"
+          className="flex w-64 cursor-pointer items-center px-4 border-neutral-400 hover:bg-neutral-300 rounded-lg border text-black py-2 transition-colors bg-neutral-200 gap-3 disabled:opacity-60  dark:text-white  dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-500"
         >
           <FaApple size={24} />
           Sign In with Apple
@@ -188,15 +252,18 @@ export default function LoginForm() {
       </div>
 
       {/* Footer Links */}
-      <div className="space-y-2 border-t border-neutral-600 pt-4 ">
+      <div className="space-y-2 border-t dark:border-neutral-600 border-neutral-300 pt-4 ">
         <button
           onClick={() => switchForm("register")}
           className="block w-full text-center text-sm text-neutral-500 dark:text-gray-40 cursor-pointer "
         >
           Don't have an account?{" "}
-          <span className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700">
+          <Link
+            href="/sign-up"
+            className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
+          >
             Sign up
-          </span>
+          </Link>
         </button>
       </div>
     </div>

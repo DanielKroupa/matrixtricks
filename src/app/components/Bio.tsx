@@ -10,12 +10,12 @@ export function Bio() {
          mt-16"
         >
           <div className="bg-cyan-700 py-2 md:px-4 px-2">
-            <h3 className="text-xl font-medium text-white text-center">
+            <h3 className="text-xl font-medium text-white  text-center">
               Alien
             </h3>
           </div>
-          <div className="bg-neutral-700 py-2 px-4 rounded-b-sm">
-            <h4 className="text-center text-white font-normal">
+          <div className="dark:bg-neutral-700 bg-neutral-200 py-2 px-4 rounded-b-sm">
+            <h4 className="text-center dark:text-white text-black font-normal">
               Basketball player, Creator, Visionair From Prague, Czech
               Republic..
             </h4>
@@ -33,7 +33,7 @@ export function Bio() {
 
           <Link
             href="/"
-            className="bg-neutral-700 rounded-lg py-3 px-4 basis-1/3 text-center shadow-md shadow-neutral-900/25"
+            className="flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 dark:border-none border-neutral-400 px-4 py-2 dark:text-white text-black transition cursor-pointer dark:shadow-md shadow-neutral-900/25"
           >
             Message
           </Link>
