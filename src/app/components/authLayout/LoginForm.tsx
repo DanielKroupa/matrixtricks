@@ -255,12 +255,12 @@ export default function LoginForm() {
       <div className="space-y-2 border-t dark:border-neutral-600 border-neutral-300 pt-4 ">
         <button
           onClick={() => switchForm("register")}
-          className="block w-full text-center text-sm text-neutral-500 dark:text-gray-40 cursor-pointer "
+          className="block w-full text-center text-sm text-neutral-500"
         >
-          Don't have an account?{" "}
+          Don't have an account?
           <Link
             href="/sign-up"
-            className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
+            className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700 cursor-pointer ml-1"
           >
             Sign up
           </Link>

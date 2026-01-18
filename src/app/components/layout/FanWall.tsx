@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { User } from "@/lib/auth";
-import ProfileInformation from "./ProfileInformation";
 
 export function FanWall() {
   return (
