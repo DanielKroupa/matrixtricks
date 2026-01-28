@@ -71,7 +71,7 @@ export default function AvatarUpload({
 
   return (
     <div className="flex gap-2 items-center mt-6">
-      <div className="w-20 h-20 bg-neutral-700 rounded-full overflow-hidden flex items-center justify-center">
+      <div className="w-20 h-20 dark:bg-neutral-700 bg-neutral-300 rounded-full overflow-hidden flex items-center justify-center">
         {previewUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <Image
@@ -114,7 +114,7 @@ export default function AvatarUpload({
           />
           <label
             htmlFor="avatar_upload"
-            className="bg-cyan-900 flex text-white py-2 px-3 rounded mr-2 w-fit cursor-pointer shadow-md justify-center items-center gap-2"
+            className="dark:bg-cyan-900 bg-cyan-800 flex text-white py-2 px-3 rounded mr-2 w-fit cursor-pointer shadow-md justify-center items-center gap-2"
           >
             <MdOutlineFileUpload size={20} />
             Change avatar
@@ -147,7 +147,7 @@ export default function AvatarUpload({
                 <button
                   type="button"
                   onClick={clearFile}
-                  className="bg-neutral-600 text-white py-1 px-2 rounded"
+                  className="cursor-pointer dark:bg-neutral-600 bg-neutral-500 text-white py-1 px-2 rounded"
                 >
                   Remove
                 </button>

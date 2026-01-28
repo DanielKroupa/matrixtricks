@@ -50,7 +50,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="bg-neutral-700 w-1/6 p-1.5 space-y-1.5">
+    <div className="dark:bg-neutral-700 bg-neutral-200 rounded-bl-md w-1/6 p-1.5 space-y-1.5 min-h-175">
       {menuItems.slice(0, 6).map((item) => {
         const isActive =
           item.href === "/admin"
@@ -59,8 +59,8 @@ export default function AdminSidebar() {
         const itemClass =
           "flex py-2.5 px-3 gap-2 rounded items-center font-medium transition " +
           (isActive
-            ? "bg-cyan-900 text-white"
-            : "bg-neutral-600 text-white/90 hover:bg-neutral-500");
+            ? "dark:bg-cyan-900 bg-cyan-800 text-white"
+            : "dark:bg-neutral-600 bg-neutral-300 dark:text-white/90 text-neutral-800 dark:hover:bg-neutral-500 hover:bg-neutral-400");
         return (
           <Link href={item.href} className={itemClass} key={item.id}>
             <item.Icon size={20} />
@@ -68,7 +68,7 @@ export default function AdminSidebar() {
           </Link>
         );
       })}
-      <hr className="text-neutral-600 border-2 rounded-full m-4" />
+      <hr className="dark:text-neutral-600 text-neutral-300 border-2 rounded-full m-4" />
       <Link
         href={menuItems[6].href}
         className={
