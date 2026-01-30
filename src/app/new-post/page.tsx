@@ -26,11 +26,6 @@ export default async function Page() {
       <Navbar />
       <Banner />
       <Title />
-
-      <div>
-        <div></div>
-        <div></div>
-      </div>
     </>
   );
 }

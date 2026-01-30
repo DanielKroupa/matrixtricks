@@ -2,6 +2,7 @@ import { getServerSession } from "@/lib/get-session";
 import { Navbar } from "../components/layout/Navbar";
 import { forbidden, unauthorized } from "next/navigation";
 import AdminSidebar from "./AdminSidebar";
+import { Copyright } from "../components/layout/Copyright";
 
 export default async function Layout({
   children,
@@ -32,6 +33,7 @@ export default async function Layout({
           </div>
         </div>
       </div>
+      <Copyright />
     </div>
   );
 }

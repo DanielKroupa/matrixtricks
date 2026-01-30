@@ -1,4 +1,6 @@
 import Image from "next/image";
+import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
+import Badge from "../ui/Badge";
 
 export function FanWall() {
   return (
@@ -17,9 +19,7 @@ export function FanWall() {
               width={65}
               height={65}
             />
-            <span className="absolute ml-8 text-sm select-none font-medium -mt-2 bg-yellow-600 px-2.5 py-0.5 rounded-full">
-              VIP
-            </span>
+            <Badge />
             {/* <ProfileInformation user={user} /> */}
           </div>
           <div className="flex flex-col space-y-1">
@@ -29,7 +29,7 @@ export function FanWall() {
               className="dark:bg-neutral-500 bg-neutral-300 py-2 px-4 rounded-lg shadow
             "
             >
-              <p className="font-light md:text-base text-sm">
+              <p className="font-normal md:text-base text-sm">
                 Lorem ipsum maecenas viverra diam eget aliquet...
                 <span className="font-medium"> Read more</span>
               </p>
@@ -51,7 +51,7 @@ export function FanWall() {
           </div>
           <div className="flex flex-col space-y-1">
             <p>Alien</p>
-            <div className="bg-neutral-500 py-2 px-4 rounded-lg shadow-md">
+            <div className="dark:bg-neutral-500 bg-neutral-300 py-2 px-4 rounded-lg shadow-md">
               <p className="font-light md:text-base text-sm">
                 Lorem ipsum maecenas viverra diam eget aliquet...
                 <span className="font-medium"> Read more</span>
@@ -71,7 +71,7 @@ export function FanWall() {
           </div>
           <div className="flex flex-col space-y-1 w-4/5">
             <p>Alien</p>
-            <div className="bg-neutral-500 py-2 px-4 rounded-lg shadow-md">
+            <div className="dark:bg-neutral-500 bg-neutral-300 py-2 px-4 rounded-lg shadow-md">
               <p className="font-light md:text-base text-sm">
                 Lorem ipsum dolor sit amet consectetur. Faucibus nunc et posuere
                 fermentum aliquet purus fermentum. Urna bibendum ornare aliquet
@@ -93,8 +93,8 @@ export function FanWall() {
           </div>
           <div className="flex flex-col space-y-1">
             <p>Alien</p>
-            <div className="bg-neutral-500 py-2 px-4 rounded-lg shadow-md">
-              <p className="font-light">
+            <div className="dark:bg-neutral-500 bg-neutral-300 py-2 px-4 rounded-lg shadow-md">
+              <p className="font-normal">
                 Lorem ipsum maecenas viverra diam eget aliquet...
                 <span className="font-medium"> Read more</span>
               </p>
@@ -105,33 +105,29 @@ export function FanWall() {
       {/* Form */}
       <form
         action=""
-        className="py-4 bg-gray-700 w-full flex-row justify-center md:px-16 px-4 text-white"
+        className="py-4 dark:bg-neutral-700 bg-neutral-200 border-t-2 border-neutral-300 w-full flex-row justify-center md:px-16 px-4 dark:text-white text-neutral-700"
       >
         <div className="md:flex block flex-row gap-2 md:w-1/2 w-full py-2">
           <input
             type="text"
             placeholder="Nickname*"
             name=""
-            className="bg-neutral-500 outline-none md:w-96 w-full focus:ring-2 ring-neutral-400 placeholder:text-[#aaaaaa] rounded-md mb-2 md:mb-0 py-2 indent-2 shadow-md "
+            className="dark:bg-neutral-500 bg-neutral-300 outline-none md:w-96 w-full focus:ring-2 ring-neutral-400 dark:placeholder:text-[#aaaaaa] placeholder:text-neutral-400 rounded-md mb-2 md:mb-0 py-2 indent-2 shadow-md "
           />
           <input
             type="text"
             placeholder="Contact*"
-            className="bg-neutral-500 outline-none md:w-96 w-full focus:ring-2 ring-neutral-400 placeholder:text-[#aaaaaa] rounded-md py-2 indent-2 shadow-md "
+            className="dark:bg-neutral-500 bg-neutral-300 outline-none md:w-96 w-full focus:ring-2 ring-neutral-400 dark:placeholder:text-[#aaaaaa] placeholder:text-neutral-400 rounded-md mb-2 md:mb-0 py-2 indent-2 shadow-md"
           />
         </div>
-        <input
-          type="text"
-          placeholder="Title"
-          className="bg-neutral-500 focus:ring-2 mb-2 ring-neutral-400  outline-none md:w-3xl w-full placeholder:text-[#aaaaaa] rounded-md py-2 indent-2 shadow-md "
-        />
-        <textarea
-          name=""
-          id=""
-          rows={3}
-          placeholder="Type a message... Show your support or ask a question..."
-          className="bg-neutral-500 focus:ring-2 ring-neutral-400 outline-none w-full placeholder:text-[#aaaaaa] rounded-md py-2 px-2 shadow-md "
-        ></textarea>
+        <div className="flex flex-col gap-2">
+          <input
+            type="text"
+            placeholder="Title"
+            className="dark:bg-neutral-500 bg-neutral-300 outline-none md:w-1/2 w-full focus:ring-2 ring-neutral-400 dark:placeholder:text-[#aaaaaa] placeholder:text-neutral-400 rounded-md mb-2 md:mb-0 py-2 indent-2 shadow-md "
+          />
+          <AutoResizeTextarea placeholder="Type a message.. Show your support or ask a question" />
+        </div>
       </form>
     </div>
   );

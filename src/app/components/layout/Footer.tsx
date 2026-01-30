@@ -7,6 +7,7 @@ import {
 import Link from "next/link";
 
 import { Tooltip } from "../ui/Tooltip";
+import { Copyright } from "./Copyright";
 
 const socialLinks = [
   { label: "Facebook", href: "#", icon: FaFacebookF },
@@ -41,9 +42,7 @@ export function Footer() {
         <Link href="/">Cookies settings</Link>
       </div>
 
-      <div className="py-2 dark:bg-neutral-800 bg-neutral-400 w-full flex justify-center">
-        <p>© 2025 MatrixTricks.com</p>
-      </div>
+      <Copyright />
     </footer>
   );
 }

@@ -6,11 +6,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { authClient } from "@/lib/auth-client";
 import {
   ResetPasswordData,
   resetPasswordSchema,
-} from "../helpers/reset-password-schema";
-import { authClient } from "@/lib/auth-client";
+} from "@/app/helpers/reset-password-schema";
 
 function ResetPasswordContent() {
   const router = useRouter();

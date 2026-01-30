@@ -1,8 +1,11 @@
-import Image from "next/image";
+import { TextPost } from "@/app/components/layout/TextPost";
+import { Metadata } from "next";
 
-import { TextPost } from "./TextPost";
+export const metadata: Metadata = {
+  title: "Texts | Matrix Tricks",
+};
 
-export function Posts() {
+export default function Page() {
   const textPosts = [
     {
       title:
