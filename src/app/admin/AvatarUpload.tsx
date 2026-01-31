@@ -103,22 +103,24 @@ export default function AvatarUpload({
           </p>
         </div>
         <div>
-          <input
-            id="avatar_upload"
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            onChange={onChange}
-            className="hidden"
-            aria-describedby="avatar-help"
-          />
-          <label
-            htmlFor="avatar_upload"
-            className="dark:bg-cyan-900 bg-cyan-800 flex text-white py-2 px-3 rounded mr-2 w-fit cursor-pointer shadow-md justify-center items-center gap-2"
-          >
-            <MdOutlineFileUpload size={20} />
-            Change avatar
-          </label>
+          <div className="flex">
+            <input
+              id="avatar_upload"
+              ref={inputRef}
+              type="file"
+              accept="image/*"
+              onChange={onChange}
+              className="hidden"
+              aria-describedby="avatar-help"
+            />
+            <label
+              htmlFor="avatar_upload"
+              className="dark:bg-cyan-900 bg-cyan-800 flex text-white py-2 px-3 rounded mr-2 w-fit cursor-pointer shadow-md justify-center items-center gap-2"
+            >
+              <MdOutlineFileUpload size={20} />
+              Upload avatar
+            </label>
+          </div>
 
           <div id="avatar-help" className="text-xs text-neutral-400 mt-1">
             Max size: {formatBytes(maxSize)}

@@ -28,7 +28,7 @@ export default async function Layout({
         </h2>
         <div className="flex w-full">
           <AdminSidebar />
-          <div className="w-5/6 dark:bg-neutral-800 p-8 border-b-2 border-r-2 rounded-br-md dark:border-neutral-700 border-neutral-200">
+          <div className="w-5/6 dark:bg-neutral-800 md:p-8 p-4 border-b-2 border-r-2 rounded-br-md dark:border-neutral-700 border-neutral-200">
             {children}
           </div>
         </div>

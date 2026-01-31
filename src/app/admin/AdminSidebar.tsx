@@ -57,14 +57,14 @@ export default function AdminSidebar() {
             ? pathname === "/admin"
             : pathname?.startsWith(item.href);
         const itemClass =
-          "flex py-2.5 px-3 gap-2 rounded items-center font-medium transition " +
+          "flex py-2.5 px-3 gap-2 rounded items-center md:justify-start justify-center font-medium transition " +
           (isActive
             ? "dark:bg-cyan-900 bg-cyan-800 text-white"
             : "dark:bg-neutral-600 bg-neutral-300 dark:text-white/90 text-neutral-800 dark:hover:bg-neutral-500 hover:bg-neutral-400");
         return (
           <Link href={item.href} className={itemClass} key={item.id}>
             <item.Icon size={20} />
-            {item.label}
+            <span className="md:block hidden">{item.label}</span>
           </Link>
         );
       })}
