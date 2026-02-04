@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import AvatarUpload from "./AvatarUpload";
 import AutoResizeTextarea from "../components/ui/form/AutoResizeTextarea";
 
+import { Spinner } from "@/components/ui/spinner";
+
 interface ProfileDetailsFormProps {
   user: User;
 }
@@ -95,10 +97,17 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
           <button
             type="submit"
             disabled={loading}
-            className={`dark:bg-cyan-900 w-full bg-cyan-800 hover:bg-cyan-900 transition-all mt-2 md:mb-0 mb-4 text-white py-2 px-3 rounded mr-2 md:w-fit cursor-pointer shadow-md flex justify-center items-center gap-2 
-                ${loading ? "cursor-not-allowed opacity-50" : "cursor pointer opacity-100"}`}
+            className={`dark:bg-cyan-900 w-full bg-cyan-800 cursor pointer hover:bg-cyan-900 transition-all mt-2 md:mb-0 mb-4 text-white py-2 px-3 rounded mr-2 md:w-fit cursor-pointer shadow-md flex justify-center items-center gap-2 
+                ${loading ? "cursor-not-allowed opacity-50" : " opacity-100"}`}
           >
-            {loading ? "Updating..." : "Save changes"}
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Spinner className="size-5" />
+                <span>Saving...</span>
+              </span>
+            ) : (
+              "Save changes"
+            )}
           </button>
         </div>
       </div>

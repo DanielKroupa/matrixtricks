@@ -94,7 +94,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
     try {
       await authClient.signOut();
       setSession(null);
-      router.refresh();
+      router.push("/");
     } finally {
       setSigningOut(false);
       setProfileMenuOpen(false);
@@ -145,7 +145,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
               className="flex items-center justify-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-2 py-1 dark:text-white text-black transition cursor-pointer"
             >
               <Image
-                src={avatarSrc || "/uploads/avatars/alien.png"}
+                src={avatarSrc}
                 alt="user avatar"
                 width={32}
                 height={32}
