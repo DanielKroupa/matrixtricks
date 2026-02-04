@@ -24,17 +24,18 @@ const menuItems: MenuItem[] = [
     Icon: IoMdSettings,
   },
   {
-    id: "moderation",
-    href: "/admin/moderation",
-    label: "Moderation",
-    Icon: MdAdminPanelSettings,
-  },
-  {
     id: "posts",
     href: "/admin/posts",
     label: "Posts",
     Icon: MdAdminPanelSettings,
   },
+  {
+    id: "moderation",
+    href: "/admin/moderation",
+    label: "Moderation",
+    Icon: MdAdminPanelSettings,
+  },
+
   { id: "rubrics", href: "/admin/rubrics", label: "Rubrics", Icon: MdDataset },
   {
     id: "monetization",
@@ -72,13 +73,17 @@ export default function AdminSidebar() {
       <Link
         href={menuItems[6].href}
         className={
-          "flex py-2.5 px-3 gap-2 rounded items-center font-medium transition " +
+          "flex py-2.5 px-3 gap-2 rounded items-center font-medium transition cursor-pointer" +
           (pathname?.startsWith(menuItems[6].href)
-            ? "bg-cyan-900 text-white"
-            : "bg-neutral-600 text-white/90 hover:bg-neutral-500")
+            ? "dark:bg-cyan-900 bg-cyan-800 text-white"
+            : "dark:bg-neutral-600 bg-neutral-300 dark:text-white/90 text-neutral-800 hover:bg-neutral-400")
         }
       >
-        {menuItems[6].label}
+        <FaShoppingCart size={20} />
+        <label htmlFor="" className="md:block hidden cursor-pointer">
+          {" "}
+          {menuItems[6].label}
+        </label>
       </Link>
     </div>
   );

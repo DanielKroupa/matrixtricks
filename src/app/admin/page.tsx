@@ -2,14 +2,25 @@ import { Metadata } from "next";
 import { getServerSession } from "@/lib/get-session";
 import AvatarUpload from "./AvatarUpload";
 import AutoResizeTextarea from "../components/ui/form/AutoResizeTextarea";
+import { forbidden, unauthorized } from "next/navigation";
+
+import { User } from "@/lib/auth";
+import { ProfileDetailsForm } from "./profile-details-form";
 
 export const metadata: Metadata = {
   title: "Admin settings | Matrix Tricks",
 };
 
-export default async function Page() {
+export default async function Page({}) {
   const session = await getServerSession();
   const user = session?.user;
+
+  if (!user) {
+    unauthorized();
+  }
+  if (user?.role !== "admin") {
+    forbidden();
+  }
 
   return (
     <>
@@ -19,31 +30,7 @@ export default async function Page() {
           <p className="font-thin dark:text-white text-neutral-400 text-base mt-3">
             Change admin profile, edit bio or change password
           </p>
-          <form className="pb-4" encType="multipart/form-data">
-            <AvatarUpload user={user} />
-
-            {/* Input change nickname */}
-            <div className="md:w-72 w-auto space-y-4 ">
-              <div className="flex flex-col gap-2">
-                <label>Nickname:</label>
-                <input
-                  type="text"
-                  className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-auto outline-none"
-                />
-              </div>
-              {/* Input change bio information */}
-              <div className="flex flex-col gap-2 ">
-                <label>Change bio information:</label>
-                <AutoResizeTextarea />
-                <button
-                  type="submit"
-                  className="dark:bg-cyan-900 w-full bg-cyan-800 mt-2 md:mb-0 mb-4 text-white py-2 px-3 rounded mr-2 md:w-fit cursor-pointer shadow-md flex justify-center items-center gap-2"
-                >
-                  Save changes
-                </button>
-              </div>
-            </div>
-          </form>
+          <ProfileDetailsForm user={user} />
         </div>
         <form className="md:ml-10 ml-0 w-full self-end">
           {/* Input change password */}

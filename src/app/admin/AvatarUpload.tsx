@@ -70,16 +70,16 @@ export default function AvatarUpload({
   }, [previewUrl]);
 
   return (
-    <div className="flex gap-2 items-center mt-6">
-      <div className="w-20 h-20 dark:bg-neutral-700 bg-neutral-300 rounded-full overflow-hidden flex items-center justify-center">
+    <div className="md:flex block gap-2 items-center mt-6">
+      <div className="w-28 h-28 dark:bg-neutral-700 bg-neutral-300 rounded-full overflow-hidden flex items-center justify-center">
         {previewUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <Image
             src={previewUrl}
             alt="preview"
             className="w-full h-full object-cover"
-            width={80}
-            height={80}
+            width={112}
+            height={112}
           />
         ) : (
           <div className="text-neutral-400">
@@ -87,9 +87,9 @@ export default function AvatarUpload({
               <Image
                 src={user.image || "/uploads/avatars/alien.png"}
                 alt="avatar"
-                width={80}
-                height={80}
-                className="object-cover"
+                width={112}
+                height={112}
+                className="object-cover w-full h-full"
               />
             ) : null}
           </div>
@@ -97,11 +97,6 @@ export default function AvatarUpload({
       </div>
 
       <div className="flex flex-col gap-2 justify-center ml-2 py-4">
-        <div>
-          <p className="text-neutral-400">
-            {file ? `Avatar / ${file.name}` : "Avatar / none"}
-          </p>
-        </div>
         <div>
           <div className="flex">
             <input

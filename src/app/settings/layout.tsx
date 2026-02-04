@@ -1,5 +1,3 @@
-import { getServerSession } from "@/lib/get-session";
-import { forbidden, unauthorized } from "next/navigation";
 import { Navbar } from "../components/layout/Navbar";
 import { Copyright } from "../components/layout/Copyright";
 
@@ -8,16 +6,6 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
-  const user = session?.user;
-
-  if (!user) {
-    unauthorized();
-  }
-  if (user?.role !== "admin") {
-    forbidden();
-  }
-
   return (
     <div className="min-h-screen mx-auto dark:bg-neutral-800 dark:text-white text-black">
       <Navbar />
@@ -26,7 +14,7 @@ export default async function Layout({
           User settings
         </h2>
         <div className="flex w-full">
-          <div className="w-5/6 dark:bg-neutral-800 p-8 border-b-2 border-r-2 rounded-br-md dark:border-neutral-700 border-neutral-200">
+          <div className="w-full dark:bg-neutral-700 p-8 border-b-2 border-r-2 rounded-br-md dark:border-neutral-700 border-neutral-200">
             {children}
           </div>
         </div>
