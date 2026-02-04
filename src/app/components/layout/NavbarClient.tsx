@@ -108,6 +108,8 @@ export default function NavbarClient({ initialSession, user }: Props) {
 
   const displayName =
     session?.user?.name ?? session?.user?.username ?? "Username";
+  const avatarSrc =
+    session?.user?.image ?? user?.image ?? "/uploads/avatars/alien.png";
 
   return (
     <>
@@ -143,11 +145,11 @@ export default function NavbarClient({ initialSession, user }: Props) {
               className="flex items-center justify-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-2 py-1 dark:text-white text-black transition cursor-pointer"
             >
               <Image
-                src={session.user.avatarUrl || "/uploads/avatars/alien.png"}
-                alt=""
-                width={36}
-                height={36}
-                className="rounded-md"
+                src={avatarSrc || "/uploads/avatars/alien.png"}
+                alt="user avatar"
+                width={32}
+                height={32}
+                className="size-8 object-contain rounded-full"
               />
               <p className="font-medium text-black dark:text-white">
                 {displayName}
@@ -285,8 +287,8 @@ export default function NavbarClient({ initialSession, user }: Props) {
             <div className="flex items-center justify-between gap-3 p-4 border-b-2 border-neutral-400/60 dark:border-neutral-500/60">
               <div className="flex items-center gap-3">
                 <Image
-                  src={session?.user?.avatarUrl || "/uploads/avatars/alien.png"}
-                  alt=""
+                  src={avatarSrc}
+                  alt="user avatar"
                   width={36}
                   height={36}
                   className="rounded-md"

@@ -33,12 +33,14 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     },
   });
 
+  const watchedImage = form.watch("image");
+
   async function onSubmit({ nickname, image }: UpdateProfileFormData) {
     setSuccess(null);
     setError(null);
     setLoading(true);
     try {
-      const { error } = await authClient.updateUser({ name: nickname });
+      const { error } = await authClient.updateUser({ name: nickname, image });
 
       if (error) {
         setError(error.message || "Failed to update profile");
@@ -53,16 +55,8 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     }
   }
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64 = reader.result as string;
-        form.setValue("image", base64, { shouldDirty: true });
-      };
-      reader.readAsDataURL(file);
-    }
+  function handleImageChange(image: string | null) {
+    form.setValue("image", image, { shouldDirty: true });
   }
 
   return (
@@ -71,7 +65,11 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
       onSubmit={form.handleSubmit(onSubmit)}
       encType="multipart/form-data"
     >
-      <AvatarUpload user={user} />
+      <AvatarUpload
+        user={user}
+        value={watchedImage}
+        onImageChange={handleImageChange}
+      />
 
       {/* Input change nickname */}
       <div className="md:w-72 w-auto space-y-4 ">
@@ -83,8 +81,12 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
             className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-auto outline-none"
             {...form.register("nickname")}
           />
-          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-          {success && <p className="text-green-500 text-sm mt-1">{success}</p>}
+          {error && (
+            <p className="text-red-500 text-sm font-medium mt-1">{error}</p>
+          )}
+          {success && (
+            <p className="text-green-500 text-sm font-medium mt-1">{success}</p>
+          )}
         </div>
         {/* Input change bio information */}
         <div className="flex flex-col gap-2 ">
@@ -93,7 +95,7 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
           <button
             type="submit"
             disabled={loading}
-            className={`dark:bg-cyan-900 w-full bg-cyan-800 mt-2 md:mb-0 mb-4 text-white py-2 px-3 rounded mr-2 md:w-fit cursor-pointer shadow-md flex justify-center items-center gap-2 
+            className={`dark:bg-cyan-900 w-full bg-cyan-800 hover:bg-cyan-900 transition-all mt-2 md:mb-0 mb-4 text-white py-2 px-3 rounded mr-2 md:w-fit cursor-pointer shadow-md flex justify-center items-center gap-2 
                 ${loading ? "cursor-not-allowed opacity-50" : "cursor pointer opacity-100"}`}
           >
             {loading ? "Updating..." : "Save changes"}

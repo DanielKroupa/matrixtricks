@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+
+import React, { useState, useRef } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import Image from "next/image";
 import { User } from "@/lib/auth";
@@ -15,26 +16,30 @@ function formatBytes(bytes: number) {
 type AvatarUploadProps = {
   maxSize?: number; // bytes
   user?: User | null;
+  value?: string | null;
+  onImageChange?: (image: string | null) => void;
 };
 
 export default function AvatarUpload({
   maxSize = 10 * 1024 * 1024,
   user,
+  value,
+  onImageChange,
 }: AvatarUploadProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0] ?? null;
+    const file = e.target.files?.[0] ?? null;
 
-    if (!f) {
+    if (!file) {
       clearFile();
       return;
     }
 
-    if (f.size > maxSize) {
+    if (file.size > maxSize) {
       clearFile();
       setError(
         `The image size is too big. Max allowed is ${formatBytes(maxSize)}.`,
@@ -45,54 +50,68 @@ export default function AvatarUpload({
     }
 
     setError(null);
-    setFile(f);
+    setFile(file);
 
-    // revoke previous preview if any, then create new
-    if (previewUrl) URL.revokeObjectURL(previewUrl);
-    const url = URL.createObjectURL(f);
-    setPreviewUrl(url);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = typeof reader.result === "string" ? reader.result : null;
+      if (!base64) {
+        setError("Failed to read the selected image.");
+        setFile(null);
+        return;
+      }
+
+      if (value === undefined) {
+        setLocalPreview(base64);
+      }
+
+      onImageChange?.(base64);
+    };
+
+    reader.onerror = () => {
+      setError("Failed to read the selected image.");
+      setFile(null);
+      if (inputRef.current) inputRef.current.value = "";
+    };
+
+    reader.readAsDataURL(file);
   }
 
   function clearFile() {
     setFile(null);
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-      setPreviewUrl(null);
+    if (value === undefined) {
+      setLocalPreview(null);
     }
     if (inputRef.current) inputRef.current.value = "";
     setError(null);
+    onImageChange?.(null);
   }
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
+  const fallbackAvatar = "/uploads/avatars/alien.png";
+  const userImage = user?.image && user.image.length > 0 ? user.image : null;
+  const previewSource = value ?? localPreview ?? userImage ?? null;
 
   return (
-    <div className="md:flex block gap-2 items-center mt-6">
+    <div className="md:flex block gap-2 items-center my-6">
       <div className="w-28 h-28 dark:bg-neutral-700 bg-neutral-300 rounded-full overflow-hidden flex items-center justify-center">
-        {previewUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
+        {previewSource ? (
           <Image
-            src={previewUrl}
-            alt="preview"
+            src={previewSource}
+            alt="avatar preview"
             className="w-full h-full object-cover"
             width={112}
             height={112}
+            unoptimized
           />
         ) : (
-          <div className="text-neutral-400">
-            {user?.image ? (
-              <Image
-                src={user.image || "/uploads/avatars/alien.png"}
-                alt="avatar"
-                width={112}
-                height={112}
-                className="object-cover w-full h-full"
-              />
-            ) : null}
-          </div>
+          <Image
+            src={fallbackAvatar}
+            alt="default avatar"
+            className="w-full h-full object-cover"
+            width={112}
+            height={112}
+            unoptimized
+          />
         )}
       </div>
 
