@@ -35,6 +35,12 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     },
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
   const watchedImage = form.watch("image");
 
   async function onSubmit({ nickname, image }: UpdateProfileFormData) {
@@ -64,7 +70,7 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
   return (
     <form
       className="pb-4"
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
     >
       <AvatarUpload
@@ -81,10 +87,12 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
             type="text"
             placeholder={user.name || "Enter nickname"}
             className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-auto outline-none"
-            {...form.register("nickname")}
+            {...register("nickname")}
           />
-          {error && (
-            <p className="text-red-500 text-sm font-medium mt-1">{error}</p>
+          {errors.nickname && (
+            <p className="text-red-500 text-sm font-medium mt-1">
+              {errors.nickname.message}
+            </p>
           )}
           {success && (
             <p className="text-green-500 text-sm font-medium mt-1">{success}</p>

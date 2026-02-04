@@ -5,7 +5,6 @@ import {
   updatePasswordSchema,
   UpdatePasswordData,
 } from "../helpers/update-password-schema";
-import { useRouter } from "next/navigation";
 
 import { Spinner } from "@/components/ui/spinner";
 import { useForm } from "react-hook-form";
@@ -16,8 +15,6 @@ export default function UpdatePasswordForm() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const router = useRouter();
 
   const form = useForm<UpdatePasswordData>({
     resolver: zodResolver(updatePasswordSchema),
