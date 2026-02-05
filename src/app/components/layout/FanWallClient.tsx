@@ -11,6 +11,7 @@ import { BsFillPinAngleFill } from "react-icons/bs";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoTrash } from "react-icons/io5";
 import { FaPen } from "react-icons/fa6";
+import { PiPaperPlaneRightFill } from "react-icons/pi";
 
 type FanwallUser = {
   id: string;
@@ -80,7 +81,7 @@ function PinnedMessageCard({
           <Image
             src={avatarSrc}
             alt="profile-avatar"
-            className="h-20 w-20 rounded-full object-contain md:h-16 md:w-16"
+            className="h-20 w-20 rounded-full object-cover md:h-16 md:w-16"
             width={65}
             height={65}
           />
@@ -95,7 +96,7 @@ function PinnedMessageCard({
           {isAdmin && (
             <>
               <button
-                className="fanwall-menu-button absolute top-2 right-2 rounded-full bg-neutral-300 p-1 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-400 dark:bg-neutral-500 dark:hover:bg-neutral-400"
+                className="fanwall-menu-button absolute top-2 right-2 rounded-full bg-neutral-300 p-1 opacity-100 transition-opacity hover:bg-neutral-400 md:opacity-0 md:group-hover:opacity-100 dark:bg-neutral-500 dark:hover:bg-neutral-400"
                 onClick={onToggleMenu}
               >
                 <BsThreeDotsVertical />
@@ -181,7 +182,7 @@ function FanwallMessageItem({
           </h5>
         )}
         <p>{authorName}</p>
-        <div className="rounded-lg bg-neutral-300 px-4 py-2 shadow-md dark:bg-neutral-500">
+        <div className="w-fit rounded-lg bg-neutral-300 px-4 py-2 shadow-md dark:bg-neutral-500">
           {isEditing ? (
             <div className="flex flex-col gap-2">
               <AutoResizeTextarea
@@ -215,7 +216,7 @@ function FanwallMessageItem({
           <>
             <button
               title="Edit post"
-              className="fanwall-menu-button absolute top-2 right-2 rounded-full bg-neutral-300 p-1 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-400 dark:bg-neutral-500 dark:hover:bg-neutral-400"
+              className="fanwall-menu-button absolute top-2 right-2 rounded-full bg-none p-1 opacity-100 transition-opacity md:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 md:hover:bg-neutral-400 md:dark:bg-neutral-600 md:dark:hover:bg-neutral-400"
               onClick={onToggleMenu}
             >
               <BsThreeDotsVertical />
@@ -236,6 +237,7 @@ function FanwallMessageItem({
                 )}
                 {canDelete && (
                   <button
+                    title="Delete post"
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
                     onClick={() => {
                       onDelete(message);
@@ -249,6 +251,7 @@ function FanwallMessageItem({
                 {isAdmin && (
                   <button
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
+                    title="Pin post"
                     onClick={() => {
                       onTogglePin(message);
                       onCloseMenu();
@@ -353,10 +356,11 @@ function FanwallForm({
         </div>
         <button
           type="submit"
-          className="cursor-pointer rounded-md bg-cyan-700 px-4 py-2 text-sm text-white shadow transition-colors hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex cursor-pointer items-center gap-2 rounded-md bg-cyan-700 px-4 py-2 text-sm text-white shadow transition-colors hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={loading}
         >
-          {loading ? "Sending..." : "Send"}
+          {loading ? "Sending..." : "Send message"}
+          <PiPaperPlaneRightFill />
         </button>
       </div>
     </form>
