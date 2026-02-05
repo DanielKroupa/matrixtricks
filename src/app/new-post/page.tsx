@@ -1,7 +1,4 @@
 import { getServerSession } from "@/lib/get-session";
-import { Banner } from "../components/Banner";
-import { Navbar } from "../components/layout/Navbar";
-import { Title } from "../components/Title";
 import { forbidden, unauthorized } from "next/navigation";
 import { Metadata } from "next";
 
@@ -22,10 +19,33 @@ export default async function Page() {
   }
 
   return (
-    <>
-      <Navbar />
-      <Banner />
-      <Title />
-    </>
+    <div className="block md:flex">
+      <div className="mx-auto my-3 w-full px-1 md:block md:px-0">
+        <h3 className="bg-cyan-800 py-2 text-center text-lg font-medium text-white dark:bg-cyan-900">
+          New post
+        </h3>
+        <div className="bg-neutral-700">
+          <div className="flex items-center gap-4 p-4 text-white">
+            <span>Choose a type:</span>
+            <label
+              htmlFor="media"
+              className="group cursor-pointer rounded-md border border-cyan-500 bg-cyan-800 px-4 py-2 hover:bg-cyan-900"
+            >
+              Media
+              <input
+                type="radio"
+                name="media-type"
+                id="media"
+                className="hidden group-checked:ring-2 group-checked:ring-cyan-400"
+              />
+            </label>
+            <label htmlFor="text">
+              Text
+              <input type="radio" name="media-type" id="text" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

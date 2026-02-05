@@ -7,14 +7,14 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen mx-auto dark:bg-neutral-800 dark:text-white text-black">
+    <div className="mx-auto min-h-screen text-black dark:bg-neutral-800 dark:text-white">
       <Navbar />
-      <div className="w-full md:block mx-auto my-3 px-1 md:px-0">
-        <h2 className="dark:bg-cyan-900 bg-cyan-800 text-center py-2 font-medium text-white text-lg">
+      <div className="mx-auto my-3 w-full px-1 md:block md:px-0">
+        <h3 className="bg-cyan-800 py-2 text-center text-lg font-medium text-white dark:bg-cyan-900">
           User settings
-        </h2>
+        </h3>
         <div className="flex w-full">
-          <div className="w-full dark:bg-neutral-700 p-8 border-b-2 border-r-2 rounded-br-md dark:border-neutral-700 border-neutral-200">
+          <div className="w-full rounded-br-md border-r-2 border-b-2 border-neutral-200 p-8 dark:border-neutral-700 dark:bg-neutral-700">
             {children}
           </div>
         </div>

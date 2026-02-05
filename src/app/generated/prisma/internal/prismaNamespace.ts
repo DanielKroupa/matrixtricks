@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  FanWallMessage: 'FanWallMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification"
+    modelProps: "user" | "session" | "account" | "verification" | "fanWallMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FanWallMessage: {
+      payload: Prisma.$FanWallMessagePayload<ExtArgs>
+      fields: Prisma.FanWallMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FanWallMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FanWallMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.FanWallMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FanWallMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>
+        }
+        findMany: {
+          args: Prisma.FanWallMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>[]
+        }
+        create: {
+          args: Prisma.FanWallMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>
+        }
+        createMany: {
+          args: Prisma.FanWallMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FanWallMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.FanWallMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>
+        }
+        update: {
+          args: Prisma.FanWallMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.FanWallMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FanWallMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FanWallMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.FanWallMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FanWallMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.FanWallMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFanWallMessage>
+        }
+        groupBy: {
+          args: Prisma.FanWallMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FanWallMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FanWallMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FanWallMessageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -801,6 +876,21 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const FanWallMessageScalarFieldEnum = {
+  id: 'id',
+  body: 'body',
+  title: 'title',
+  nickname: 'nickname',
+  contact: 'contact',
+  isPinned: 'isPinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type FanWallMessageScalarFieldEnum = (typeof FanWallMessageScalarFieldEnum)[keyof typeof FanWallMessageScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -980,6 +1070,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
+  fanWallMessage?: Prisma.FanWallMessageOmit
 }
 
 /* Types for Logging */

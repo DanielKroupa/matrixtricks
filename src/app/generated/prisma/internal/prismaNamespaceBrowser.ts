@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  FanWallMessage: 'FanWallMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -132,6 +133,21 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const FanWallMessageScalarFieldEnum = {
+  id: 'id',
+  body: 'body',
+  title: 'title',
+  nickname: 'nickname',
+  contact: 'contact',
+  isPinned: 'isPinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type FanWallMessageScalarFieldEnum = (typeof FanWallMessageScalarFieldEnum)[keyof typeof FanWallMessageScalarFieldEnum]
 
 
 export const SortOrder = {

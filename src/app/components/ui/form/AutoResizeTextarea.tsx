@@ -1,19 +1,41 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type AutoResizeTextareaProps = {
   placeholder?: string;
+  value?: string;
+  name?: string;
+  required?: boolean;
+  className?: string;
+  onChange?: (value: string) => void;
 };
 
 export default function AutoResizeTextarea({
   placeholder,
+  value,
+  name,
+  required,
+  className,
+  onChange,
 }: AutoResizeTextareaProps) {
-  const [value, setValue] = useState("");
+  const [internalValue, setInternalValue] = useState(value ?? "");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const isControlled = value !== undefined;
+  const currentValue = isControlled ? value : internalValue;
+
+  useEffect(() => {
+    if (!isControlled) return;
+    setInternalValue(value ?? "");
+  }, [isControlled, value]);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
+    if (!isControlled) {
+      setInternalValue(e.target.value);
+    }
+
+    onChange?.(e.target.value);
 
     const el = textareaRef.current;
     if (!el) return;
@@ -22,14 +44,27 @@ export default function AutoResizeTextarea({
     el.style.height = el.scrollHeight + "px";
   };
 
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }, [currentValue]);
+
   return (
     <textarea
       ref={textareaRef}
-      value={value}
+      value={currentValue}
       onChange={handleChange}
       rows={1}
       placeholder={placeholder}
-      className="dark:bg-neutral-500 bg-neutral-300 outline-none w-full min-h-28 focus:ring-2 ring-neutral-400 dark:placeholder:text-[#aaaaaa] placeholder:text-neutral-400 rounded-md py-2 px-2 shadow-md"
+      name={name}
+      required={required}
+      className={
+        className ||
+        "min-h-28 w-full rounded-md bg-neutral-300 px-2 py-2 shadow-md ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
+      }
     />
   );
 }

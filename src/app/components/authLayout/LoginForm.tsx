@@ -103,7 +103,7 @@ export default function LoginForm() {
             {...register("email")}
             autoFocus
             placeholder="Email"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.email ? "border border-red-500" : ""
             }`}
             required
@@ -119,7 +119,7 @@ export default function LoginForm() {
             type={showPassword ? "text" : "password"}
             {...register("password")}
             placeholder="Password"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 pr-10 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 pr-10 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.password ? "border border-red-500" : ""
             }`}
             required
@@ -128,7 +128,7 @@ export default function LoginForm() {
             type="button"
             aria-label={showPassword ? "Hide password" : "Show password"}
             onClick={() => setShowPassword((s) => !s)}
-            className="absolute right-3 top-7.5 -translate-y-1/2 text-neutral-600 hover:text-neutral-900"
+            className="absolute top-7.5 right-3 -translate-y-1/2 text-neutral-600 hover:text-neutral-900"
           >
             {showPassword ? (
               <FaEyeSlash
@@ -155,23 +155,23 @@ export default function LoginForm() {
         <div className="flex items-center">
           <label
             htmlFor="stay-signed-in"
-            className="flex items-center gap-2 cursor-pointer select-none"
+            className="flex cursor-pointer items-center gap-2 select-none"
           >
             <input
               id="stay-signed-in"
               type="checkbox"
               {...register("rememberMe")}
-              className="sr-only peer"
+              className="peer sr-only"
               aria-checked={watch("rememberMe")}
             />
 
-            <span className="inline-flex h-5 w-5 items-center justify-center border-gray-400 rounded border dark:border-gray-600 dark:bg-neutral-800 bg-neutral-300 transition-colors peer-checked:bg-cyan-700 peer-checked:border-cyan-700">
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-gray-400 bg-neutral-300 transition-colors peer-checked:border-cyan-700 peer-checked:bg-cyan-700 dark:border-gray-600 dark:bg-neutral-800">
               {watch("rememberMe") && (
                 <FaCheck size={14} className="text-white" />
               )}
             </span>
 
-            <span className="text-sm dark:text-neutral-300 text-neutral-700">
+            <span className="text-sm text-neutral-700 dark:text-neutral-300">
               Stay signed in
             </span>
           </label>
@@ -191,7 +191,7 @@ export default function LoginForm() {
         </PrimaryButton>
         <Link
           href="/forgot-password"
-          className="block w-full text-center text-sm dark:text-cyan-500 text-cyan-700 hover:text-cyan-900 dark:hover:text-cyan-600 cursor-pointer"
+          className="block w-full cursor-pointer text-center text-sm text-cyan-700 hover:text-cyan-900 dark:text-cyan-500 dark:hover:text-cyan-600"
         >
           Forgot your Password?
         </Link>
@@ -203,7 +203,7 @@ export default function LoginForm() {
           <div className="w-full border-t border-neutral-300 dark:border-neutral-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 dark:bg-neutral-800 bg-white text-neutral-400">
+          <span className="bg-white px-2 text-neutral-400 dark:bg-neutral-800">
             Or also
           </span>
         </div>
@@ -215,7 +215,7 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => handleSocialSignIn("facebook")}
-          className="flex w-64 cursor-pointer items-center px-4 border-neutral-400 hover:bg-neutral-300 rounded-lg border text-black py-2 transition-colors bg-neutral-200 gap-3 disabled:opacity-60  dark:text-white  dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-500"
+          className="flex w-64 cursor-pointer items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
         >
           <Image
             src="/icons/facebook.svg"
@@ -230,9 +230,9 @@ export default function LoginForm() {
           type="button"
           onClick={() => handleSocialSignIn("google")}
           disabled={socialLoading}
-          className={`flex w-64 items-center px-4 border-neutral-400 hover:bg-neutral-300 rounded-lg border text-black py-2 transition-colors bg-neutral-200 gap-3 disabled:opacity-60  dark:text-white  dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-500 ${
+          className={`flex w-64 items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600 ${
             socialLoading
-              ? "cursor-not-allowed pointer-events-none"
+              ? "pointer-events-none cursor-not-allowed"
               : "cursor-pointer"
           }`}
         >
@@ -244,7 +244,7 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => handleSocialSignIn("apple")}
-          className="flex w-64 cursor-pointer items-center px-4 border-neutral-400 hover:bg-neutral-300 rounded-lg border text-black py-2 transition-colors bg-neutral-200 gap-3 disabled:opacity-60  dark:text-white  dark:bg-neutral-700 dark:hover:bg-neutral-600 dark:border-neutral-500"
+          className="flex w-64 cursor-pointer items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
         >
           <FaApple size={24} />
           Sign In with Apple
@@ -252,7 +252,7 @@ export default function LoginForm() {
       </div>
 
       {/* Footer Links */}
-      <div className="space-y-2 border-t dark:border-neutral-600 border-neutral-300 pt-4 ">
+      <div className="space-y-2 border-t border-neutral-300 pt-4 dark:border-neutral-600">
         <button
           onClick={() => switchForm("register")}
           className="block w-full text-center text-sm text-neutral-500"
@@ -260,7 +260,7 @@ export default function LoginForm() {
           Don't have an account?
           <Link
             href="/sign-up"
-            className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700 cursor-pointer ml-1"
+            className="ml-1 cursor-pointer font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
           >
             Sign up
           </Link>
