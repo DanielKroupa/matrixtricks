@@ -98,7 +98,7 @@ export default function AvatarUpload({
           <Image
             src={previewSource}
             alt="avatar preview"
-            className="w-full h-full object-cover"
+            className="h-28 w-28 object-cover rounded-full"
             width={112}
             height={112}
             unoptimized
@@ -107,7 +107,7 @@ export default function AvatarUpload({
           <Image
             src={fallbackAvatar}
             alt="default avatar"
-            className="w-full h-full object-cover"
+            className="h-28 w-28 object-cover rounded-full"
             width={112}
             height={112}
             unoptimized

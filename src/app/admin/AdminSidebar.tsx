@@ -51,7 +51,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="dark:bg-neutral-700 bg-neutral-200 rounded-bl-md w-1/6 p-1.5 space-y-1.5 min-h-175">
+    <div className="min-h-175 w-1/6 space-y-1.5 rounded-bl-md bg-neutral-200 p-1.5 dark:bg-neutral-700">
       {menuItems.slice(0, 6).map((item) => {
         const isActive =
           item.href === "/admin"
@@ -65,22 +65,22 @@ export default function AdminSidebar() {
         return (
           <Link href={item.href} className={itemClass} key={item.id}>
             <item.Icon size={20} />
-            <span className="md:block hidden">{item.label}</span>
+            <span className="hidden md:block">{item.label}</span>
           </Link>
         );
       })}
-      <hr className="dark:text-neutral-600 text-neutral-300 border-2 rounded-full m-4" />
+      <hr className="m-4 rounded-full border-2 text-neutral-300 dark:text-neutral-600" />
       <Link
         href={menuItems[6].href}
         className={
-          "flex py-2.5 px-3 gap-2 rounded items-center font-medium transition cursor-pointer" +
+          "flex cursor-pointer items-center gap-2 rounded px-3 py-2.5 font-medium transition" +
           (pathname?.startsWith(menuItems[6].href)
-            ? "dark:bg-cyan-900 bg-cyan-800 text-white"
-            : "dark:bg-neutral-600 bg-neutral-300 dark:text-white/90 text-neutral-800 hover:bg-neutral-400")
+            ? "bg-cyan-800 text-white dark:bg-cyan-900"
+            : "bg-neutral-300 text-neutral-800 hover:bg-neutral-400 dark:bg-neutral-600 dark:text-white/90")
         }
       >
         <FaShoppingCart size={20} />
-        <label htmlFor="" className="md:block hidden cursor-pointer">
+        <label htmlFor="" className="hidden cursor-pointer md:block">
           {" "}
           {menuItems[6].label}
         </label>

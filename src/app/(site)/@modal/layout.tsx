@@ -24,13 +24,13 @@ export default function ModalLayout({ children }: ModalLayoutProps) {
   return (
     <div
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex shadow items-center justify-center bg-black/60 "
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 shadow"
     >
       <div className="relative w-full max-w-md rounded-lg bg-white shadow-2xl dark:bg-neutral-800">
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute rounded-full bg-neutral-300 dark:bg-neutral-700 dark:shadow-md p-1.5 right-4 top-4 text-gray-500 transition-colors hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-300 cursor-pointer"
+          className="absolute top-4 right-4 cursor-pointer rounded-full bg-neutral-300 p-1.5 text-gray-500 transition-colors hover:text-gray-800 dark:bg-neutral-700 dark:text-gray-400 dark:shadow-md dark:hover:text-gray-300"
           aria-label="Close modal"
           title="Close"
         >

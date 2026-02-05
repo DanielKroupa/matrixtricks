@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { IoSettings } from "react-icons/io5";
 import { FaUser } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
+import { RiAdminFill } from "react-icons/ri";
 
 import { authClient } from "@/lib/auth-client";
 import { User } from "@/lib/auth";
@@ -149,7 +150,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                 alt="user avatar"
                 width={32}
                 height={32}
-                className="size-8 object-contain rounded-full"
+                className="w-8 h-8 object-cover rounded-full"
               />
               <p className="font-medium text-black dark:text-white">
                 {displayName}
@@ -175,6 +176,15 @@ export default function NavbarClient({ initialSession, user }: Props) {
                 >
                   <FaUser className="text-neutral-600 dark:text-neutral-300" />
                   Profile
+                </Link>
+                <Link
+                  href="/admin"
+                  role="menuitem"
+                  onClick={() => setProfileMenuOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black dark:text-white transition hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                >
+                  <RiAdminFill className="text-neutral-600 dark:text-neutral-300" />
+                  Admin settings
                 </Link>
                 <Link
                   href="/settings"
@@ -291,7 +301,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                   alt="user avatar"
                   width={36}
                   height={36}
-                  className="rounded-md"
+                  className="w-9 h-9 object-cover rounded-full"
                 />
                 <div className="min-w-0">
                   <p className="truncate font-medium text-black dark:text-white">

@@ -128,7 +128,7 @@ export default function UpdatePasswordForm() {
                   <span>Updating...</span>
                 </span>
               ) : (
-                "Save changes"
+                "Update password"
               )}
             </button>
           </div>
