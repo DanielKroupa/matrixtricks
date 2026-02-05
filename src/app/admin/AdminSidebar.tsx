@@ -73,10 +73,10 @@ export default function AdminSidebar() {
       <Link
         href={menuItems[6].href}
         className={
-          "flex cursor-pointer items-center gap-2 rounded px-3 py-2.5 font-medium transition" +
+          "flex cursor-pointer items-center gap-2 rounded bg-neutral-300 px-3 py-2.5 font-medium transition" +
           (pathname?.startsWith(menuItems[6].href)
             ? "bg-cyan-800 text-white dark:bg-cyan-900"
-            : "bg-neutral-300 text-neutral-800 hover:bg-neutral-400 dark:bg-neutral-600 dark:text-white/90")
+            : " bg-cyan-800 text-neutral-800 hover:bg-neutral-400 dark:bg-neutral-600 dark:text-white/90")
         }
       >
         <FaShoppingCart size={20} />

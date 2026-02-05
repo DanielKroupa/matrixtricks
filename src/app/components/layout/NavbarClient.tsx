@@ -115,8 +115,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
   return (
     <>
       <nav
-        className={`flex w-full items-center justify-end gap-4 px-4 py-2 z-50 sticky top-0 backdrop-blur-lg transition-all duration-300
-          ${scrolled ? "bg-neutral-200/80 dark:bg-neutral-700/80 shadow-md" : "bg-neutral-200 dark:bg-neutral-700"}`}
+        className={`sticky top-0 z-50 flex w-full items-center justify-end gap-4 px-4 py-2 backdrop-blur-lg transition-all duration-300 ${scrolled ? "bg-neutral-200/80 shadow-md dark:bg-neutral-700/80" : "bg-neutral-200 dark:bg-neutral-700"}`}
       >
         {/* Mobile hamburger */}
         <button
@@ -126,7 +125,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
             setMobileMenuOpen((open) => !open);
             setProfileMenuOpen(false);
           }}
-          className="flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer md:hidden"
+          className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:hidden dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
         >
           {mobileMenuOpen ? <XIcon size={20} /> : <MenuIcon size={20} />}
         </button>
@@ -143,14 +142,14 @@ export default function NavbarClient({ initialSession, user }: Props) {
               aria-haspopup="menu"
               aria-expanded={profileMenuOpen}
               aria-controls="profile-menu"
-              className="flex items-center justify-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-2 py-1 dark:text-white text-black transition cursor-pointer"
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-2 py-1 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
             >
               <Image
                 src={avatarSrc}
                 alt="user avatar"
                 width={32}
                 height={32}
-                className="w-8 h-8 object-cover rounded-full"
+                className="h-8 w-8 rounded-full object-cover"
               />
               <p className="font-medium text-black dark:text-white">
                 {displayName}
@@ -164,33 +163,35 @@ export default function NavbarClient({ initialSession, user }: Props) {
             <div
               id="profile-menu"
               role="menu"
-              className={`absolute right-0 top-full mt-2 w-48 rounded-lg border-2 border-neutral-400 dark:border-neutral-500 bg-neutral-200 dark:bg-neutral-700 shadow-md backdrop-blur-lg transition-all duration-150
-                ${profileMenuOpen ? "opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-1"}`}
+              className={`absolute top-full right-0 mt-2 w-48 rounded-lg border-2 border-neutral-400 bg-neutral-200 shadow-md backdrop-blur-lg transition-all duration-150 dark:border-neutral-500 dark:bg-neutral-700 ${profileMenuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"}`}
             >
               <div className="flex flex-col gap-1 p-2">
                 <Link
                   href="/profile"
                   role="menuitem"
                   onClick={() => setProfileMenuOpen(false)}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black dark:text-white transition hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
                 >
                   <FaUser className="text-neutral-600 dark:text-neutral-300" />
                   Profile
                 </Link>
-                <Link
-                  href="/admin"
-                  role="menuitem"
-                  onClick={() => setProfileMenuOpen(false)}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black dark:text-white transition hover:bg-neutral-300 dark:hover:bg-neutral-600"
-                >
-                  <RiAdminFill className="text-neutral-600 dark:text-neutral-300" />
-                  Admin settings
-                </Link>
+                {user?.role === "admin" && (
+                  <Link
+                    href="/admin"
+                    role="menuitem"
+                    onClick={() => setProfileMenuOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
+                  >
+                    <RiAdminFill className="text-neutral-600 dark:text-neutral-300" />
+                    Admin settings
+                  </Link>
+                )}
+
                 <Link
                   href="/settings"
                   role="menuitem"
                   onClick={() => setProfileMenuOpen(false)}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black dark:text-white transition hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
                 >
                   <IoSettings className="text-neutral-600 dark:text-neutral-300" />
                   Settings
@@ -201,8 +202,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                   role="menuitem"
                   onClick={handleSignOut}
                   disabled={signingOut}
-                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-black dark:text-white transition
-                    ${signingOut ? "opacity-50 cursor-not-allowed" : "hover:bg-neutral-300 cursor-pointer dark:hover:bg-neutral-600"}`}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-black transition dark:text-white ${signingOut ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600"}`}
                 >
                   <FaSignOutAlt className="text-neutral-600 dark:text-neutral-300" />
                   {signingOut ? "Signing out..." : "Sign out"}
@@ -213,7 +213,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
         )}
 
         {isLoggedIn && (
-          <button className="hidden md:flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer">
+          <button className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white">
             <Image
               src="/icons/mail.svg"
               alt="mail"
@@ -224,7 +224,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
           </button>
         )}
 
-        <button className="hidden md:flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 dark:border-neutral-500 border-neutral-400 px-3 py-2 dark:text-white text-black transition cursor-pointer">
+        <button className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white">
           <Image
             src="/icons/lang-cs.png"
             alt="lang-switch"
@@ -238,7 +238,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
         {user?.role === "admin" && (
           <Link
             href="/new-post"
-            className="hidden md:flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer"
+            className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
             <PlusIcon size={20} />
             New post
@@ -248,7 +248,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
         <button
           onClick={toggleTheme}
           aria-label="Toggle theme"
-          className="hidden md:flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer"
+          className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
         >
           <Image
             src="/icons/theme-switch.png"
@@ -262,7 +262,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
         {!isLoggedIn ? (
           <Link
             href="/sign-in"
-            className="hidden md:flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer"
+            className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
             Sign In
             <Image
@@ -278,8 +278,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
 
       {/* Mobile overlay + drawer (responsive) */}
       <div
-        className={`fixed inset-0 z-50 md:hidden transition-opacity duration-200
-          ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-50 transition-opacity duration-200 md:hidden ${mobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
         aria-hidden={!mobileMenuOpen}
       >
         <div className="flex h-full w-full">
@@ -287,21 +286,20 @@ export default function NavbarClient({ initialSession, user }: Props) {
             type="button"
             aria-label="Close menu overlay"
             onClick={() => setMobileMenuOpen(false)}
-            className="hidden sm:block h-full flex-1 bg-black/35"
+            className="hidden h-full flex-1 bg-black/35 sm:block"
           />
 
           <div
-            className={`h-full w-full sm:w-3/4 border-l-2 border-neutral-400 dark:border-neutral-500 bg-neutral-200 dark:bg-neutral-700 shadow-lg backdrop-blur-lg transition-transform duration-200
-              ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+            className={`h-full w-full border-l-2 border-neutral-400 bg-neutral-200 shadow-lg backdrop-blur-lg transition-transform duration-200 sm:w-3/4 dark:border-neutral-500 dark:bg-neutral-700 ${mobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
           >
-            <div className="flex items-center justify-between gap-3 p-4 border-b-2 border-neutral-400/60 dark:border-neutral-500/60">
+            <div className="flex items-center justify-between gap-3 border-b-2 border-neutral-400/60 p-4 dark:border-neutral-500/60">
               <div className="flex items-center gap-3">
                 <Image
                   src={avatarSrc}
                   alt="user avatar"
                   width={36}
                   height={36}
-                  className="w-9 h-9 object-cover rounded-full"
+                  className="h-9 w-9 rounded-full object-cover"
                 />
                 <div className="min-w-0">
                   <p className="truncate font-medium text-black dark:text-white">
@@ -313,7 +311,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                 type="button"
                 aria-label="Close menu"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer"
+                className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
               >
                 <XIcon size={18} />
               </button>
@@ -325,7 +323,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                   <Link
                     href="/profile"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"
+                    className="flex w-full items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                   >
                     <FaUser className="text-neutral-600 dark:text-neutral-300" />
                     Profile
@@ -333,24 +331,40 @@ export default function NavbarClient({ initialSession, user }: Props) {
 
                   {user?.role === "admin" && (
                     <Link
-                      href="/new-post"
-                      className="hidden md:flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer"
+                      href="/admin"
+                      className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
                     >
-                      <PlusIcon size={20} />
-                      New post
+                      <RiAdminFill
+                        size={20}
+                        className="text-neutral-600 dark:text-neutral-300"
+                      />
+                      Admin settings
                     </Link>
                   )}
 
                   <Link
                     href="/settings"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"
+                    className="flex w-full items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                   >
                     <IoSettings className="text-neutral-600 dark:text-neutral-300" />
                     Settings
                   </Link>
 
-                  <hr className="my-2 text-neutral-600 mx- border rounded-full" />
+                  {user?.role === "admin" && (
+                    <Link
+                      href="/new-post"
+                      className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
+                    >
+                      <PlusIcon
+                        size={20}
+                        className="text-neutral-600 dark:text-neutral-300"
+                      />
+                      New post
+                    </Link>
+                  )}
+
+                  <hr className="mx- my-2 rounded-full border text-neutral-600" />
                   <div className="flex gap-8">
                     <button
                       type="button"
@@ -359,7 +373,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                         setMobileMenuOpen(false);
                         toggleTheme();
                       }}
-                      className="flex w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                     >
                       <Image
                         src="/icons/theme-switch.png"
@@ -371,7 +385,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                       Switch Theme
                     </button>
 
-                    <button className="flex justify-center w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80">
+                    <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80">
                       <Image
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
@@ -387,8 +401,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                     type="button"
                     disabled={signingOut}
                     onClick={handleSignOut}
-                    className={`flex w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer
-                      ${signingOut ? "opacity-50 cursor-not-allowed" : "hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"}`}
+                    className={`flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white ${signingOut ? "cursor-not-allowed opacity-50" : "hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"}`}
                   >
                     <FaSignOutAlt />
                     {signingOut ? "Signing out..." : "Sign out"}
@@ -399,7 +412,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                   <Link
                     href="/sign-in"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"
+                    className="flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                   >
                     Sign In
                     <Image
@@ -418,7 +431,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                         setMobileMenuOpen(false);
                         toggleTheme();
                       }}
-                      className="flex w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                     >
                       <Image
                         src="/icons/theme-switch.png"
@@ -430,7 +443,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                       Switch Theme
                     </button>
 
-                    <button className="flex justify-center w-full items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 border-neutral-400 dark:border-neutral-500 px-3 py-2 dark:text-white text-black transition cursor-pointer hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80">
+                    <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80">
                       <Image
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
