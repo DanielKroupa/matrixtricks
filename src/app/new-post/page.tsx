@@ -24,7 +24,7 @@ export default async function Page() {
         <h3 className="bg-cyan-800 py-2 text-center text-lg font-medium text-white dark:bg-cyan-900">
           New post
         </h3>
-        <div className="bg-neutral-700">
+        <form action="" className="bg-neutral-700">
           <div className="flex items-center gap-4 p-4 text-white">
             <span>Choose a type:</span>
             <label
@@ -39,12 +39,32 @@ export default async function Page() {
                 className="hidden group-checked:ring-2 group-checked:ring-cyan-400"
               />
             </label>
-            <label htmlFor="text">
+            <label
+              htmlFor="text"
+              className="group cursor-pointer rounded-md border border-cyan-500 bg-cyan-800 px-4 py-2 hover:bg-cyan-900"
+            >
               Text
-              <input type="radio" name="media-type" id="text" />
+              <input
+                type="radio"
+                name="media-type"
+                id="text"
+                className="hidden group-checked:ring-2 group-checked:ring-cyan-400"
+              />
             </label>
           </div>
-        </div>
+          <div>
+            <label className="">
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Title"
+                className="w-auto rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-600"
+              />
+            </label>
+          </div>
+          <div></div>
+        </form>
       </div>
     </div>
   );
