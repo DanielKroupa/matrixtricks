@@ -70,7 +70,8 @@ export const PostModal = ({
 
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
+        title="Close"
+        className="absolute top-4 right-4 z-50 cursor-pointer rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
       >
         <X size={24} />
       </button>
@@ -96,27 +97,6 @@ export const PostModal = ({
         <div className="flex h-full w-full flex-col bg-white md:w-100 md:border-l">
           <div className="flex items-start justify-between border-b bg-white p-4">
             <div className="w-full">
-              <div className="mb-3 flex items-center gap-3">
-                {fullPost?.author && (
-                  <>
-                    <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-                      {fullPost.author.image && (
-                        <Image
-                          src={fullPost.author.image}
-                          fill
-                          alt={fullPost.author.name}
-                        />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold">
-                        {fullPost.author.name || fullPost.author.username}
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-
               <h2 className="text-lg leading-tight font-bold">
                 {initialPost.title}
               </h2>

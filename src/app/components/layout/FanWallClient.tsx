@@ -81,7 +81,7 @@ function PinnedMessageCard({
           <Image
             src={avatarSrc}
             alt="profile-avatar"
-            className="h-20 w-20 rounded-full object-cover md:h-16 md:w-16"
+            className="flex h-20 w-20 rounded-full object-cover md:h-16 md:w-16"
             width={65}
             height={65}
           />
@@ -216,13 +216,26 @@ function FanwallMessageItem({
           <>
             <button
               title="Edit post"
-              className="fanwall-menu-button absolute top-2 right-2 rounded-full bg-none p-1 opacity-100 transition-opacity md:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 md:hover:bg-neutral-400 md:dark:bg-neutral-600 md:dark:hover:bg-neutral-400"
+              className="fanwall-menu-button absolute top-2 right-2 cursor-pointer rounded-full bg-none p-1 opacity-100 transition-opacity md:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 md:hover:bg-neutral-400 md:dark:bg-neutral-600 md:dark:hover:bg-neutral-400"
               onClick={onToggleMenu}
             >
               <BsThreeDotsVertical />
             </button>
             {isMenuOpen && (
               <div className="fanwall-menu absolute top-8 right-2 z-10 w-32 rounded-md bg-white shadow-lg dark:bg-neutral-600">
+                {isAdmin && (
+                  <button
+                    className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
+                    title="Pin post"
+                    onClick={() => {
+                      onTogglePin(message);
+                      onCloseMenu();
+                    }}
+                  >
+                    {message.isPinned ? <BsPinFill /> : <BsFillPinAngleFill />}
+                    {message.isPinned ? "Unpin" : "Pin"}
+                  </button>
+                )}
                 {canEdit && !isEditing && (
                   <button
                     className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
@@ -246,19 +259,6 @@ function FanwallMessageItem({
                   >
                     <IoTrash />
                     Delete
-                  </button>
-                )}
-                {isAdmin && (
-                  <button
-                    className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
-                    title="Pin post"
-                    onClick={() => {
-                      onTogglePin(message);
-                      onCloseMenu();
-                    }}
-                  >
-                    {message.isPinned ? <BsPinFill /> : <BsFillPinAngleFill />}
-                    {message.isPinned ? "Unpin" : "Pin"}
                   </button>
                 )}
               </div>

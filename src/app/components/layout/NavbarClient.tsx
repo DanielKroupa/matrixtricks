@@ -364,7 +364,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
                     </Link>
                   )}
 
-                  <hr className="mx- my-2 rounded-full border text-neutral-600" />
+                  <hr className="my-2 rounded-full border text-neutral-400 dark:text-neutral-600" />
                   <div className="flex gap-8">
                     <button
                       type="button"
@@ -396,14 +396,14 @@ export default function NavbarClient({ initialSession, user }: Props) {
                       <span>CS &gt;</span>
                     </button>
                   </div>
-
+                  <hr className="my-2 rounded-full border text-neutral-400 dark:text-neutral-600" />
                   <button
                     type="button"
                     disabled={signingOut}
                     onClick={handleSignOut}
                     className={`flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white ${signingOut ? "cursor-not-allowed opacity-50" : "hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"}`}
                   >
-                    <FaSignOutAlt />
+                    <FaSignOutAlt className="fill-neutral-600 dark:fill-white" />
                     {signingOut ? "Signing out..." : "Sign out"}
                   </button>
                 </>

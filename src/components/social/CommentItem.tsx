@@ -22,23 +22,22 @@ export const CommentItem = ({ comment }: { comment: any }) => {
   };
 
   const user = comment.user;
-  const displayName =
-    user?.name || user?.username || comment.nickname || "Anonymous";
+  const displayName = user?.name || user?.username || comment.nickname;
   const avatarUrl = user?.image;
 
   return (
-    <div className="flex gap-3 border-b border-gray-100 py-3 last:border-0">
-      <div className="shrink-0">
+    <div className="flex gap-3 border-neutral-300 py-3">
+      <div className="flex shrink-0">
         {avatarUrl ? (
           <Image
             src={avatarUrl}
             alt={displayName}
-            width={32}
-            height={32}
-            className="rounded-full object-cover"
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-full object-cover"
           />
         ) : (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200">
             <UserIcon size={16} className="text-gray-500" />
           </div>
         )}
@@ -52,7 +51,7 @@ export const CommentItem = ({ comment }: { comment: any }) => {
             </span>
           </div>
         </div>
-        <p className="mt-1 text-sm wrap-break-word text-gray-800">
+        <p className="mt-1 rounded-md bg-neutral-200 p-2 text-sm wrap-break-word text-gray-800">
           {comment.content}
         </p>
 

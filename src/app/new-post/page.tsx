@@ -49,10 +49,7 @@ export default function NewPostPage() {
       formData.append("type", data.type);
       formData.append("rubric", data.rubric);
       if (data.scheduledAt) {
-        formData.append(
-          "scheduledAt",
-          new Date(data.scheduledAt).toISOString(),
-        );
+        formData.append("scheduledAt", data.scheduledAt);
       }
 
       const response = await fetch("/api/posts", {

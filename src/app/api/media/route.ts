@@ -52,6 +52,7 @@ export async function POST(request: NextRequest) {
 
     // Optimize image
     if (file.type.startsWith("image/")) {
+      // @ts-expect-error Sharp buffer type issue
       buffer = await sharp(buffer)
         .resize(1200, 1200, { fit: "inside", withoutEnlargement: true })
         .jpeg({ quality: 80 })

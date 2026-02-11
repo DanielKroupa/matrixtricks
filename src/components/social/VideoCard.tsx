@@ -12,7 +12,7 @@ interface VideoCardProps {
 
 export const VideoCard = ({ post, onClick }: VideoCardProps) => {
   const videoMedia =
-    post.media.find((m: any) => m.type === "video") || post.media[0];
+    post.media.find((media: any) => media.type === "video") || post.media[0];
   const thumbnailUrl = videoMedia?.url; // In real app, generate thumbnail. For now use same URL or placeholder if video.
   // Ideally we have a thumbnail field or we use a video tag to show poster.
 

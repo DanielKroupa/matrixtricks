@@ -49,7 +49,7 @@ export const CommentSection = ({
           likes: [],
           _count: { likes: 0 },
         };
-        setComments([newComment, ...comments]);
+        setComments([...comments, newComment]);
         setContent("");
         setNickname("");
       }
@@ -61,9 +61,9 @@ export const CommentSection = ({
   };
 
   return (
-    <div className="flex h-full flex-col bg-white">
-      <div className="border-b p-4">
-        <h3 className="text-lg font-bold">Comments ({comments.length})</h3>
+    <div className="flex h-full flex-col bg-white text-black">
+      <div className="border-b border-neutral-300 p-4">
+        <h3 className="text-lg font-semibold">Comments ({comments.length})</h3>
       </div>
 
       <div className="custom-scrollbar mb-0 flex-1 overflow-y-auto p-4">
@@ -78,13 +78,13 @@ export const CommentSection = ({
         )}
       </div>
 
-      <div className="mt-auto border-t bg-gray-50 p-4">
+      <div className="mt-auto border-t border-neutral-300 bg-gray-50 p-4">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           {error && <p className="text-sm text-red-500">{error}</p>}
 
           {!session && (
             <input
-              className="w-full rounded-md border p-2 text-sm transition-colors outline-none focus:border-blue-500"
+              className="w-full rounded-md border border-neutral-300 p-2 text-sm transition-colors outline-none focus:border-cyan-500"
               placeholder="Your Nickname (required)"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
@@ -103,8 +103,8 @@ export const CommentSection = ({
               </div>
             )}
             <textarea
-              className="flex-1 resize-none rounded-md border p-3 pr-20 text-sm transition-colors outline-none focus:border-blue-500"
-              placeholder="Add a comment..."
+              className="flex-1 resize-none rounded-md border border-neutral-300 p-3 pr-20 text-sm transition-colors outline-none focus:border-cyan-500"
+              placeholder="Leave a comment..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
@@ -120,7 +120,7 @@ export const CommentSection = ({
               <button
                 type="submit"
                 disabled={loading || !content.trim()}
-                className="rounded-full bg-blue-600 p-1.5 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-full bg-cyan-600 p-1.5 text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Send size={16} />
               </button>

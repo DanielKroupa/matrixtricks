@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/get-session";
-import { CreateCommentSchema } from "@/helpers/social-schema";
+import { CreateCommentSchema } from "@/app/helpers/social-schema";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
@@ -49,7 +49,7 @@ export async function getPostDetails(postId: string) {
         },
       },
       comments: {
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: "asc" },
         include: {
           user: {
             select: {
