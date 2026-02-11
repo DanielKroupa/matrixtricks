@@ -1,5 +1,10 @@
 import { Navbar } from "../components/layout/Navbar";
 import { Copyright } from "../components/layout/Copyright";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Settings | Matrix Tricks",
+};
 
 export default async function Layout({
   children,

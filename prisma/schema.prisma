@@ -7,6 +7,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum RubricType {
+  TEXTS
+  BASICS
+  VIDEOS
+  TRICKS
+}
+
 model User {
   id              String           @id
   name            String
@@ -19,6 +26,10 @@ model User {
   sessions        Session[]
   accounts        Account[]
   fanWallMessages FanWallMessage[]
+  posts           Post[]
+  comments        Comment[]
+  postLikes       PostLike[]
+  commentLikes    CommentLike[]
 
   username        String?
   displayUsername String?
@@ -92,4 +103,97 @@ model FanWallMessage {
   @@index([userId])
   @@index([isPinned, createdAt])
   @@map("fanwall_message")
+}
+
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  content     String? // Rich text content
+  type        String // "text" or "media"
+  rubric      RubricType
+  published   Boolean    @default(false)
+  scheduledAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  media      Media[]
+  comments   Comment[]
+  likes      PostLike[]
+  shareCount Int        @default(0)
+
+  @@index([authorId])
+  @@index([rubric])
+  @@index([published, createdAt])
+  @@map("post")
+}
+
+model Media {
+  id         String   @id @default(cuid())
+  url        String
+  type       String // "image" or "video"
+  fileName   String
+  fileSize   Int
+  uploadedAt DateTime @default(now())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@map("media")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  nickname String?
+
+  likes CommentLike[]
+
+  @@index([postId])
+  @@index([userId])
+  @@map("comment")
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@index([postId])
+  @@index([userId])
+  @@map("post_like")
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  commentId String
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("comment_like")
 }

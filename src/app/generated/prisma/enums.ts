@@ -9,7 +9,11 @@
 * 🟢 You can import this file directly.
 */
 
+export const RubricType = {
+  TEXTS: 'TEXTS',
+  BASICS: 'BASICS',
+  VIDEOS: 'VIDEOS',
+  TRICKS: 'TRICKS'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type RubricType = (typeof RubricType)[keyof typeof RubricType]

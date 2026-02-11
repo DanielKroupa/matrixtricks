@@ -2,6 +2,11 @@ import { Banner } from "../components/Banner";
 import { Footer } from "../components/layout/Footer";
 import { Navbar } from "../components/layout/Navbar";
 import { Title } from "../components/Title";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "New Post | Matrix Tricks",
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

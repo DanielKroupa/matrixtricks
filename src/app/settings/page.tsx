@@ -1,12 +1,7 @@
-import { Metadata } from "next";
 import { getServerSession } from "@/lib/get-session";
 
 import { unauthorized } from "next/navigation";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Settings | Matrix Tricks",
-};
 
 export default async function Page() {
   const session = await getServerSession();
@@ -17,20 +12,20 @@ export default async function Page() {
   }
   return (
     <div className="flex gap-2">
-      <div className="border-r-2 border-b-2 border-l-2 border-neutral-600 rounded-br-md rounded-bl-md">
-        <h3 className="p-2 bg-neutral-600 font-medium">User info</h3>
+      <div className="rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-600">
+        <h3 className="bg-neutral-600 p-2 font-medium">User info</h3>
         <span className="text-xl">{user?.name} </span>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <div className="">
-            <button className="flex items-center gap-1.5 justify-center px-2 py-1.5 rounded-md bg-neutral-500">
-              <span className="size-3 flex rounded-full bg-green-500 p-1"></span>
+            <button className="flex items-center justify-center gap-1.5 rounded-md bg-neutral-500 px-2 py-1.5">
+              <span className="flex size-3 rounded-full bg-green-500 p-1"></span>
               Online
             </button>
           </div>
           <div> / </div>
           <div>
-            <button className="flex items-center gap-1.5 justify-center px-2 py-1.5 rounded-md bg-neutral-500">
-              <span className="size-3 flex rounded-full bg-amber-600 p-1"></span>
+            <button className="flex items-center justify-center gap-1.5 rounded-md bg-neutral-500 px-2 py-1.5">
+              <span className="flex size-3 rounded-full bg-amber-600 p-1"></span>
               Offline
             </button>
           </div>
@@ -40,28 +35,28 @@ export default async function Page() {
             VIP: <span>Active</span>
           </p>
 
-          <div className="space-y-2 block">
+          <div className="block space-y-2">
             <p>
               1 Month Subscription <span>(expires 24.12.25)</span>
             </p>
-            <Link href="" className="bg-neutral-600 px-3 py-2 rounded-md">
+            <Link href="" className="rounded-md bg-neutral-600 px-3 py-2">
               Buy VIP
             </Link>
           </div>
         </div>
       </div>
       <form className="">
-        <h3 className="p-2 bg-neutral-600 font-medium text-center">
+        <h3 className="bg-neutral-600 p-2 text-center font-medium">
           Change password
         </h3>
-        <div className="w-full border-r-2 border-l-2 border-b-2 border-neutral-600 rounded-br-md rounded-bl-md">
+        <div className="w-full rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-600">
           <div className="space-y-4 p-4">
             <div className="flex flex-col gap-2">
               <label className="font-normal">Current password:</label>
               <input
                 type="password"
                 autoComplete="current-password"
-                className="dark:bg-neutral-800 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-full  outline-none"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-800"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -69,7 +64,7 @@ export default async function Page() {
               <input
                 type="password"
                 autoComplete="new-password"
-                className="dark:bg-neutral-800 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-full  outline-none"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-800"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -77,12 +72,12 @@ export default async function Page() {
               <input
                 type="password"
                 autoComplete="new-password"
-                className="dark:bg-neutral-800 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-full  outline-none"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-800"
               />
             </div>
             <button
               type="submit"
-              className="dark:bg-cyan-900 justify-self-center bg-cyan-800 text-white py-2 px-4 rounded-md mr-2 md:w-fit w-full cursor-pointer shadow-md flex justify-center items-center gap-2"
+              className="mr-2 flex w-full cursor-pointer items-center justify-center gap-2 justify-self-center rounded-md bg-cyan-800 px-4 py-2 text-white shadow-md md:w-fit dark:bg-cyan-900"
             >
               Update password
             </button>

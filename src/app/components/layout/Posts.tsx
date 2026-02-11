@@ -1,83 +1,64 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-import { TextPost } from "./TextPost";
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  type: string;
+  rubric: string;
+  media: { id: string; url: string; type: string }[];
+  createdAt: string;
+}
 
 export function Posts() {
-  const textPosts = [
-    {
-      title:
-        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
-      body: (
-        <>
-          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
-          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
-          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
-          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
-          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
-          amet leo odio scelerisque amet. At ut mollis turpis etiam
-          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
-          eget facilisi porttitor eu sociis diam.
-        </>
-      ),
-    },
-    {
-      title:
-        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
-      body: (
-        <>
-          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
-          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
-          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
-          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
-          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
-          amet leo odio scelerisque amet. At ut mollis turpis etiam
-          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
-          eget facilisi porttitor eu sociis diam.
-        </>
-      ),
-    },
-    {
-      title:
-        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
-      body: (
-        <>
-          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
-          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
-          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
-          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
-          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
-          amet leo odio scelerisque amet. At ut mollis turpis etiam
-          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
-          eget facilisi porttitor eu sociis diam.
-        </>
-      ),
-    },
-    {
-      title:
-        "Lorem ipsum enim senectus nec enim rhoncus eu nunc velit eget leo dignissim elementum pharetra.",
-      body: (
-        <>
-          Lorem ipsum dolor sit amet consectetur. Tortor habitasse massa porta a
-          ultrices fermentum. In id tellus cras tristique. Tempus porttitor ut
-          mauris arcu vel porttitor ac. Pharetra tempus eu cras viverra. Donec
-          diam aenean eu est. Adipiscing habitant suscipit ut mattis malesuada
-          nisi nulla. Id lectus pulvinar augue aliquet tincidunt. A eget egestas
-          amet leo odio scelerisque amet. At ut mollis turpis etiam
-          pellentesque. Nulla egestas arcu vel arcu phasellus. Facilisis lorem
-          eget facilisi porttitor eu sociis diam.
-        </>
-      ),
-    },
-  ];
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/posts?rubric=videos")
+      .then((res) => res.json())
+      .then((data) => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <>
-      {/* Texts */}
-      <div className="p-2 w-full grid gap-4 dark:text-white text-black">
-        {textPosts.map((post, index) => (
-          <TextPost key={index} title={post.title} body={post.body} />
-        ))}
-      </div>
-    </>
+    <div className="grid w-full gap-4 p-2 text-black dark:text-white">
+      {posts.map((post) => (
+        <div key={post.id} className="rounded border p-4">
+          <h2 className="text-xl font-bold">{post.title}</h2>
+          <p className="text-sm text-gray-500">{post.rubric}</p>
+          {post.content && (
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          )}
+          <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
+            {post.media.map((media) => (
+              <div key={media.id}>
+                {media.type === "image" ? (
+                  <Image
+                    src={media.url}
+                    alt=""
+                    width={300}
+                    height={200}
+                    className="h-auto w-full"
+                  />
+                ) : (
+                  <video src={media.url} controls className="w-full" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

@@ -55,7 +55,12 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  FanWallMessage: 'FanWallMessage'
+  FanWallMessage: 'FanWallMessage',
+  Post: 'Post',
+  Media: 'Media',
+  Comment: 'Comment',
+  PostLike: 'PostLike',
+  CommentLike: 'CommentLike'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -148,6 +153,69 @@ export const FanWallMessageScalarFieldEnum = {
 } as const
 
 export type FanWallMessageScalarFieldEnum = (typeof FanWallMessageScalarFieldEnum)[keyof typeof FanWallMessageScalarFieldEnum]
+
+
+export const PostScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  type: 'type',
+  rubric: 'rubric',
+  published: 'published',
+  scheduledAt: 'scheduledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  authorId: 'authorId',
+  shareCount: 'shareCount'
+} as const
+
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const MediaScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  type: 'type',
+  fileName: 'fileName',
+  fileSize: 'fileSize',
+  uploadedAt: 'uploadedAt',
+  postId: 'postId'
+} as const
+
+export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
+
+
+export const CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  postId: 'postId',
+  userId: 'userId',
+  nickname: 'nickname'
+} as const
+
+export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
+
+
+export const PostLikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  postId: 'postId',
+  userId: 'userId'
+} as const
+
+export type PostLikeScalarFieldEnum = (typeof PostLikeScalarFieldEnum)[keyof typeof PostLikeScalarFieldEnum]
+
+
+export const CommentLikeScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  commentId: 'commentId',
+  userId: 'userId'
+} as const
+
+export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
 
 
 export const SortOrder = {

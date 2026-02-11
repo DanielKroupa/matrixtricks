@@ -84,7 +84,7 @@ export default function RegisterForm() {
             {...register("email")}
             autoComplete="email"
             placeholder="Enter your email"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.email ? "border border-red-500" : ""
             }`}
           />
@@ -99,7 +99,7 @@ export default function RegisterForm() {
             {...register("username")}
             autoComplete="username"
             placeholder="Choose a username"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.username ? "border border-red-500" : ""
             }`}
           />
@@ -116,7 +116,7 @@ export default function RegisterForm() {
             {...register("password")}
             autoComplete="new-password"
             placeholder="Create a password"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.password ? "border border-red-500" : ""
             }`}
           />
@@ -133,7 +133,7 @@ export default function RegisterForm() {
             {...register("confirmPassword")}
             autoComplete="new-password"
             placeholder="Confirm your password"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.confirmPassword ? "border border-red-500" : ""
             }`}
           />
@@ -155,12 +155,12 @@ export default function RegisterForm() {
         </PrimaryButton>
       </form>
 
-      <div className="border-t pt-4 dark:border-neutral-600 border-neutral-300">
+      <div className="border-t border-neutral-300 pt-4 dark:border-neutral-600">
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
           Already have an account?{" "}
           <Link
             href="/sign-in"
-            className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700 cursor-pointer"
+            className="cursor-pointer font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
           >
             Sign in
           </Link>
