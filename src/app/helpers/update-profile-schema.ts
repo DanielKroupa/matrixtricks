@@ -11,7 +11,6 @@ export const updateProfileSchema = z.object({
       /^[a-zA-Z0-9_.]+$/,
       "Username can only contain letters, numbers, underscores, and dots",
     ),
-  image: z.string().nullable().optional(),
 });
 
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

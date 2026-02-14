@@ -7,10 +7,19 @@ const updatePostSchema = z
   .object({
     title: z.string().min(1).max(255).optional(),
     content: z.string().optional(),
+    isPinned: z.boolean().optional(),
   })
-  .refine((data) => data.title !== undefined || data.content !== undefined, {
-    message: "At least one field must be provided",
-  });
+  .refine(
+    (data) =>
+      data.title !== undefined ||
+      data.content !== undefined ||
+      data.isPinned !== undefined,
+    {
+      message: "At least one field must be provided",
+    },
+  );
+
+const MAX_PINNED_PER_RUBRIC = 5;
 
 export async function PATCH(
   request: NextRequest,
@@ -32,7 +41,7 @@ export async function PATCH(
 
     const existingPost = await prisma.post.findUnique({
       where: { id },
-      select: { id: true, authorId: true },
+      select: { id: true, authorId: true, rubric: true, isPinned: true },
     });
 
     if (!existingPost) {
@@ -44,6 +53,92 @@ export async function PATCH(
 
     if (!isAdmin && !isOwner) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    if (parsed.data.isPinned !== undefined && !isAdmin) {
+      return NextResponse.json(
+        { error: "Only admin can pin or unpin posts" },
+        { status: 403 },
+      );
+    }
+
+    if (parsed.data.isPinned !== undefined) {
+      const wantsPinned = parsed.data.isPinned;
+
+      const updatedPost = await prisma.$transaction(async (tx) => {
+        if (wantsPinned) {
+          const pinnedInRubric = await tx.post.findMany({
+            where: {
+              rubric: existingPost.rubric,
+              isPinned: true,
+              id: { not: id },
+            },
+            orderBy: [{ pinnedAt: "asc" }, { createdAt: "asc" }],
+            select: { id: true },
+          });
+
+          if (pinnedInRubric.length >= MAX_PINNED_PER_RUBRIC) {
+            const toUnpinCount =
+              pinnedInRubric.length - MAX_PINNED_PER_RUBRIC + 1;
+            const idsToUnpin = pinnedInRubric
+              .slice(0, toUnpinCount)
+              .map((post) => post.id);
+
+            if (idsToUnpin.length > 0) {
+              await tx.post.updateMany({
+                where: { id: { in: idsToUnpin } },
+                data: { isPinned: false, pinnedAt: null },
+              });
+            }
+          }
+
+          return tx.post.update({
+            where: { id },
+            data: {
+              ...(parsed.data.title !== undefined
+                ? { title: parsed.data.title }
+                : {}),
+              ...(parsed.data.content !== undefined
+                ? { content: parsed.data.content }
+                : {}),
+              isPinned: true,
+              pinnedAt: new Date(),
+            },
+            select: {
+              id: true,
+              title: true,
+              content: true,
+              isPinned: true,
+              pinnedAt: true,
+              updatedAt: true,
+            },
+          });
+        }
+
+        return tx.post.update({
+          where: { id },
+          data: {
+            ...(parsed.data.title !== undefined
+              ? { title: parsed.data.title }
+              : {}),
+            ...(parsed.data.content !== undefined
+              ? { content: parsed.data.content }
+              : {}),
+            isPinned: false,
+            pinnedAt: null,
+          },
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            isPinned: true,
+            pinnedAt: true,
+            updatedAt: true,
+          },
+        });
+      });
+
+      return NextResponse.json(updatedPost);
     }
 
     const updatedPost = await prisma.post.update({
@@ -60,6 +155,8 @@ export async function PATCH(
         id: true,
         title: true,
         content: true,
+        isPinned: true,
+        pinnedAt: true,
         updatedAt: true,
       },
     });

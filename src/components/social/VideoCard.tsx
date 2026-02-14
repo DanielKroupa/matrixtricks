@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Play } from "lucide-react";
+import { Heart, Pin, Play } from "lucide-react";
 
 // Using exact type would be better, but any for flexibility with Prisma includes
 interface VideoCardProps {
@@ -23,6 +23,11 @@ export const VideoCard = ({ post }: VideoCardProps) => {
       href={postHref}
       className="group relative aspect-video cursor-pointer overflow-hidden rounded-lg bg-black"
     >
+      {post.isPinned && (
+        <div className="absolute top-2 left-2 z-10 rounded-full bg-black/50 p-1 text-white">
+          <Pin size={14} />
+        </div>
+      )}
       {thumbnailUrl ? (
         videoMedia.type === "video" ? (
           <video

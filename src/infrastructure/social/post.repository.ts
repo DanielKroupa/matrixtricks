@@ -8,7 +8,11 @@ export const postRepository = {
     const skip = (page - 1) * limit;
     return prisma.post.findMany({
       where: { rubric, published: true },
-      orderBy: { createdAt: "desc" },
+      orderBy: [
+        { isPinned: "desc" },
+        { pinnedAt: "desc" },
+        { createdAt: "desc" },
+      ],
       skip,
       take: limit,
       include: {

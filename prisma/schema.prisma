@@ -111,6 +111,8 @@ model Post {
   content     String? // Rich text content
   type        String // "text" or "media"
   rubric      RubricType
+  isPinned    Boolean    @default(false)
+  pinnedAt    DateTime?
   published   Boolean    @default(false)
   scheduledAt DateTime?
   createdAt   DateTime   @default(now())
@@ -127,6 +129,7 @@ model Post {
   @@index([authorId])
   @@index([rubric])
   @@index([published, createdAt])
+  @@index([rubric, isPinned, pinnedAt])
   @@map("post")
 }
 

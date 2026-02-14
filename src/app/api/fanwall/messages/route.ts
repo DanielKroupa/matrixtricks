@@ -35,26 +35,68 @@ function serializeMessage(message: {
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const limitParam = url.searchParams.get("limit");
+  const beforeParam = url.searchParams.get("before");
+
   const parsedLimit = Number(limitParam ?? DEFAULT_LIMIT);
   const limit = Math.min(
     Number.isFinite(parsedLimit) ? parsedLimit : DEFAULT_LIMIT,
     MAX_LIMIT,
   );
 
+  const includeUser = {
+    user: {
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        image: true,
+        role: true,
+      },
+    },
+  } as const;
+
+  if (beforeParam) {
+    const beforeDate = new Date(beforeParam);
+    if (Number.isNaN(beforeDate.getTime())) {
+      // invalid before -> fallback to default behavior
+      const messages = await prisma.fanWallMessage.findMany({
+        take: limit,
+        orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
+        include: includeUser,
+      });
+
+      return NextResponse.json(
+        { messages: messages.map(serializeMessage) },
+        { headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const pinnedMessages = await prisma.fanWallMessage.findMany({
+      where: { isPinned: true },
+      orderBy: { createdAt: "desc" },
+      include: includeUser,
+    });
+
+    const nonPinnedMessages = await prisma.fanWallMessage.findMany({
+      where: { isPinned: false, createdAt: { lt: beforeDate } },
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: includeUser,
+    });
+
+    const combined = [...pinnedMessages, ...nonPinnedMessages];
+
+    return NextResponse.json(
+      { messages: combined.map(serializeMessage) },
+      { headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  // default behavior
   const messages = await prisma.fanWallMessage.findMany({
     take: limit,
     orderBy: [{ isPinned: "desc" }, { createdAt: "desc" }],
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-          image: true,
-          role: true,
-        },
-      },
-    },
+    include: includeUser,
   });
 
   return NextResponse.json(

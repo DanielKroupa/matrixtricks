@@ -161,6 +161,8 @@ export const PostScalarFieldEnum = {
   content: 'content',
   type: 'type',
   rubric: 'rubric',
+  isPinned: 'isPinned',
+  pinnedAt: 'pinnedAt',
   published: 'published',
   scheduledAt: 'scheduledAt',
   createdAt: 'createdAt',

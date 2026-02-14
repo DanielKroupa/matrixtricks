@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import Image from "next/image";
 import { User } from "@/lib/auth";
@@ -16,14 +16,85 @@ function formatBytes(bytes: number) {
 type AvatarUploadProps = {
   maxSize?: number; // bytes
   user?: User | null;
-  value?: string | null;
-  onImageChange?: (image: string | null) => void;
+  onImageChange?: (imageFile: File | null) => void;
 };
+
+const AVATAR_DIMENSION = 256;
+const CLIENT_WEBP_QUALITY = 0.7;
+
+function stripExtension(fileName: string) {
+  return fileName.replace(/\.[^/.]+$/, "");
+}
+
+async function compressForPreviewAndUpload(file: File) {
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Only image files are allowed.");
+  }
+
+  const sourceUrl = URL.createObjectURL(file);
+
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const image = new window.Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("Failed to read image."));
+      image.src = sourceUrl;
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = AVATAR_DIMENSION;
+    canvas.height = AVATAR_DIMENSION;
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      throw new Error("Canvas is not available in this browser.");
+    }
+
+    const sourceSize = Math.min(img.naturalWidth, img.naturalHeight);
+    const sourceX = Math.floor((img.naturalWidth - sourceSize) / 2);
+    const sourceY = Math.floor((img.naturalHeight - sourceSize) / 2);
+
+    context.drawImage(
+      img,
+      sourceX,
+      sourceY,
+      sourceSize,
+      sourceSize,
+      0,
+      0,
+      AVATAR_DIMENSION,
+      AVATAR_DIMENSION,
+    );
+
+    const webpBlob = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob(resolve, "image/webp", CLIENT_WEBP_QUALITY);
+    });
+
+    if (webpBlob) {
+      return new File([webpBlob], `${stripExtension(file.name)}.webp`, {
+        type: "image/webp",
+      });
+    }
+
+    const pngBlob = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob(resolve, "image/png");
+    });
+
+    if (!pngBlob) {
+      throw new Error("Failed to process image.");
+    }
+
+    return new File([pngBlob], `${stripExtension(file.name)}.png`, {
+      type: "image/png",
+    });
+  } finally {
+    URL.revokeObjectURL(sourceUrl);
+  }
+}
 
 export default function AvatarUpload({
   maxSize = 10 * 1024 * 1024,
   user,
-  value,
   onImageChange,
 }: AvatarUploadProps) {
   const [file, setFile] = useState<File | null>(null);
@@ -31,7 +102,15 @@ export default function AvatarUpload({
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    return () => {
+      if (localPreview) {
+        URL.revokeObjectURL(localPreview);
+      }
+    };
+  }, [localPreview]);
+
+  async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
 
     if (!file) {
@@ -49,39 +128,39 @@ export default function AvatarUpload({
       return;
     }
 
-    setError(null);
-    setFile(file);
+    try {
+      const processedFile = await compressForPreviewAndUpload(file);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = typeof reader.result === "string" ? reader.result : null;
-      if (!base64) {
-        setError("Failed to read the selected image.");
-        setFile(null);
-        return;
-      }
-
-      if (value === undefined) {
-        setLocalPreview(base64);
-      }
-
-      onImageChange?.(base64);
-    };
-
-    reader.onerror = () => {
-      setError("Failed to read the selected image.");
+      setError(null);
+      setFile(processedFile);
+      setLocalPreview((prev) => {
+        if (prev) {
+          URL.revokeObjectURL(prev);
+        }
+        return URL.createObjectURL(processedFile);
+      });
+      onImageChange?.(processedFile);
+    } catch {
+      setError("Failed to process the selected image.");
       setFile(null);
+      setLocalPreview((prev) => {
+        if (prev) {
+          URL.revokeObjectURL(prev);
+        }
+        return null;
+      });
       if (inputRef.current) inputRef.current.value = "";
-    };
-
-    reader.readAsDataURL(file);
+    }
   }
 
   function clearFile() {
     setFile(null);
-    if (value === undefined) {
-      setLocalPreview(null);
-    }
+    setLocalPreview((prev) => {
+      if (prev) {
+        URL.revokeObjectURL(prev);
+      }
+      return null;
+    });
     if (inputRef.current) inputRef.current.value = "";
     setError(null);
     onImageChange?.(null);
@@ -89,7 +168,7 @@ export default function AvatarUpload({
 
   const fallbackAvatar = "/uploads/avatars/alien.png";
   const userImage = user?.image && user.image.length > 0 ? user.image : null;
-  const previewSource = value ?? localPreview ?? userImage ?? null;
+  const previewSource = localPreview ?? userImage ?? null;
 
   return (
     <div className="my-6 block items-center gap-2 md:flex">

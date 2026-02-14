@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart, User as UserIcon } from "lucide-react";
 import Image from "next/image";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -36,7 +36,7 @@ export const CommentItem = ({
   };
 
   const user = comment.user;
-  const displayName = user?.name || user?.username || comment.nickname;
+  const displayName = user?.name || user?.username || comment.nickname || "";
   const avatarUrl = user?.image;
   const sessionUser = session?.user ?? session?.data?.user ?? null;
   const currentUserId = sessionUser?.id;
@@ -181,7 +181,7 @@ export const CommentItem = ({
                   )}
                   {canDelete && (
                     <button
-                      className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                      className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-200 dark:text-red-300 dark:hover:bg-neutral-600"
                       onClick={handleDelete}
                       disabled={isSaving}
                     >

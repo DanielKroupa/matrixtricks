@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 import Badge from "../ui/Badge";
@@ -43,6 +43,7 @@ type FanWallClientProps = {
 type FanwallError = string | null;
 
 const DEFAULT_AVATAR = "/uploads/avatars/alien.png";
+const PAGE_SIZE = 20;
 
 function getAuthorName(message: FanwallMessage) {
   return (
@@ -52,6 +53,49 @@ function getAuthorName(message: FanwallMessage) {
 
 function getAvatarSrc(message: FanwallMessage) {
   return message.user?.image || DEFAULT_AVATAR;
+}
+
+function formatTime(iso: string) {
+  const date = new Date(iso);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const now = Date.now();
+  const diffInSeconds = Math.round((date.getTime() - now) / 1000);
+  const absSeconds = Math.abs(diffInSeconds);
+  const rtf = new Intl.RelativeTimeFormat("cs", { numeric: "auto" });
+
+  if (absSeconds < 60) {
+    return rtf.format(diffInSeconds, "second");
+  }
+
+  const diffInMinutes = Math.round(diffInSeconds / 60);
+  if (Math.abs(diffInMinutes) < 60) {
+    return rtf.format(diffInMinutes, "minute");
+  }
+
+  const diffInHours = Math.round(diffInMinutes / 60);
+  if (Math.abs(diffInHours) < 24) {
+    return rtf.format(diffInHours, "hour");
+  }
+
+  const diffInDays = Math.round(diffInHours / 24);
+  if (Math.abs(diffInDays) < 30) {
+    return rtf.format(diffInDays, "day");
+  }
+
+  return date.toLocaleString("cs-CZ");
+}
+
+function formatExactTime(iso: string) {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return date.toLocaleString("cs-CZ");
 }
 
 type PinnedMessageCardProps = {
@@ -75,7 +119,7 @@ function PinnedMessageCard({
   const avatarSrc = getAvatarSrc(message);
 
   return (
-    <div className="bg-neutral-200 py-4 dark:bg-[#444444]">
+    <div className="bg-neutral-300 py-4 shadow-lg dark:bg-[#353535]">
       <div className="group relative flex flex-row items-center justify-baseline gap-2 px-2 md:gap-4 md:px-6">
         <div>
           <Image
@@ -89,8 +133,17 @@ function PinnedMessageCard({
         </div>
         <div className="flex flex-col space-y-1">
           {message.title && <h5 className="font-medium">{message.title}</h5>}
-          <p>{authorName}</p>
-          <div className="rounded-lg bg-neutral-300 px-4 py-2 shadow dark:bg-neutral-500">
+          <p className="flex items-center gap-2">
+            <span>{authorName}</span>
+            <time
+              className="text-xs text-neutral-500"
+              dateTime={message.createdAt}
+              title={formatExactTime(message.createdAt)}
+            >
+              {formatTime(message.createdAt)}
+            </time>
+          </p>
+          <div className="rounded-lg bg-neutral-200 px-4 py-2 shadow dark:bg-neutral-500">
             <p className="text-sm font-normal md:text-base">{message.body}</p>
           </div>
           {isAdmin && (
@@ -181,7 +234,16 @@ function FanwallMessageItem({
             {message.title}
           </h5>
         )}
-        <p>{authorName}</p>
+        <p className="flex items-center gap-2">
+          <span>{authorName}</span>
+          <time
+            className="text-xs text-neutral-500"
+            dateTime={message.createdAt}
+            title={formatExactTime(message.createdAt)}
+          >
+            {formatTime(message.createdAt)}
+          </time>
+        </p>
         <div className="w-fit rounded-lg bg-neutral-300 px-4 py-2 shadow-md dark:bg-neutral-500">
           {isEditing ? (
             <div className="flex flex-col gap-2">
@@ -251,7 +313,7 @@ function FanwallMessageItem({
                 {canDelete && (
                   <button
                     title="Delete post"
-                    className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
+                    className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-100 dark:text-red-300 dark:hover:bg-neutral-500"
                     onClick={() => {
                       onDelete(message);
                       onCloseMenu();
@@ -306,7 +368,7 @@ function FanwallForm({
   return (
     <form
       onSubmit={onSubmit}
-      className="w-full flex-row justify-center border-t-2 border-neutral-300 bg-neutral-200 px-4 py-4 text-neutral-700 md:px-16 dark:bg-neutral-700 dark:text-white"
+      className="w-full flex-row justify-center border-t-2 border-neutral-300 bg-neutral-200 px-4 py-4 text-neutral-700 md:px-16 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
     >
       {!sessionUser && (
         <div className="block w-full flex-row gap-2 py-2 md:flex md:w-1/2">
@@ -397,6 +459,12 @@ export default function FanWallClient({
       );
   }, [messages]);
 
+  // Scrolling / pagination state
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  const [loadingOlder, setLoadingOlder] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const socketUrl =
       process.env.NEXT_PUBLIC_FANWALL_SOCKET_URL || "http://localhost:3001";
@@ -429,6 +497,106 @@ export default function FanWallClient({
       socket.disconnect();
     };
   }, []);
+
+  // Scroll helpers
+  const scrollToBottom = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, []);
+
+  // On mount, ensure we scroll to bottom
+  useEffect(() => {
+    scrollToBottom();
+  }, [scrollToBottom]);
+
+  // When new messages arrive, if user is at bottom, keep at bottom
+  const prevMessagesLen = useRef(messages.length);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const prev = prevMessagesLen.current;
+    if (messages.length > prev && isAtBottom) {
+      // Wait for DOM update
+      requestAnimationFrame(() => scrollToBottom());
+    }
+    prevMessagesLen.current = messages.length;
+  }, [messages.length, isAtBottom, scrollToBottom]);
+
+  // Load older messages (pagination) using 'before' cursor
+  async function loadOlder() {
+    if (loadingOlder || !hasMore) return;
+    const el = containerRef.current;
+    if (!el) return;
+    setLoadingOlder(true);
+
+    // Find oldest non-pinned message timestamp
+    const nonPinned = otherMessages;
+    if (nonPinned.length === 0) {
+      setHasMore(false);
+      setLoadingOlder(false);
+      return;
+    }
+
+    const oldest = nonPinned[0];
+    const before = new Date(oldest.createdAt).toISOString();
+
+    try {
+      const prevScrollHeight = el.scrollHeight;
+      const res = await fetch(
+        `/api/fanwall/messages?before=${encodeURIComponent(
+          before,
+        )}&limit=${PAGE_SIZE}`,
+        { cache: "no-store" },
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        setLoadingOlder(false);
+        return;
+      }
+
+      const fetched: FanwallMessage[] = data.messages ?? [];
+
+      // Filter out pinned and duplicates
+      const toPrepend = fetched.filter(
+        (m) => !m.isPinned && !messages.some((ex) => ex.id === m.id),
+      );
+
+      if (toPrepend.length === 0) {
+        setHasMore(false);
+        setLoadingOlder(false);
+        return;
+      }
+
+      setMessages((prev) => {
+        const combined = [...toPrepend, ...prev];
+        return combined;
+      });
+
+      // restore scroll position so view doesn't jump
+      requestAnimationFrame(() => {
+        const nowHeight = el.scrollHeight;
+        el.scrollTop = nowHeight - prevScrollHeight;
+      });
+
+      if (fetched.length < PAGE_SIZE) setHasMore(false);
+    } catch (err) {
+      // ignore
+    } finally {
+      setLoadingOlder(false);
+    }
+  }
+
+  // Scroll event handler
+  function onScroll(e: React.UIEvent<HTMLDivElement>) {
+    const el = e.currentTarget;
+    const nearTop = el.scrollTop < 120;
+    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 60;
+
+    setIsAtBottom(nearBottom);
+    if (nearTop) loadOlder();
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -668,33 +836,46 @@ export default function FanWallClient({
         />
       )}
 
-      <div className="bg-neutral-200 py-4 dark:bg-neutral-700">
+      <div className="bg-neutral-200 dark:bg-neutral-700">
         {otherMessages.length === 0 && (
           <div className="px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-300">
             No messages yet.
           </div>
         )}
 
-        {otherMessages.map((message) => (
-          <FanwallMessageItem
-            key={message.id}
-            message={message}
-            sessionUser={sessionUser}
-            isAdmin={isAdmin}
-            isEditing={editingId === message.id}
-            editingBody={editingBody}
-            isMenuOpen={openMenuId === message.id}
-            loading={loading}
-            onToggleMenu={() => toggleMenu(message.id)}
-            onStartEdit={startEditing}
-            onStopEdit={stopEditing}
-            onSaveEdit={saveEdit}
-            onDelete={deleteMessage}
-            onTogglePin={togglePin}
-            onChangeEditingBody={setEditingBody}
-            onCloseMenu={() => setOpenMenuId(null)}
-          />
-        ))}
+        <div
+          ref={containerRef}
+          onScroll={onScroll}
+          className="fanwall-scroll overflow-auto px-0 md:px-2"
+          role="list"
+        >
+          {loadingOlder && (
+            <div className="px-4 py-2 text-center text-xs text-neutral-500">
+              Loading older messages…
+            </div>
+          )}
+
+          {otherMessages.map((message) => (
+            <FanwallMessageItem
+              key={message.id}
+              message={message}
+              sessionUser={sessionUser}
+              isAdmin={isAdmin}
+              isEditing={editingId === message.id}
+              editingBody={editingBody}
+              isMenuOpen={openMenuId === message.id}
+              loading={loading}
+              onToggleMenu={() => toggleMenu(message.id)}
+              onStartEdit={startEditing}
+              onStopEdit={stopEditing}
+              onSaveEdit={saveEdit}
+              onDelete={deleteMessage}
+              onTogglePin={togglePin}
+              onChangeEditingBody={setEditingBody}
+              onCloseMenu={() => setOpenMenuId(null)}
+            />
+          ))}
+        </div>
       </div>
       <FanwallForm
         sessionUser={sessionUser}

@@ -24,6 +24,7 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const router = useRouter();
 
@@ -31,7 +32,6 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       nickname: user.name ?? "",
-      image: user.image ?? null,
     },
   });
 
@@ -41,21 +41,44 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     formState: { errors },
   } = form;
 
-  const watchedImage = form.watch("image");
-
-  async function onSubmit({ nickname, image }: UpdateProfileFormData) {
+  async function onSubmit({ nickname }: UpdateProfileFormData) {
     setSuccess(null);
     setError(null);
     setLoading(true);
-    try {
-      const { error } = await authClient.updateUser({ name: nickname, image });
 
-      if (error) {
-        setError(error.message || "Failed to update profile");
-      } else {
-        setSuccess("Profile updated successfully");
-        router.refresh();
+    try {
+      const { error: updateNameError } = await authClient.updateUser({
+        name: nickname,
+      });
+
+      if (updateNameError) {
+        setError(updateNameError.message || "Failed to update profile");
+        return;
       }
+
+      if (avatarFile) {
+        const formData = new FormData();
+        formData.append("file", avatarFile);
+
+        const response = await fetch("/api/users/me/avatar", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          setError(
+            result?.error || "Profile name updated, avatar upload failed",
+          );
+          return;
+        }
+
+        setAvatarFile(null);
+      }
+
+      setSuccess("Profile updated successfully");
+      router.refresh();
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
     } finally {
@@ -63,8 +86,8 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     }
   }
 
-  function handleImageChange(image: string | null) {
-    form.setValue("image", image, { shouldDirty: true });
+  function handleImageChange(imageFile: File | null) {
+    setAvatarFile(imageFile);
   }
 
   return (
@@ -73,40 +96,35 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
     >
-      <AvatarUpload
-        user={user}
-        value={watchedImage}
-        onImageChange={handleImageChange}
-      />
+      <AvatarUpload user={user} onImageChange={handleImageChange} />
 
       {/* Input change nickname */}
-      <div className="md:w-72 w-auto space-y-4 ">
+      <div className="w-auto space-y-4 md:w-72">
         <div className="flex flex-col gap-2">
           <label>Nickname:</label>
           <input
             type="text"
             placeholder={user.name || "Enter nickname"}
-            className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-auto outline-none"
+            className="w-auto rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
             {...register("nickname")}
           />
           {errors.nickname && (
-            <p className="text-red-500 text-sm font-medium mt-1">
+            <p className="mt-1 text-sm font-medium text-red-500">
               {errors.nickname.message}
             </p>
           )}
           {success && (
-            <p className="text-green-500 text-sm font-medium mt-1">{success}</p>
+            <p className="mt-1 text-sm font-medium text-green-500">{success}</p>
           )}
         </div>
         {/* Input change bio information */}
-        <div className="flex flex-col gap-2 ">
+        <div className="flex flex-col gap-2">
           <label>Change bio information:</label>
           <AutoResizeTextarea />
           <button
             type="submit"
             disabled={loading}
-            className={`dark:bg-cyan-900 w-full bg-cyan-800 cursor pointer hover:bg-cyan-900 transition-all mt-2 md:mb-0 mb-4 text-white py-2 px-3 rounded mr-2 md:w-fit cursor-pointer shadow-md flex justify-center items-center gap-2 
-                ${loading ? "cursor-not-allowed opacity-50" : " opacity-100"}`}
+            className={`cursor pointer mt-2 mr-2 mb-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md transition-all hover:bg-cyan-900 md:mb-0 md:w-fit dark:bg-cyan-900 ${loading ? "cursor-not-allowed opacity-50" : "opacity-100"}`}
           >
             {loading ? (
               <span className="flex items-center gap-2">

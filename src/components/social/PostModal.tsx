@@ -6,6 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { SocialShareModal } from "./SocialShareModal";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsFillPinAngleFill } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import { useRouter } from "next/navigation";
@@ -174,6 +175,36 @@ export const PostModal = ({
   const media = fullPost?.media?.[0] || initialPost.media?.[0];
   const postTitle = fullPost?.title ?? initialPost.title;
   const postContent = fullPost?.content ?? initialPost.content ?? "";
+  const isPinned = Boolean(fullPost?.isPinned ?? initialPost.isPinned);
+
+  const handleTogglePin = async () => {
+    if (!isAdmin || isSaving) return;
+
+    try {
+      setIsSaving(true);
+      const response = await fetch(`/api/posts/${initialPost.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isPinned: !isPinned }),
+      });
+
+      if (!response.ok) {
+        alert("Failed to update pin state");
+        return;
+      }
+
+      const updatedPost = await response.json();
+      setFullPost((prev: any) => ({ ...prev, ...updatedPost }));
+      router.refresh();
+    } catch {
+      alert("Failed to update pin state");
+    } finally {
+      setIsSaving(false);
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center p-0 duration-200 sm:p-6 md:p-4">
@@ -203,17 +234,15 @@ export const PostModal = ({
 
               <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
               <div className="absolute top-3 right-3 left-3 z-10">
-                <h2 className="line-clamp-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                <h2 className="line-clamp-2 flex items-center gap-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                  {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
               </div>
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
               <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-between">
-                <button
-                  onClick={handleLike}
-                  className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
-                >
+                <button onClick={handleLike} title="Like">
                   <Heart size={16} fill={liked ? "currentColor" : "none"} />
                   <span>{likeCount}</span>
                 </button>
@@ -241,7 +270,8 @@ export const PostModal = ({
               />
               <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
               <div className="absolute top-3 right-3 left-3 z-10">
-                <h2 className="line-clamp-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                <h2 className="line-clamp-2 flex items-center gap-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                  {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
               </div>
@@ -250,6 +280,7 @@ export const PostModal = ({
               <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-center gap-4">
                 <button
                   onClick={handleLike}
+                  title="Like"
                   className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
                 >
                   <Heart size={16} fill={liked ? "currentColor" : "none"} />
@@ -257,6 +288,7 @@ export const PostModal = ({
                 </button>
                 <button
                   onClick={handleShare}
+                  title="Share"
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
                 >
                   <Image
@@ -273,7 +305,8 @@ export const PostModal = ({
             <div className="relative h-full w-full bg-black">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
               <div className="absolute top-3 right-3 left-3 z-10">
-                <h2 className="line-clamp-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                <h2 className="line-clamp-2 flex items-center gap-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                  {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
               </div>
@@ -296,6 +329,7 @@ export const PostModal = ({
                 </button>
                 <button
                   onClick={handleShare}
+                  title="Share"
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
                 >
                   <Share2 size={16} />
@@ -327,6 +361,16 @@ export const PostModal = ({
                       </button>
                       {isMenuOpen && (
                         <div className="post-menu absolute top-8 right-0 z-20 w-36 rounded-md bg-white shadow-lg dark:bg-neutral-700">
+                          {isAdmin && (
+                            <button
+                              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                              onClick={handleTogglePin}
+                              disabled={isSaving}
+                            >
+                              <BsFillPinAngleFill />
+                              {isPinned ? "Unpin" : "Pin"}
+                            </button>
+                          )}
                           <button
                             className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
                             onClick={handleEditPost}
