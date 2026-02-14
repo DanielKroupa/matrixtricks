@@ -158,9 +158,10 @@ export default function NewPostPage() {
             <select
               required
               {...register("rubric")}
+              defaultValue={"default"}
               className="w-full cursor-pointer rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
             >
-              <option value="" disabled defaultValue={""} hidden>
+              <option value="default" disabled hidden>
                 Select rubric
               </option>
               {rubrics.map((rubric) => (
