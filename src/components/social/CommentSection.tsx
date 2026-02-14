@@ -1,10 +1,10 @@
 "use client";
-import { JSX, useState } from "react";
-import { createComment } from "@/actions/social";
+import { JSX, ReactNode, useState } from "react";
 import { CommentItem } from "./CommentItem";
-import { authClient } from "@/lib/auth-client";
 import { Send, Smile } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useComments } from "./hooks/useComments";
+import type { CommentViewModel } from "./hooks/useComments";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
@@ -12,16 +12,25 @@ export const CommentSection = ({
   postId,
   initialComments,
   session,
+  headerRight,
 }: {
   postId: string;
-  initialComments: any[];
+  initialComments: CommentViewModel[];
   session: any;
+  headerRight?: ReactNode;
 }): JSX.Element => {
-  const [comments, setComments] = useState(initialComments);
   const [content, setContent] = useState("");
   const [nickname, setNickname] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const {
+    comments,
+    error,
+    loading,
+    setError,
+    addComment,
+    toggleLike,
+    updateCommentContent,
+    removeComment,
+  } = useComments(initialComments, session);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const onEmojiClick = (emojiObject: any) => {
@@ -29,56 +38,65 @@ export const CommentSection = ({
     setShowEmojiPicker(false);
   };
 
+  const handleCommentUpdated = async (commentId: string, content: string) => {
+    const updated = await updateCommentContent(commentId, content);
+    return Boolean(updated);
+  };
+
+  const handleCommentDeleted = async (commentId: string) => {
+    const success = await removeComment(commentId);
+    return success;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     try {
-      const result = await createComment({
-        content,
+      const newComment = await addComment(
         postId,
-        nickname: session ? undefined : nickname,
-      });
-      if (result.error) {
-        setError(result.error);
-      } else if (result.comment) {
-        const newComment = {
-          ...result.comment,
-          user: session?.user || null,
-          likes: [],
-          _count: { likes: 0 },
-        };
-        setComments([...comments, newComment]);
+        content,
+        session ? undefined : nickname,
+      );
+      if (newComment) {
         setContent("");
         setNickname("");
       }
     } catch (e) {
       setError("Failed to post comment");
     } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="flex h-full flex-col bg-white text-black">
-      <div className="border-b border-neutral-300 p-4">
+    <div className="flex h-full flex-col bg-white text-black dark:bg-neutral-700 dark:text-white">
+      <div className="flex items-center justify-between gap-2 border-b border-neutral-300 p-4 dark:border-neutral-600">
         <h3 className="text-lg font-semibold">Comments ({comments.length})</h3>
+        {headerRight}
       </div>
 
       <div className="custom-scrollbar mb-0 flex-1 overflow-y-auto p-4">
         {comments.length === 0 ? (
-          <p className="py-4 text-center text-gray-500">
+          <p className="py-4 text-center text-gray-500 dark:text-gray-400">
             No comments yet. Be the first!
           </p>
         ) : (
           comments.map((comment) => (
-            <CommentItem key={comment.id} comment={comment} />
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              session={session}
+              onCommentUpdated={(commentId, content) =>
+                handleCommentUpdated(commentId, content)
+              }
+              onCommentDeleted={(commentId) => handleCommentDeleted(commentId)}
+              onToggleLike={() => toggleLike(comment.id)}
+            />
           ))
         )}
       </div>
 
-      <div className="mt-auto border-t border-neutral-300 bg-gray-50 p-4">
+      <div className="mt-auto border-t border-neutral-300 bg-gray-50 p-4 dark:border-neutral-600 dark:bg-neutral-800">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           {error && <p className="text-sm text-red-500">{error}</p>}
 
@@ -103,7 +121,7 @@ export const CommentSection = ({
               </div>
             )}
             <textarea
-              className="flex-1 resize-none rounded-md border border-neutral-300 p-3 pr-20 text-sm transition-colors outline-none focus:border-cyan-500"
+              className="flex-1 resize-none rounded-md border border-neutral-300 p-3 pr-20 text-sm transition-colors outline-none focus:border-cyan-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white"
               placeholder="Leave a comment..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -113,7 +131,7 @@ export const CommentSection = ({
               <button
                 type="button"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className="rounded-full p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-yellow-500"
+                className="rounded-full p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-yellow-500 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-yellow-500"
               >
                 <Smile size={18} />
               </button>

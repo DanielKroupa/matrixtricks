@@ -2,11 +2,6 @@
 import { X, Heart, Share2 } from "lucide-react";
 import { CommentSection } from "./CommentSection";
 import { useState, useEffect } from "react";
-import {
-  getPostDetails,
-  togglePostLike,
-  incrementShareCount,
-} from "@/actions/social";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { SocialShareModal } from "./SocialShareModal";
@@ -14,6 +9,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { usePostInteractions } from "./hooks/usePostInteractions";
 
 export const PostModal = ({
   post: initialPost,
@@ -23,27 +19,24 @@ export const PostModal = ({
   onClose: () => void;
 }) => {
   const router = useRouter();
-  const [fullPost, setFullPost] = useState<any>(null);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(initialPost._count?.likes || 0);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>("");
   const [session, setSession] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  const {
+    fullPost,
+    setFullPost,
+    liked,
+    likeCount,
+    shareCount,
+    handleLike,
+    handleShareIncrement,
+  } = usePostInteractions(initialPost);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
-    const fetchDetails = async () => {
-      const details = await getPostDetails(initialPost.id);
-      setFullPost(details);
-      if (details) {
-        setLiked(details.likes?.length > 0);
-        setLikeCount(details._count.likes);
-      }
-    };
-    fetchDetails();
 
     authClient
       .getSession()
@@ -83,19 +76,12 @@ export const PostModal = ({
     };
   }, [isMenuOpen]);
 
-  const handleLike = async () => {
-    const newLiked = !liked;
-    setLiked(newLiked);
-    setLikeCount((prev: any) => (newLiked ? prev + 1 : prev - 1));
-    await togglePostLike(initialPost.id);
-  };
-
   const handleShare = async () => {
     const url =
       typeof window !== "undefined"
         ? `${window.location.origin}/rubrics/${initialPost.rubric.toLowerCase()}/post/${initialPost.id}`
         : "";
-    await incrementShareCount(initialPost.id);
+    await handleShareIncrement();
     setShareUrl(url);
     setIsShareOpen(true);
   };
@@ -186,9 +172,11 @@ export const PostModal = ({
   };
 
   const media = fullPost?.media?.[0] || initialPost.media?.[0];
+  const postTitle = fullPost?.title ?? initialPost.title;
+  const postContent = fullPost?.content ?? initialPost.content ?? "";
 
   return (
-    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center p-4 duration-200 sm:p-6">
+    <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center p-0 duration-200 sm:p-6 md:p-4">
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-md"
         onClick={onClose}
@@ -202,90 +190,164 @@ export const PostModal = ({
         <X size={24} />
       </button>
 
-      <div className="relative z-10 box-border flex h-[85vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl md:flex-row">
+      <div className="relative z-10 box-border flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl md:h-[85vh] md:flex-row">
         {/* Left: Media */}
         <div className="relative flex min-h-[40vh] flex-1 items-center justify-center bg-black md:min-h-full">
           {media?.type === "video" ? (
-            <video src={media.url} controls className="max-h-full max-w-full" />
-          ) : (
-            media?.url && (
+            <div className="relative h-full w-full">
+              <video
+                src={media.url}
+                controls
+                className="h-full w-full object-contain"
+              />
+
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
+              <div className="absolute top-3 right-3 left-3 z-10">
+                <h2 className="line-clamp-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                  {postTitle}
+                </h2>
+              </div>
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
+              <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-between">
+                <button
+                  onClick={handleLike}
+                  className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
+                >
+                  <Heart size={16} fill={liked ? "currentColor" : "none"} />
+                  <span>{likeCount}</span>
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
+                >
+                  <Image
+                    src="/icons/share.svg"
+                    alt="Share"
+                    width={16}
+                    height={16}
+                  />
+                  <span>{shareCount}</span>
+                </button>
+              </div>
+            </div>
+          ) : media?.url ? (
+            <div className="relative h-full w-full">
               <Image
                 src={media.url}
                 alt="Content"
                 fill
                 className="object-contain"
               />
-            )
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
+              <div className="absolute top-3 right-3 left-3 z-10">
+                <h2 className="line-clamp-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                  {postTitle}
+                </h2>
+              </div>
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
+              <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-center gap-4">
+                <button
+                  onClick={handleLike}
+                  className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
+                >
+                  <Heart size={16} fill={liked ? "currentColor" : "none"} />
+                  <span>{likeCount}</span>
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
+                >
+                  <Image
+                    src="/icons/share.svg"
+                    alt="Share"
+                    width={16}
+                    height={16}
+                  />
+                  <span> {shareCount}</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="relative h-full w-full bg-black">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
+              <div className="absolute top-3 right-3 left-3 z-10">
+                <h2 className="line-clamp-2 text-sm leading-snug font-semibold text-white drop-shadow-sm md:text-base">
+                  {postTitle}
+                </h2>
+              </div>
+
+              <div className="absolute inset-0 overflow-y-auto p-6 pt-16 pb-20 md:p-8 md:pt-16 md:pb-24">
+                <div
+                  className="prose prose-invert max-w-none text-sm md:text-base"
+                  dangerouslySetInnerHTML={{ __html: postContent }}
+                />
+              </div>
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
+              <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-between">
+                <button
+                  onClick={handleLike}
+                  className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
+                >
+                  <Heart size={16} fill={liked ? "currentColor" : "none"} />
+                  <span>{likeCount}</span>
+                </button>
+                <button
+                  onClick={handleShare}
+                  className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
+                >
+                  <Share2 size={16} />
+                  <span>Share {shareCount}</span>
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
         {/* Right: Interaction */}
-        <div className="flex h-full w-full flex-col bg-white md:w-100 md:border-l">
-          <div className="flex items-start justify-between border-b bg-white p-4">
-            <div className="w-full">
-              <div className="flex items-start justify-between gap-2">
-                <h2 className="text-lg leading-tight font-bold">
-                  {fullPost?.title ?? initialPost.title}
-                </h2>
-                {canManagePost && (
-                  <div className="relative">
-                    <button
-                      title="Post actions"
-                      className="post-menu-button cursor-pointer rounded-full bg-neutral-200 p-1 transition-colors hover:bg-neutral-300"
-                      onClick={() => setIsMenuOpen((open) => !open)}
-                      disabled={isSaving}
-                    >
-                      <BsThreeDotsVertical />
-                    </button>
-                    {isMenuOpen && (
-                      <div className="post-menu absolute top-8 right-0 z-20 w-36 rounded-md bg-white shadow-lg">
-                        <button
-                          className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200"
-                          onClick={handleEditPost}
-                          disabled={isSaving}
-                        >
-                          <FaPen />
-                          Edit
-                        </button>
-                        <button
-                          className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200"
-                          onClick={handleDeletePost}
-                          disabled={isSaving}
-                        >
-                          <IoTrash />
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-4 flex items-center gap-2">
-                <button
-                  onClick={handleLike}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-full py-1.5 transition-colors ${liked ? "bg-pink-100 text-pink-600" : "bg-gray-100 hover:bg-gray-200"}`}
-                >
-                  <Heart size={18} fill={liked ? "currentColor" : "none"} />
-                  <span className="text-sm font-medium">{likeCount}</span>
-                </button>
-                <button
-                  onClick={handleShare}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-gray-100 py-1.5 transition-colors hover:bg-gray-200"
-                >
-                  <Share2 size={18} />
-                  <span className="text-sm font-medium">Share</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
+        <div className="flex h-full w-full flex-col bg-white md:w-100 md:border-l dark:border-neutral-700 dark:bg-neutral-700">
           <div className="relative flex-1 overflow-hidden">
             {fullPost ? (
               <CommentSection
                 postId={initialPost.id}
                 initialComments={fullPost.comments}
                 session={session}
+                headerRight={
+                  canManagePost ? (
+                    <div className="relative">
+                      <button
+                        title="Post actions"
+                        className="post-menu-button cursor-pointer rounded-full bg-neutral-200 p-1 transition-colors hover:bg-neutral-300 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+                        onClick={() => setIsMenuOpen((open) => !open)}
+                        disabled={isSaving}
+                      >
+                        <BsThreeDotsVertical />
+                      </button>
+                      {isMenuOpen && (
+                        <div className="post-menu absolute top-8 right-0 z-20 w-36 rounded-md bg-white shadow-lg dark:bg-neutral-700">
+                          <button
+                            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                            onClick={handleEditPost}
+                            disabled={isSaving}
+                          >
+                            <FaPen />
+                            Edit
+                          </button>
+                          <button
+                            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200"
+                            onClick={handleDeletePost}
+                            disabled={isSaving}
+                          >
+                            <IoTrash />
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : null
+                }
               />
             ) : (
               <div className="flex h-full items-center justify-center">

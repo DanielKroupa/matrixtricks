@@ -16,3 +16,11 @@ export const CreateCommentSchema = z.object({
 export const ToggleLikeSchema = z.object({
   entityId: z.string().cuid(),
 });
+
+export const UpdateCommentSchema = z.object({
+  commentId: z.string().cuid(),
+  content: z
+    .string()
+    .min(1, "Comment cannot be empty")
+    .max(500, "Comment is too long"),
+});

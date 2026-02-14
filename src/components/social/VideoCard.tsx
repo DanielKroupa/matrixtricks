@@ -1,25 +1,27 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import { Heart, MessageCircle, Share2, Play } from "lucide-react";
+import Link from "next/link";
+import { Heart, Play } from "lucide-react";
 
 // Using exact type would be better, but any for flexibility with Prisma includes
 interface VideoCardProps {
   post: any;
-  onClick: (post: any) => void;
 }
 
-export const VideoCard = ({ post, onClick }: VideoCardProps) => {
+export const VideoCard = ({ post }: VideoCardProps) => {
   const videoMedia =
     post.media.find((media: any) => media.type === "video") || post.media[0];
   const thumbnailUrl = videoMedia?.url; // In real app, generate thumbnail. For now use same URL or placeholder if video.
+  const rubricSlug =
+    typeof post.rubric === "string" ? post.rubric.toLowerCase() : "videos";
+  const postHref = `/rubrics/${rubricSlug}/post/${post.id}`;
   // Ideally we have a thumbnail field or we use a video tag to show poster.
 
   return (
-    <div
+    <Link
+      href={postHref}
       className="group relative aspect-video cursor-pointer overflow-hidden rounded-lg bg-black"
-      onClick={() => onClick(post)}
     >
       {thumbnailUrl ? (
         videoMedia.type === "video" ? (
@@ -45,22 +47,22 @@ export const VideoCard = ({ post, onClick }: VideoCardProps) => {
       )}
 
       <div className="absolute inset-0 flex flex-col justify-end bg-black/40 p-4 text-white opacity-0 transition-opacity group-hover:opacity-100">
-        <h3 className="mb-2 truncate font-bold">{post.title}</h3>
-        <div className="flex items-center gap-4 text-sm">
+        <h3 className="mb-2 truncate text-sm font-bold">{post.title}</h3>
+        <div className="flex items-center justify-between gap-4 text-sm">
           <div className="flex items-center gap-1">
             <Heart size={16} />
             <span>{post._count?.likes || 0}</span>
           </div>
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <MessageCircle size={16} />
             <span>{post._count?.comments || 0}</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-1">
-            <Share2 size={16} />
+            <Image src="/icons/share.svg" alt="Share" width={16} height={16} />
             <span>{post.shareCount || 0}</span>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };

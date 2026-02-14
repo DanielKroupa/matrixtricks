@@ -92,13 +92,13 @@ export default function AvatarUpload({
   const previewSource = value ?? localPreview ?? userImage ?? null;
 
   return (
-    <div className="md:flex block gap-2 items-center my-6">
-      <div className="w-28 h-28 dark:bg-neutral-700 bg-neutral-300 rounded-full overflow-hidden flex items-center justify-center">
+    <div className="my-6 block items-center gap-2 md:flex">
+      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-neutral-300 dark:bg-neutral-700">
         {previewSource ? (
           <Image
             src={previewSource}
             alt="avatar preview"
-            className="h-28 w-28 object-cover rounded-full"
+            className="h-28 w-28 rounded-full object-cover"
             width={112}
             height={112}
             unoptimized
@@ -107,7 +107,7 @@ export default function AvatarUpload({
           <Image
             src={fallbackAvatar}
             alt="default avatar"
-            className="h-28 w-28 object-cover rounded-full"
+            className="h-28 w-28 rounded-full object-cover"
             width={112}
             height={112}
             unoptimized
@@ -115,7 +115,7 @@ export default function AvatarUpload({
         )}
       </div>
 
-      <div className="flex flex-col gap-2 justify-center ml-2 py-4">
+      <div className="ml-2 flex flex-col justify-center gap-2 py-4">
         <div>
           <div className="flex">
             <input
@@ -129,14 +129,14 @@ export default function AvatarUpload({
             />
             <label
               htmlFor="avatar_upload"
-              className="dark:bg-cyan-900 bg-cyan-800 flex text-white py-2 px-3 rounded mr-2 w-fit cursor-pointer shadow-md justify-center items-center gap-2"
+              className="mr-2 flex w-fit cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md dark:bg-cyan-900"
             >
               <MdOutlineFileUpload size={20} />
               Upload avatar
             </label>
           </div>
 
-          <div id="avatar-help" className="text-xs text-neutral-400 mt-1">
+          <div id="avatar-help" className="mt-1 text-xs text-neutral-400">
             Max size: {formatBytes(maxSize)}
           </div>
 
@@ -151,7 +151,7 @@ export default function AvatarUpload({
           )}
 
           {file && (
-            <div className="mt-2 text-sm text-neutral-300">
+            <div className="mt-2 text-sm text-neutral-400">
               <div>
                 <span className="font-semibold">Name:</span> {file.name}
               </div>
@@ -163,7 +163,7 @@ export default function AvatarUpload({
                 <button
                   type="button"
                   onClick={clearFile}
-                  className="cursor-pointer dark:bg-neutral-600 bg-neutral-500 text-white py-1 px-2 rounded"
+                  className="cursor-pointer rounded bg-neutral-500 px-2 py-1 text-white dark:bg-neutral-600"
                 >
                   Remove
                 </button>
