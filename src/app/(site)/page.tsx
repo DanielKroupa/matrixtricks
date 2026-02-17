@@ -1,13 +1,25 @@
-import { getVideoPosts } from "@/actions/social";
+import { getVideoPostsPage } from "@/actions/social";
+import { getEffectivePostPreference } from "@/app/helpers/post-preferences";
 import { VideoFeed } from "@/components/social/VideoFeed";
 
 export default async function Home() {
-  const posts = await getVideoPosts();
+  const preference = await getEffectivePostPreference("VIDEOS");
+  const result = await getVideoPostsPage(
+    1,
+    preference.postsPerPage,
+    preference.sortBy,
+  );
 
   return (
     <div className="container mx-auto">
       <div className="flex items-center justify-between p-6 pb-0"></div>
-      <VideoFeed initialPosts={posts} />
+      <VideoFeed
+        rubric="VIDEOS"
+        initialPosts={result.posts}
+        initialHasMore={result.hasMore}
+        postsPerPage={preference.postsPerPage}
+        sortBy={preference.sortBy}
+      />
     </div>
   );
 }

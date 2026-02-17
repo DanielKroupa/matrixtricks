@@ -8,18 +8,41 @@ import {
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { postService } from "@/application/social/post.service";
-import { RubricParam } from "@/domain/social/types";
+import { PostSortOption, RubricParam } from "@/domain/social/types";
+
+export async function getRubricPostsPage(
+  rubric: RubricParam,
+  page: number = 1,
+  limit: number = 10,
+  sortBy: PostSortOption = "newest",
+) {
+  return postService.listByRubric(rubric, page, limit, sortBy);
+}
 
 export async function getRubricPosts(
   rubric: RubricParam,
   page: number = 1,
-  limit: number = 12,
+  limit: number = 10,
+  sortBy: PostSortOption = "newest",
 ) {
-  return postService.listByRubric(rubric, page, limit);
+  const result = await getRubricPostsPage(rubric, page, limit, sortBy);
+  return result.posts;
 }
 // Get posts
-export async function getVideoPosts(page: number = 1, limit: number = 12) {
-  return getRubricPosts("VIDEOS", page, limit);
+export async function getVideoPostsPage(
+  page: number = 1,
+  limit: number = 10,
+  sortBy: PostSortOption = "newest",
+) {
+  return getRubricPostsPage("VIDEOS", page, limit, sortBy);
+}
+
+export async function getVideoPosts(
+  page: number = 1,
+  limit: number = 10,
+  sortBy: PostSortOption = "newest",
+) {
+  return getRubricPosts("VIDEOS", page, limit, sortBy);
 }
 // Get post details
 export async function getPostDetails(postId: string) {

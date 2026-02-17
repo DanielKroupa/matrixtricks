@@ -1,9 +1,14 @@
-import { RubricParam } from "@/domain/social/types";
+import type { PostSortOption, RubricParam } from "@/domain/social/types";
 import { postRepository } from "@/infrastructure/social/post.repository";
 
 export const postService = {
-  async listByRubric(rubric: RubricParam, page = 1, limit = 12) {
-    return postRepository.getRubricPosts(rubric, page, limit);
+  async listByRubric(
+    rubric: RubricParam,
+    page = 1,
+    limit = 12,
+    sortBy: PostSortOption = "newest",
+  ) {
+    return postRepository.getRubricPosts(rubric, page, limit, sortBy);
   },
 
   async getDetails(postId: string, userId?: string) {

@@ -380,7 +380,7 @@ export const PostModal = ({
                             Edit
                           </button>
                           <button
-                            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200"
+                            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-neutral-200 dark:text-red-500 dark:hover:bg-neutral-600 dark:hover:text-red-400"
                             onClick={handleDeletePost}
                             disabled={isSaving}
                           >

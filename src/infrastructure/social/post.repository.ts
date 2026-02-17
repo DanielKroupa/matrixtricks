@@ -1,25 +1,52 @@
 import prisma from "@/lib/prisma";
-import { RubricParam } from "@/domain/social/types";
+import type { PostSortOption, RubricParam } from "@/domain/social/types";
 
 const emptyUserId = "00000000-0000-0000-0000-000000000000";
 
 export const postRepository = {
-  async getRubricPosts(rubric: RubricParam, page = 1, limit = 12) {
+  async getRubricPosts(
+    rubric: RubricParam,
+    page = 1,
+    limit = 12,
+    sortBy: PostSortOption = "newest",
+  ) {
     const skip = (page - 1) * limit;
-    return prisma.post.findMany({
+
+    const sortOrderBy =
+      sortBy === "oldest"
+        ? [{ createdAt: "asc" as const }]
+        : sortBy === "shareCount"
+          ? [{ shareCount: "desc" as const }, { createdAt: "desc" as const }]
+          : sortBy === "likeCount"
+            ? [
+                { likes: { _count: "desc" as const } },
+                { createdAt: "desc" as const },
+              ]
+            : sortBy === "commentCount"
+              ? [
+                  { comments: { _count: "desc" as const } },
+                  { createdAt: "desc" as const },
+                ]
+              : [{ createdAt: "desc" as const }];
+
+    const posts = await prisma.post.findMany({
       where: { rubric, published: true },
-      orderBy: [
-        { isPinned: "desc" },
-        { pinnedAt: "desc" },
-        { createdAt: "desc" },
-      ],
+      orderBy: [{ isPinned: "desc" }, { pinnedAt: "desc" }, ...sortOrderBy],
       skip,
-      take: limit,
+      take: limit + 1,
       include: {
         media: true,
         _count: { select: { likes: true, comments: true } },
       },
     });
+
+    const hasMore = posts.length > limit;
+    const paginatedPosts = hasMore ? posts.slice(0, limit) : posts;
+
+    return {
+      posts: paginatedPosts,
+      hasMore,
+    };
   },
 
   async getPostDetails(postId: string, userId?: string) {

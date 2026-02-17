@@ -1,5 +1,22 @@
 export type RubricParam = "VIDEOS" | "TEXTS" | "BASICS" | "TRICKS";
 
+export type PostSortOption =
+  | "newest"
+  | "oldest"
+  | "shareCount"
+  | "likeCount"
+  | "commentCount";
+
+export type PostPreference = {
+  postsPerPage: number;
+  sortBy: PostSortOption;
+};
+
+export type PaginatedPostsResult = {
+  posts: PostDTO[];
+  hasMore: boolean;
+};
+
 export type MediaDTO = {
   id: string;
   url: string;
