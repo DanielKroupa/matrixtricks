@@ -171,7 +171,7 @@ export default function AvatarUpload({
   const previewSource = localPreview ?? userImage ?? null;
 
   return (
-    <div className="my-6 block items-center gap-2 md:flex">
+    <div className="my-6 flex flex-col items-center justify-center gap-2 md:flex-row md:justify-start">
       <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-neutral-300 dark:bg-neutral-700">
         {previewSource ? (
           <Image
@@ -215,7 +215,10 @@ export default function AvatarUpload({
             </label>
           </div>
 
-          <div id="avatar-help" className="mt-1 text-xs text-neutral-400">
+          <div
+            id="avatar-help"
+            className="mt-1 text-center text-xs text-neutral-400 md:text-left"
+          >
             Max size: {formatBytes(maxSize)}
           </div>
 

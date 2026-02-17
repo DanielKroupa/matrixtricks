@@ -2,13 +2,14 @@
 
 import {
   updateProfileSchema,
-  UpdateProfileFormData,
+  type UpdateProfileFormData,
 } from "../helpers/update-profile-schema";
-import { User } from "@/lib/auth";
+import type { User } from "@/lib/auth";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
+import { updateSiteSettings } from "@/actions/site-settings";
 
 import { useRouter } from "next/navigation";
 import AvatarUpload from "./AvatarUpload";
@@ -18,9 +19,15 @@ import { Spinner } from "@/components/ui/spinner";
 
 interface ProfileDetailsFormProps {
   user: User;
+  initialTitle: string;
+  initialBio: string;
 }
 
-export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
+export function ProfileDetailsForm({
+  user,
+  initialTitle,
+  initialBio,
+}: ProfileDetailsFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -32,16 +39,19 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
       nickname: user.name ?? "",
+      title: initialTitle,
+      bio: initialBio,
     },
   });
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = form;
 
-  async function onSubmit({ nickname }: UpdateProfileFormData) {
+  async function onSubmit({ nickname, title, bio }: UpdateProfileFormData) {
     setSuccess(null);
     setError(null);
     setLoading(true);
@@ -77,10 +87,22 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
         setAvatarFile(null);
       }
 
+      const siteSettingsResult = await updateSiteSettings({
+        title,
+        bio,
+      });
+
+      if (siteSettingsResult?.error) {
+        setError(siteSettingsResult.error);
+        return;
+      }
+
       setSuccess("Profile updated successfully");
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : "An unexpected error occurred";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -113,29 +135,61 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
               {errors.nickname.message}
             </p>
           )}
-          {success && (
-            <p className="mt-1 text-sm font-medium text-green-500">{success}</p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label>Edit main title:</label>
+          <input
+            type="text"
+            placeholder={initialTitle || "Enter main title"}
+            className="w-auto rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
+            {...register("title")}
+          />
+          {errors.title && (
+            <p className="mt-1 text-sm font-medium text-red-500">
+              {errors.title.message}
+            </p>
           )}
         </div>
         {/* Input change bio information */}
         <div className="flex flex-col gap-2">
           <label>Change bio information:</label>
-          <AutoResizeTextarea />
-          <button
-            type="submit"
-            disabled={loading}
-            className={`cursor pointer mt-2 mr-2 mb-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md transition-all hover:bg-cyan-900 md:mb-0 md:w-fit dark:bg-cyan-900 ${loading ? "cursor-not-allowed opacity-50" : "opacity-100"}`}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <Spinner className="size-5" />
-                <span>Saving...</span>
-              </span>
-            ) : (
-              "Save changes"
+          <Controller
+            name="bio"
+            control={control}
+            render={({ field }) => (
+              <AutoResizeTextarea
+                value={field.value}
+                onChange={field.onChange}
+                placeholder={initialBio || "Enter bio"}
+              />
             )}
-          </button>
+          />
+          {errors.bio && (
+            <p className="mt-1 text-sm font-medium text-red-500">
+              {errors.bio.message}
+            </p>
+          )}
         </div>
+        {success && (
+          <p className="mt-1 text-sm font-medium text-green-500">{success}</p>
+        )}
+        <button
+          type="submit"
+          disabled={loading}
+          className={`cursor pointer mt-2 mr-2 mb-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md transition-all hover:bg-cyan-900 md:mb-0 md:w-fit dark:bg-cyan-900 ${loading ? "cursor-not-allowed opacity-50" : "opacity-100"}`}
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <Spinner className="size-5" />
+              <span>Saving...</span>
+            </span>
+          ) : (
+            "Save changes"
+          )}
+        </button>
+        {error && (
+          <p className="mt-1 text-sm font-medium text-red-500">{error}</p>
+        )}
       </div>
     </form>
   );

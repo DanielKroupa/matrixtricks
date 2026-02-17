@@ -225,6 +225,7 @@ function FanwallMessageItem({
           alt="profile-avatar"
           className="h-16 w-16 rounded-full object-cover md:h-20 md:w-20"
           width={65}
+          loading="lazy"
           height={65}
         />
       </div>

@@ -393,7 +393,8 @@ export const ModelName = {
   Media: 'Media',
   Comment: 'Comment',
   PostLike: 'PostLike',
-  CommentLike: 'CommentLike'
+  CommentLike: 'CommentLike',
+  SiteSetting: 'SiteSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "media" | "comment" | "postLike" | "commentLike"
+    modelProps: "user" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1154,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SiteSetting: {
+      payload: Prisma.$SiteSettingPayload<ExtArgs>
+      fields: Prisma.SiteSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SiteSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SiteSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.SiteSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SiteSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>
+        }
+        findMany: {
+          args: Prisma.SiteSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>[]
+        }
+        create: {
+          args: Prisma.SiteSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>
+        }
+        createMany: {
+          args: Prisma.SiteSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SiteSettingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>[]
+        }
+        delete: {
+          args: Prisma.SiteSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>
+        }
+        update: {
+          args: Prisma.SiteSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.SiteSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SiteSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SiteSettingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>[]
+        }
+        upsert: {
+          args: Prisma.SiteSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SiteSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.SiteSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSiteSetting>
+        }
+        groupBy: {
+          args: Prisma.SiteSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SiteSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SiteSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SiteSettingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1331,6 +1406,17 @@ export const CommentLikeScalarFieldEnum = {
 } as const
 
 export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
+
+
+export const SiteSettingScalarFieldEnum = {
+  id: 'id',
+  mainTitle: 'mainTitle',
+  mainBio: 'mainBio',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[keyof typeof SiteSettingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1544,6 +1630,7 @@ export type GlobalOmitConfig = {
   comment?: Prisma.CommentOmit
   postLike?: Prisma.PostLikeOmit
   commentLike?: Prisma.CommentLikeOmit
+  siteSetting?: Prisma.SiteSettingOmit
 }
 
 /* Types for Logging */

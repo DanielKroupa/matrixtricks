@@ -11,6 +11,16 @@ export const updateProfileSchema = z.object({
       /^[a-zA-Z0-9_.]+$/,
       "Username can only contain letters, numbers, underscores, and dots",
     ),
+  title: z
+    .string()
+    .trim()
+    .min(1, { message: "Title is required" })
+    .max(120, { message: "Title must be at most 120 characters long" }),
+  bio: z
+    .string()
+    .trim()
+    .min(1, { message: "Bio is required" })
+    .max(220, { message: "Bio must be at most 220 characters long" }),
 });
 
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;

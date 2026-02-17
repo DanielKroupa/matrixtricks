@@ -1,39 +1,38 @@
 import Link from "next/link";
+import { getMainBio } from "@/app/helpers/main-title";
 
-export function Bio() {
+export async function Bio() {
+  const bio = await getMainBio();
+
   return (
     <>
       {/* Bio */}
-      <div className="md:w-sm w-full md:px-0 px-1.5 mx-auto">
-        <div
-          className="border-4 rounded-lg border-cyan-600
-         mt-16"
-        >
-          <div className="bg-cyan-700 py-2 md:px-4 px-2">
-            <h3 className="text-xl font-medium text-white  text-center">
+      <div className="mx-auto w-full px-1.5 md:w-sm md:px-0">
+        <div className="mt-16 rounded-lg border-4 border-cyan-600">
+          <div className="bg-cyan-700 px-2 py-2 md:px-4">
+            <h3 className="text-center text-xl font-medium text-white">
               Alien
             </h3>
           </div>
-          <div className="dark:bg-neutral-700 bg-neutral-200 py-2 px-4 rounded-b-sm">
-            <h4 className="text-center dark:text-white text-black font-normal">
-              Basketball player, Creator, Visionair From Prague, Czech
-              Republic..
+          <div className="rounded-b-sm bg-neutral-200 px-4 py-2 dark:bg-neutral-700">
+            <h4 className="text-center font-normal text-black dark:text-white">
+              {bio}
             </h4>
           </div>
         </div>
         {/* Action buttons */}
-        <div className="flex flex-row text-white gap-2 text-lg pt-2 justify-center">
+        <div className="flex flex-row justify-center gap-2 pt-2 text-lg text-white">
           <Link
             href="/"
-            className="bg-cyan-700 py-3 px-4 rounded-lg basis-2/3 text-center font-medium shadow-md shadow-blue-950/30"
+            className="basis-2/3 rounded-lg bg-cyan-700 px-4 py-3 text-center font-medium shadow-md shadow-blue-950/30"
           >
             Become a fan
-            <span className="px-3 ml-2 py-1 rounded-md bg-cyan-800">3.3k</span>
+            <span className="ml-2 rounded-md bg-cyan-800 px-3 py-1">3.3k</span>
           </Link>
 
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-lg dark:bg-neutral-600 bg-neutral-300 border-2 dark:border-none border-neutral-400 px-4 py-2 dark:text-white text-black transition cursor-pointer dark:shadow-md shadow-neutral-900/25"
+            className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-4 py-2 text-black shadow-neutral-900/25 transition dark:border-none dark:bg-neutral-600 dark:text-white dark:shadow-md"
           >
             Message
           </Link>

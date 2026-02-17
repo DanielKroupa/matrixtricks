@@ -17,17 +17,18 @@ export async function getRubricPosts(
 ) {
   return postService.listByRubric(rubric, page, limit);
 }
-
+// Get posts
 export async function getVideoPosts(page: number = 1, limit: number = 12) {
   return getRubricPosts("VIDEOS", page, limit);
 }
-
+// Get post details
 export async function getPostDetails(postId: string) {
   const session = await getServerSession();
   const userId = session?.user?.id;
   return postService.getDetails(postId, userId ?? undefined);
 }
 
+// Create comment
 export async function createComment(data: z.infer<typeof CreateCommentSchema>) {
   const validation = CreateCommentSchema.safeParse(data);
   if (!validation.success) {
@@ -53,6 +54,7 @@ export async function createComment(data: z.infer<typeof CreateCommentSchema>) {
   return { success: true, comment };
 }
 
+// Update comment
 export async function updateComment(data: z.infer<typeof UpdateCommentSchema>) {
   const validation = UpdateCommentSchema.safeParse(data);
   if (!validation.success) {
@@ -92,6 +94,7 @@ export async function updateComment(data: z.infer<typeof UpdateCommentSchema>) {
   }
 }
 
+// Delete comment
 export async function deleteComment(commentId: string) {
   if (!commentId) {
     return { error: "Invalid comment id" };
@@ -117,6 +120,7 @@ export async function deleteComment(commentId: string) {
   return { success: true };
 }
 
+// Like/unlike post
 export async function togglePostLike(postId: string) {
   const session = await getServerSession();
   if (!session?.user) {
@@ -130,6 +134,7 @@ export async function togglePostLike(postId: string) {
   return { success: true };
 }
 
+// Like/unlike comment
 export async function toggleCommentLike(commentId: string) {
   const session = await getServerSession();
   if (!session?.user) {
@@ -143,6 +148,7 @@ export async function toggleCommentLike(commentId: string) {
   return { success: true };
 }
 
+// share count
 export async function incrementShareCount(postId: string) {
   await postService.incrementShare(postId);
   return { success: true };

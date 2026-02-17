@@ -3,6 +3,7 @@ import { getServerSession } from "@/lib/get-session";
 import { forbidden, unauthorized } from "next/navigation";
 import { ProfileDetailsForm } from "./profile-details-form";
 import UpdatePasswordForm from "./update-password-form";
+import { getSiteSettings } from "@/app/helpers/main-title";
 
 export const metadata: Metadata = {
   title: "Admin settings | Matrix Tricks",
@@ -19,15 +20,21 @@ export default async function Page({}) {
     forbidden();
   }
 
+  const siteSettings = await getSiteSettings();
+
   return (
     <>
-      <div className="md:flex block">
+      <div className="block md:flex">
         <div className="w-full">
           <h3 className="text-lg font-medium">Admin profile settings</h3>
-          <p className="font-thin dark:text-white text-neutral-400 text-base mt-3">
+          <p className="mt-3 text-base font-thin text-neutral-400 dark:text-white">
             Change admin profile, edit bio or change password
           </p>
-          <ProfileDetailsForm user={user} />
+          <ProfileDetailsForm
+            user={user}
+            initialTitle={siteSettings.title}
+            initialBio={siteSettings.bio}
+          />
         </div>
         <UpdatePasswordForm />
       </div>

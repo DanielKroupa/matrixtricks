@@ -67,3 +67,8 @@ export type PostLike = Prisma.PostLikeModel
  * 
  */
 export type CommentLike = Prisma.CommentLikeModel
+/**
+ * Model SiteSetting
+ * 
+ */
+export type SiteSetting = Prisma.SiteSettingModel

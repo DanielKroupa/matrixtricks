@@ -60,7 +60,8 @@ export const ModelName = {
   Media: 'Media',
   Comment: 'Comment',
   PostLike: 'PostLike',
-  CommentLike: 'CommentLike'
+  CommentLike: 'CommentLike',
+  SiteSetting: 'SiteSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -218,6 +219,17 @@ export const CommentLikeScalarFieldEnum = {
 } as const
 
 export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
+
+
+export const SiteSettingScalarFieldEnum = {
+  id: 'id',
+  mainTitle: 'mainTitle',
+  mainBio: 'mainBio',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[keyof typeof SiteSettingScalarFieldEnum]
 
 
 export const SortOrder = {

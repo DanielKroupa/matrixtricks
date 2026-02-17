@@ -1,10 +1,12 @@
-export function Title() {
+import { getMainTitle } from "@/app/helpers/main-title";
+
+export async function Title() {
+  const title = await getMainTitle();
+
   return (
-    <div className="flex justify-center w-full md:w-auto px-2">
-      <div className="rounded-full dark:text-white text-black border-cyan-700 border-4 md:w-xl w-full py-2 px-4 my-2">
-        <h2 className="text-center md:text-xl text-lg font-medium">
-          The real basketball is out there
-        </h2>
+    <div className="flex w-full justify-center px-2 md:w-auto">
+      <div className="my-2 w-full rounded-full border-4 border-cyan-700 px-4 py-2 text-black md:w-xl dark:text-white">
+        <h2 className="text-center text-lg font-medium md:text-xl">{title}</h2>
       </div>
     </div>
   );
