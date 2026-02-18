@@ -13,7 +13,7 @@
   --foreground: #171717;
 }
 
-/*  DARK THEME – řízený třídou, ne systémem */
+/* DARK THEME */
 html.dark {
   --background: #111111;
   --foreground: #ededed;

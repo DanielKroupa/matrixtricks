@@ -27,10 +27,15 @@ export default function LoginForm() {
 
   const handleSocialSignIn = async (provider: Provider) => {
     try {
+      setServerError(null);
       setSocialLoading(true);
-      await authClient.signIn.social({ provider });
+      await authClient.signIn.social({
+        provider,
+        callbackURL: "/",
+      });
     } catch (err) {
       console.error("Social sign-in error:", err);
+      setServerError("Something went wrong");
     } finally {
       setSocialLoading(false);
     }
@@ -215,7 +220,12 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => handleSocialSignIn("facebook")}
-          className="flex w-64 cursor-pointer items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
+          disabled={socialLoading}
+          className={`flex w-64 items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600 ${
+            socialLoading
+              ? "pointer-events-none cursor-not-allowed"
+              : "cursor-pointer"
+          }`}
         >
           <Image
             src="/icons/facebook.svg"
@@ -244,7 +254,12 @@ export default function LoginForm() {
         <button
           type="button"
           onClick={() => handleSocialSignIn("apple")}
-          className="flex w-64 cursor-pointer items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
+          disabled={socialLoading}
+          className={`flex w-64 items-center gap-3 rounded-lg border border-neutral-400 bg-neutral-200 px-4 py-2 text-black transition-colors hover:bg-neutral-300 disabled:opacity-60 dark:border-neutral-500 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600 ${
+            socialLoading
+              ? "pointer-events-none cursor-not-allowed"
+              : "cursor-pointer"
+          }`}
         >
           <FaApple size={24} />
           Sign In with Apple

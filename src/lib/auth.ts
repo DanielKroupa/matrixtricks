@@ -3,7 +3,7 @@ import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins";
 
 import { prismaAdapter } from "better-auth/adapters/prisma";
-// If your Prisma file is located elsewhere, you can change the path
+
 import { PrismaClient } from "../app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { EmailTemplate } from "@/lib/email-template";
@@ -25,6 +25,16 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       accessType: "offline",
       redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/google",
+    },
+    facebook: {
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+      redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/facebook",
+    },
+    apple: {
+      clientId: process.env.APPLE_CLIENT_ID as string,
+      clientSecret: process.env.APPLE_CLIENT_SECRET as string,
+      redirectURI: process.env.BETTER_AUTH_URL + "/api/auth/callback/apple",
     },
   },
   emailAndPassword: {

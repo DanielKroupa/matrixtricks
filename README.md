@@ -20,6 +20,69 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## BetterAuth Social Login Setup
+
+This project supports social sign-in via Google, Facebook, and Apple through BetterAuth.
+
+### Required environment variables
+
+Add these variables to your environment configuration:
+
+```bash
+BETTER_AUTH_URL=http://localhost:3000
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+FACEBOOK_CLIENT_ID=
+FACEBOOK_CLIENT_SECRET=
+
+APPLE_CLIENT_ID=
+APPLE_CLIENT_SECRET=
+```
+
+For production, set `BETTER_AUTH_URL` to your HTTPS domain.
+
+### Callback URLs
+
+Use these callback URLs in provider dashboards:
+
+- Google: `<BETTER_AUTH_URL>/api/auth/callback/google`
+- Facebook: `<BETTER_AUTH_URL>/api/auth/callback/facebook`
+- Apple: `<BETTER_AUTH_URL>/api/auth/callback/apple`
+
+Examples:
+
+- Local: `http://localhost:3000/api/auth/callback/{provider}`
+- Production: `https://your-domain.com/api/auth/callback/{provider}`
+
+### Facebook provider checklist
+
+1. Create an app in Meta for Developers.
+2. Enable Facebook Login product.
+3. Add valid OAuth redirect URI:
+   - `http://localhost:3000/api/auth/callback/facebook`
+   - `https://your-domain.com/api/auth/callback/facebook`
+4. Request minimum scopes for this app setup:
+   - `email`
+   - public profile
+5. Add test users (development mode) or switch app to live mode for production.
+
+### Apple provider checklist
+
+1. Create an Identifier for Sign in with Apple (Services ID).
+2. Configure Sign in with Apple for your domain and return URL.
+3. Create a Sign in with Apple private key and keep:
+   - Team ID
+   - Key ID
+   - Client ID (Services ID)
+4. Generate Apple client secret (JWT) and set it as `APPLE_CLIENT_SECRET`.
+5. Use this return URL:
+   - `http://localhost:3000/api/auth/callback/apple` (local)
+   - `https://your-domain.com/api/auth/callback/apple` (production)
+
+Note: Apple can be stricter for local development. If local callback fails, use a publicly reachable HTTPS environment for verification.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
