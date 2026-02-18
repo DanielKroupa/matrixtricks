@@ -17,7 +17,7 @@ export default async function Page() {
   );
 
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto">
       <div className="flex items-center justify-between p-6 pb-0"></div>
       <VideoFeed
         rubric="BASICS"
