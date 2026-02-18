@@ -154,11 +154,12 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         {/* Change color of font */}
         <select
           className="rounded border px-2 py-1 text-sm"
+          defaultValue={""}
           onChange={(e) =>
             editor.chain().focus().setColor(e.target.value).run()
           }
         >
-          <option value="" disabled selected hidden>
+          <option value="" disabled hidden>
             Color
           </option>
           {colors.map((color) => (
