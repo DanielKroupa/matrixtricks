@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const items = [
   { to: "/rubrics/basics", label: "Basics" },
@@ -7,18 +10,34 @@ const items = [
   { to: "/rubrics/videos", label: "Videos" },
 ];
 
+const DEFAULT_ACTIVE = "/rubrics/videos";
+
 export function Rubrics() {
+  const pathname = usePathname();
+  const activeTo =
+    items.find((item) => pathname?.startsWith(item.to))?.to ?? DEFAULT_ACTIVE;
+
   return (
-    <div className="md:overflow-x-clip overflow-x-auto whitespace-nowrap flex gap-2 font-medium scroll-smooth md:touch-pan-x w-auto">
-      {items.map(({ to, label }) => (
-        <Link
-          key={to}
-          href={to}
-          className={`py-2 px-4 rounded-lg dark:bg-neutral-700 bg-neutral-300 border-2 dark:border-none border-neutral-400 min-w-24 inline-flex font-medium items-center justify-center transition-colors `}
-        >
-          {label}
-        </Link>
-      ))}
+    <div className="flex w-auto gap-2 overflow-x-auto scroll-smooth font-medium whitespace-nowrap md:touch-pan-x md:overflow-x-clip">
+      {items.map(({ to, label }) => {
+        const isActive = activeTo === to;
+        const itemClass =
+          "min-w-24 inline-flex items-center justify-center rounded-lg border-2 px-4 py-2 font-medium transition " +
+          (isActive
+            ? "bg-cyan-800 text-white dark:bg-cyan-900"
+            : "bg-neutral-300 text-neutral-800 hover:bg-neutral-400 dark:border-none dark:bg-neutral-600 dark:text-white/90 dark:hover:bg-neutral-500");
+
+        return (
+          <Link
+            key={to}
+            href={to}
+            aria-current={isActive ? "page" : undefined}
+            className={itemClass}
+          >
+            {label}
+          </Link>
+        );
+      })}
     </div>
   );
 }
