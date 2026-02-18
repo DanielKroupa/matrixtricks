@@ -22,10 +22,10 @@ export function Rubrics() {
       {items.map(({ to, label }) => {
         const isActive = activeTo === to;
         const itemClass =
-          "min-w-24 inline-flex items-center justify-center rounded-lg border-2 px-4 py-2 font-medium transition " +
+          "min-w-24 inline-flex items-center justify-center rounded-lg px-4 py-2 border-2 border-neutral-400 dark:border-neutral-700 font-medium transition " +
           (isActive
             ? "bg-cyan-800 text-white dark:bg-cyan-900"
-            : "bg-neutral-300 text-neutral-800 hover:bg-neutral-400 dark:border-none dark:bg-neutral-600 dark:text-white/90 dark:hover:bg-neutral-500");
+            : "bg-neutral-300 text-neutral-800 dark:bg-neutral-600 dark:text-white/90");
 
         return (
           <Link
