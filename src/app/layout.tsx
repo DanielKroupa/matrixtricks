@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { LoginModal } from "./components/authLayout/LoginModal";
+import DevBreakpointBadge from "@/components/ui/DevBreakpointBadge";
 import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({
@@ -24,13 +25,13 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <body
-        className={`${poppins.variable} xl:container mx-auto antialiased  `}
-      >
+      <body className={`${poppins.variable} mx-auto antialiased xl:container`}>
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
+
+          {process.env.NODE_ENV !== "production" && <DevBreakpointBadge />}
 
           <LoginModal />
         </AuthProvider>

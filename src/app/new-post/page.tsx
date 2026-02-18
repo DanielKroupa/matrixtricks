@@ -97,14 +97,15 @@ export default function NewPostPage() {
           New post
         </h3>
         <form
+          encType="multipart/form-data"
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-neutral-200 px-2 py-6 md:px-36 md:py-12 dark:bg-neutral-700"
+          className="bg-neutral-200 px-2 py-6 md:px-12 md:py-18 lg:px-36 lg:py-12 xl:px-64 dark:bg-neutral-700"
         >
           {/* Type Selection */}
           <div className="mb-4">
-            <label className="mb-2 block text-black dark:text-white">
+            <p className="mb-2 block text-black dark:text-white">
               Choose a type:
-            </label>
+            </p>
             <div className="flex gap-4">
               <label className="hover flex cursor-pointer items-center rounded-md bg-neutral-300 px-4 py-2 transition-colors peer-checked:bg-neutral-400 hover:bg-neutral-400 dark:bg-neutral-600 dark:peer-checked:bg-cyan-800 dark:hover:bg-neutral-500">
                 <input
@@ -134,32 +135,35 @@ export default function NewPostPage() {
 
           {/* Title */}
           <div className="mb-4">
-            <label className="mb-2 block text-black dark:text-white">
-              <span className="text-red-600">*</span>
-              Title
+            <label className="block text-black dark:text-white" htmlFor="title">
+              <p>
+                <span className="text-red-600">*</span>
+                Title
+              </p>
+              <input
+                type="text"
+                id="title"
+                {...register("title")}
+                className="mt-2 w-full rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
+                placeholder="Enter title"
+              />
+              {errors.title && (
+                <p className="text-red-500">{errors.title.message}</p>
+              )}
             </label>
-            <input
-              type="text"
-              {...register("title")}
-              className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
-              placeholder="Enter title"
-            />
-            {errors.title && (
-              <p className="text-red-500">{errors.title.message}</p>
-            )}
           </div>
 
           {/* Rubric */}
           <div className="mb-4 max-w-64">
-            <label className="mb-2 block text-black dark:text-white">
+            <p className="block text-black dark:text-white">
               <span className="text-red-600">*</span>
               Rubric
-            </label>
+            </p>
             <select
               required
               {...register("rubric")}
               defaultValue={"default"}
-              className="w-full cursor-pointer rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
+              className="mt-2 w-full cursor-pointer rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
             >
               <option value="default" disabled hidden>
                 Select rubric
@@ -178,9 +182,9 @@ export default function NewPostPage() {
           {/* Content */}
           {postType === "text" && (
             <div className="mb-4">
-              <label className="mb-2 block text-black dark:text-white">
+              <span className="mb-2 block text-black dark:text-white">
                 Content
-              </label>
+              </span>
               <RichTextEditor
                 value={watch("content") || ""}
                 onChange={(value) => setValue("content", value)}
@@ -191,15 +195,17 @@ export default function NewPostPage() {
           {/* Media Upload */}
           {(postType === "text" || postType === "media") && (
             <div className="mb-4">
-              <label className="mb-2 block text-black dark:text-white">
-                Media
-              </label>
+              <p className="mb-2 block text-black dark:text-white">Media</p>
               <div className="flex">
                 <input
                   id="media_upload"
                   type="file"
                   multiple
-                  accept={postType === "text" ? "image/*" : "image/*,video/*"}
+                  accept={
+                    postType === "text"
+                      ? ".jpg, .jpeg, .png, .webp"
+                      : "image/*,video/*"
+                  }
                   onChange={(e) =>
                     setMediaFiles(Array.from(e.target.files || []))
                   }
@@ -213,22 +219,22 @@ export default function NewPostPage() {
                   Upload Media
                 </label>
               </div>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-1">
+              <div className="flex flex-wrap gap-4">
                 {mediaFiles.map((file, index) => (
                   <div
                     key={index}
-                    className="flex flex-col items-start gap-2 rounded bg-neutral-300 p-1 dark:bg-neutral-600"
+                    className="flex h-fit w-fit flex-col items-start gap-2 rounded bg-neutral-300 p-1 dark:bg-neutral-600"
                   >
                     {file.type.startsWith("image/") ? (
                       <img
                         src={URL.createObjectURL(file)}
                         alt={file.name}
-                        className="h-fit w-full rounded object-cover"
+                        className="max-h-1/2 max-w-1/2 rounded object-cover"
                       />
                     ) : (
                       <video
                         src={URL.createObjectURL(file)}
-                        className="h-fit w-full rounded object-cover"
+                        className="max-h-1/2 max-w-1/2 rounded object-cover"
                         controls
                       />
                     )}
@@ -246,7 +252,7 @@ export default function NewPostPage() {
                       onClick={() =>
                         setMediaFiles(mediaFiles.filter((_, i) => i !== index))
                       }
-                      className="mt-1 cursor-pointer text-sm text-red-500 hover:text-red-700"
+                      className="mt-1 cursor-pointer rounded-md bg-red-500 px-2 py-1 text-sm text-white hover:bg-red-700"
                     >
                       Remove
                     </button>
@@ -258,9 +264,9 @@ export default function NewPostPage() {
 
           {/* Scheduling */}
           <div className="mb-4">
-            <label className="mb-2 block text-black dark:text-white">
+            <p className="mb-2 block text-black dark:text-white">
               Schedule (optional)
-            </label>
+            </p>
             <input
               type="datetime-local"
               {...register("scheduledAt")}
