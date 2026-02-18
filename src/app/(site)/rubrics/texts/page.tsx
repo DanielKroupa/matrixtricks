@@ -1,6 +1,6 @@
 import { getRubricPostsPage } from "@/actions/social";
 import { getEffectivePostPreference } from "@/app/helpers/post-preferences";
-import { VideoFeed } from "@/components/social/VideoFeed";
+import { TextFeed } from "@/components/social/TextFeed";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,9 +17,9 @@ export default async function Page() {
   );
 
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto">
       <div className="flex items-center justify-between p-6 pb-0"></div>
-      <VideoFeed
+      <TextFeed
         rubric="TEXTS"
         initialPosts={result.posts}
         initialHasMore={result.hasMore}

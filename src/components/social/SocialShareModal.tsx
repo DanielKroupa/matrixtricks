@@ -7,6 +7,7 @@ interface SocialShareModalProps {
   onClose: () => void;
   url: string;
   title: string;
+  heading?: string;
 }
 
 export const SocialShareModal = ({
@@ -14,6 +15,7 @@ export const SocialShareModal = ({
   onClose,
   url,
   title,
+  heading = "Share Video",
 }: SocialShareModalProps) => {
   if (!isOpen) return null;
 
@@ -51,7 +53,7 @@ export const SocialShareModal = ({
       />
       <div className="relative z-10 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-800">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Share Video</h3>
+          <h3 className="text-lg font-semibold">{heading}</h3>
           <button
             onClick={onClose}
             title="Close"

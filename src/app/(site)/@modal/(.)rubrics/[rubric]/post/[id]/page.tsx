@@ -10,6 +10,7 @@ export default async function RubricPostModalPage({
     | Promise<{ rubric: string; id: string }>;
 }) {
   const { rubric, id } = (await params) as { rubric: string; id: string };
+
   const post = await getPostDetails(id);
 
   if (!post) {

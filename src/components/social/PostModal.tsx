@@ -1,23 +1,24 @@
 "use client";
-import { X, Heart, Share2 } from "lucide-react";
-import { CommentSection } from "./CommentSection";
-import { useState, useEffect } from "react";
-import { authClient } from "@/lib/auth-client";
+import { Heart, Share2, X } from "lucide-react";
 import Image from "next/image";
-import { SocialShareModal } from "./SocialShareModal";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { BsFillPinAngleFill } from "react-icons/bs";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { CommentSection } from "./CommentSection";
 import { usePostInteractions } from "./hooks/usePostInteractions";
+import { SocialShareModal } from "./SocialShareModal";
 
 export const PostModal = ({
   post: initialPost,
   onClose,
+  mode = "modal",
 }: {
   post: any;
   onClose: () => void;
+  mode?: "modal" | "page";
 }) => {
   const router = useRouter();
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -37,17 +38,21 @@ export const PostModal = ({
   } = usePostInteractions(initialPost);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-
     authClient
       .getSession()
       .then(setSession)
       .catch(() => {});
 
+    if (mode !== "modal") {
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [initialPost.id]);
+  }, [mode]);
 
   useEffect(() => {
     if (!isMenuOpen) return;
@@ -134,7 +139,7 @@ export const PostModal = ({
       const updatedPost = await response.json();
       setFullPost((prev: any) => ({ ...prev, ...updatedPost }));
       router.refresh();
-    } catch (error) {
+    } catch (_error) {
       alert("Failed to update post");
     } finally {
       setIsSaving(false);
@@ -165,7 +170,7 @@ export const PostModal = ({
       setIsMenuOpen(false);
       onClose();
       router.refresh();
-    } catch (error) {
+    } catch (_error) {
       alert("Failed to delete post");
     } finally {
       setIsSaving(false);
@@ -176,6 +181,9 @@ export const PostModal = ({
   const postTitle = fullPost?.title ?? initialPost.title;
   const postContent = fullPost?.content ?? initialPost.content ?? "";
   const isPinned = Boolean(fullPost?.isPinned ?? initialPost.isPinned);
+  const rubricName = String(fullPost?.rubric ?? initialPost.rubric ?? "");
+  const isTextRubric = rubricName.toUpperCase() === "TEXTS";
+  const isTextPageLayout = isTextRubric && mode === "page";
 
   const handleTogglePin = async () => {
     if (!isAdmin || isSaving) return;
@@ -206,12 +214,158 @@ export const PostModal = ({
     }
   };
 
+  const postActionsMenu = canManagePost ? (
+    <div className="relative">
+      <button
+        type="button"
+        title="Post actions"
+        className="post-menu-button cursor-pointer rounded-full bg-neutral-200 p-1 transition-colors hover:bg-neutral-300 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+        onClick={() => setIsMenuOpen((open) => !open)}
+        disabled={isSaving}
+      >
+        <BsThreeDotsVertical />
+      </button>
+      {isMenuOpen && (
+        <div className="post-menu absolute top-8 right-0 z-20 w-36 rounded-md bg-white shadow-lg dark:bg-neutral-700">
+          {isAdmin && (
+            <button
+              type="button"
+              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+              onClick={handleTogglePin}
+              disabled={isSaving}
+            >
+              <BsFillPinAngleFill />
+              {isPinned ? "Unpin" : "Pin"}
+            </button>
+          )}
+          <button
+            type="button"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+            onClick={handleEditPost}
+            disabled={isSaving}
+          >
+            <FaPen />
+            Edit
+          </button>
+          <button
+            type="button"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-neutral-200 dark:text-red-500 dark:hover:bg-neutral-600 dark:hover:text-red-400"
+            onClick={handleDeletePost}
+            disabled={isSaving}
+          >
+            <IoTrash />
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
+  ) : null;
+
+  if (isTextPageLayout) {
+    return (
+      <div className="mx-auto w-full max-w-5xl p-4 sm:p-6">
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+          <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-6 dark:border-neutral-700">
+            <h1 className="line-clamp-2 flex items-center gap-2 text-lg font-semibold text-neutral-900 dark:text-white">
+              {isPinned && <BsFillPinAngleFill className="shrink-0" />}
+              {postTitle}
+            </h1>
+            <div className="flex items-center gap-2">
+              {postActionsMenu}
+              <button
+                onClick={onClose}
+                title="Close"
+                className="cursor-pointer rounded-full bg-neutral-200 p-2 text-neutral-700 transition-colors hover:bg-neutral-300 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          {media?.type === "video" ? (
+            <video
+              src={media.url}
+              controls
+              className="max-h-[60vh] w-full bg-black object-contain"
+            >
+              <track kind="captions" />
+            </video>
+          ) : media?.url ? (
+            <div className="relative h-80 w-full bg-black sm:h-105">
+              <Image
+                src={media.url}
+                alt="Content"
+                fill
+                className="object-contain"
+              />
+            </div>
+          ) : null}
+
+          <div className="px-4 py-5 sm:px-6">
+            <div
+              className="prose dark:prose-invert max-w-none text-sm sm:text-base"
+              dangerouslySetInnerHTML={{ __html: postContent }}
+            />
+          </div>
+
+          <div className="flex items-center justify-start gap-4 border-y border-neutral-200 px-4 py-3 sm:px-6 dark:border-neutral-700">
+            <button
+              onClick={handleLike}
+              title="Like"
+              className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${liked ? "bg-pink-500/20 text-pink-600 dark:text-pink-400" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"}`}
+            >
+              <Heart size={16} fill={liked ? "currentColor" : "none"} />
+              <span>{likeCount}</span>
+            </button>
+            <button
+              onClick={handleShare}
+              title="Share post"
+              className="flex cursor-pointer items-center gap-2 rounded-full bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
+            >
+              <Image
+                src="/icons/share.svg"
+                alt="Share"
+                width={16}
+                height={16}
+              />
+              <span>{shareCount}</span>
+            </button>
+          </div>
+
+          <div className="h-[60vh] min-h-105">
+            {fullPost ? (
+              <CommentSection
+                postId={initialPost.id}
+                initialComments={fullPost.comments}
+                session={session}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900"></div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <SocialShareModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          url={shareUrl}
+          title={initialPost.title}
+          heading="Share post"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center p-0 duration-200 sm:p-6 md:p-4">
-      <div
+      <button
+        type="button"
+        aria-label="Close"
         className="absolute inset-0 bg-black/80 backdrop-blur-md"
         onClick={onClose}
-      />
+      ></button>
 
       <button
         onClick={onClose}
@@ -230,7 +384,9 @@ export const PostModal = ({
                 src={media.url}
                 controls
                 className="h-full w-full object-contain"
-              />
+              >
+                <track kind="captions" />
+              </video>
 
               <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/70 via-black/25 to-transparent" />
               <div className="absolute top-3 right-3 left-3 z-10">
@@ -348,50 +504,7 @@ export const PostModal = ({
                 postId={initialPost.id}
                 initialComments={fullPost.comments}
                 session={session}
-                headerRight={
-                  canManagePost ? (
-                    <div className="relative">
-                      <button
-                        title="Post actions"
-                        className="post-menu-button cursor-pointer rounded-full bg-neutral-200 p-1 transition-colors hover:bg-neutral-300 dark:bg-neutral-600 dark:hover:bg-neutral-500"
-                        onClick={() => setIsMenuOpen((open) => !open)}
-                        disabled={isSaving}
-                      >
-                        <BsThreeDotsVertical />
-                      </button>
-                      {isMenuOpen && (
-                        <div className="post-menu absolute top-8 right-0 z-20 w-36 rounded-md bg-white shadow-lg dark:bg-neutral-700">
-                          {isAdmin && (
-                            <button
-                              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                              onClick={handleTogglePin}
-                              disabled={isSaving}
-                            >
-                              <BsFillPinAngleFill />
-                              {isPinned ? "Unpin" : "Pin"}
-                            </button>
-                          )}
-                          <button
-                            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                            onClick={handleEditPost}
-                            disabled={isSaving}
-                          >
-                            <FaPen />
-                            Edit
-                          </button>
-                          <button
-                            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-neutral-200 dark:text-red-500 dark:hover:bg-neutral-600 dark:hover:text-red-400"
-                            onClick={handleDeletePost}
-                            disabled={isSaving}
-                          >
-                            <IoTrash />
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ) : null
-                }
+                headerRight={postActionsMenu}
               />
             ) : (
               <div className="flex h-full items-center justify-center">
@@ -407,6 +520,7 @@ export const PostModal = ({
         onClose={() => setIsShareOpen(false)}
         url={shareUrl}
         title={initialPost.title}
+        heading="Share Video"
       />
     </div>
   );

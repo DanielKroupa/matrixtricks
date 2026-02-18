@@ -27,6 +27,7 @@ export const PostModalRoute = ({
     <PostModal
       post={{ ...post, rubric: post?.rubric ?? rubric }}
       onClose={handleClose}
+      mode={closeHref ? "page" : "modal"}
     />
   );
 };
