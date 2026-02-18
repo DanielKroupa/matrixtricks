@@ -5,6 +5,8 @@ import { useEffect, useState, useTransition } from "react";
 import { TextCard } from "./TextCard";
 import { getRubricPostsPage } from "@/actions/social";
 
+import { Spinner } from "../ui/spinner";
+
 type TextFeedProps = {
   rubric: RubricParam;
   initialPosts: any[];
@@ -61,14 +63,21 @@ export const TextFeed = ({
       </div>
 
       {hasMore && (
-        <div className="mt-5 mb-3 flex justify-center">
+        <div className="mt-2 flex justify-center">
           <button
             type="button"
             onClick={handleLoadMore}
             disabled={isPending}
-            className="rounded-lg bg-cyan-800 px-5 py-2 font-medium text-white transition hover:bg-cyan-900 disabled:cursor-not-allowed disabled:opacity-60"
+            className="cursor-pointer rounded-lg bg-cyan-800 px-5 py-2 font-medium text-white transition hover:bg-cyan-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isPending ? "Loading..." : "Load more posts"}
+            {isPending ? (
+              <div className="flex items-center gap-2">
+                <Spinner className="size-5" />
+                <span>Loading...</span>
+              </div>
+            ) : (
+              "Load more posts"
+            )}
           </button>
         </div>
       )}

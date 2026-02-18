@@ -18,7 +18,7 @@ export default async function Page() {
 
   return (
     <div className="mx-auto">
-      <div className="flex items-center justify-between p-6 pb-0"></div>
+      <div className="flex items-center justify-between p-6 py-2 pb-0"></div>
       <TextFeed
         rubric="TEXTS"
         initialPosts={result.posts}

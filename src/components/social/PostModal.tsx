@@ -219,7 +219,7 @@ export const PostModal = ({
       <button
         type="button"
         title="Post actions"
-        className="post-menu-button cursor-pointer rounded-full bg-neutral-200 p-1 transition-colors hover:bg-neutral-300 dark:bg-neutral-600 dark:hover:bg-neutral-500"
+        className="post-menu-button cursor-pointer rounded-full bg-neutral-300 p-1 transition-colors hover:bg-neutral-400 dark:bg-neutral-600 dark:hover:bg-neutral-500"
         onClick={() => setIsMenuOpen((open) => !open)}
         disabled={isSaving}
       >
@@ -230,7 +230,7 @@ export const PostModal = ({
           {isAdmin && (
             <button
               type="button"
-              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+              className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200/50 dark:hover:bg-neutral-600"
               onClick={handleTogglePin}
               disabled={isSaving}
             >
@@ -240,7 +240,7 @@ export const PostModal = ({
           )}
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
+            className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200/50 dark:hover:bg-neutral-600"
             onClick={handleEditPost}
             disabled={isSaving}
           >
@@ -261,25 +261,18 @@ export const PostModal = ({
     </div>
   ) : null;
 
+  // For text posts in the "Texts" rubric, we use a different layout that emphasizes the content and places interactions at the bottom.
+  // For other posts, we use a more media-centric layout.
   if (isTextPageLayout) {
     return (
       <div className="mx-auto w-full max-w-5xl p-4 sm:p-6">
-        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
-          <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-6 dark:border-neutral-700">
+        <div className="overflow-hidden rounded-xl border border-neutral-400 bg-neutral-200/75 shadow dark:border-neutral-700 dark:bg-neutral-700/75">
+          <div className="flex items-center justify-between border-b border-neutral-300 px-4 py-3 sm:px-6 dark:border-neutral-700">
             <h1 className="line-clamp-2 flex items-center gap-2 text-lg font-semibold text-neutral-900 dark:text-white">
               {isPinned && <BsFillPinAngleFill className="shrink-0" />}
               {postTitle}
             </h1>
-            <div className="flex items-center gap-2">
-              {postActionsMenu}
-              <button
-                onClick={onClose}
-                title="Close"
-                className="cursor-pointer rounded-full bg-neutral-200 p-2 text-neutral-700 transition-colors hover:bg-neutral-300 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
-              >
-                <X size={18} />
-              </button>
-            </div>
+            <div className="flex items-center gap-2">{postActionsMenu}</div>
           </div>
 
           {media?.type === "video" ? (
@@ -308,11 +301,15 @@ export const PostModal = ({
             />
           </div>
 
-          <div className="flex items-center justify-start gap-4 border-y border-neutral-200 px-4 py-3 sm:px-6 dark:border-neutral-700">
+          <div className="flex items-center justify-start gap-4 border-y border-neutral-300 px-4 py-3 sm:px-6 dark:border-neutral-700">
             <button
               onClick={handleLike}
               title="Like"
-              className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${liked ? "bg-pink-500/20 text-pink-600 dark:text-pink-400" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"}`}
+              className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                liked
+                  ? "border-2 border-pink-500/20 bg-pink-500/20 text-pink-600 dark:text-pink-400"
+                  : "border-2 border-neutral-300 bg-neutral-200 text-neutral-700 hover:bg-neutral-400 dark:border-neutral-700 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
+              }`}
             >
               <Heart size={16} fill={liked ? "currentColor" : "none"} />
               <span>{likeCount}</span>
@@ -320,13 +317,14 @@ export const PostModal = ({
             <button
               onClick={handleShare}
               title="Share post"
-              className="flex cursor-pointer items-center gap-2 rounded-full bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
+              className="flex cursor-pointer items-center gap-2 rounded-full bg-neutral-300 px-3 py-1.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-400 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
             >
               <Image
                 src="/icons/share.svg"
                 alt="Share"
                 width={16}
                 height={16}
+                className="invert-80 dark:invert-0"
               />
               <span>{shareCount}</span>
             </button>

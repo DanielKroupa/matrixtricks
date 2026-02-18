@@ -16,7 +16,7 @@ export const TextCard = ({ post }: TextCardProps) => {
   return (
     <a
       href={postHref}
-      className="block w-full overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-xs transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:hover:bg-neutral-700"
+      className="block w-full overflow-hidden rounded-md border border-neutral-400 bg-neutral-200 shadow transition-colors hover:border-neutral-500 hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-700 dark:hover:bg-neutral-600"
     >
       <div className="p-4">
         <h3 className="mb-2 text-base leading-snug font-semibold text-neutral-900 dark:text-white">
@@ -29,13 +29,19 @@ export const TextCard = ({ post }: TextCardProps) => {
         ) : null}
       </div>
 
-      <div className="flex items-center justify-between border-t border-neutral-200 px-4 py-3 text-sm text-neutral-700 dark:border-neutral-700 dark:text-neutral-300">
+      <div className="flex items-center justify-end gap-2 border-t border-neutral-400 px-4 py-3 text-sm text-neutral-700 hover:border-neutral-500 md:justify-start dark:border-neutral-500 dark:text-neutral-300 dark:hover:border-neutral-500">
         <div className="flex items-center gap-1.5">
-          <Heart size={16} />
+          <Heart size={16} className="text-neutral-700 dark:text-neutral-300" />
           <span>{likesCount}</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <Image src="/icons/share.svg" alt="Share" width={16} height={16} />
+          <Image
+            src="/icons/share.svg"
+            className="invert-80 dark:invert-0"
+            alt="Share"
+            width={16}
+            height={16}
+          />
           <span>{sharesCount}</span>
         </div>
       </div>

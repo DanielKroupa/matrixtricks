@@ -181,7 +181,7 @@ export const CommentItem = ({
                   )}
                   {canDelete && (
                     <button
-                      className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-200 dark:text-red-300 dark:hover:bg-neutral-600"
+                      className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-200/50 dark:text-red-300 dark:hover:bg-neutral-600"
                       onClick={handleDelete}
                       disabled={isSaving}
                     >
@@ -227,7 +227,7 @@ export const CommentItem = ({
             </div>
           </div>
         ) : (
-          <p className="mt-1 rounded-md bg-neutral-200 p-2 text-sm wrap-break-word text-gray-800 dark:bg-neutral-600 dark:text-white">
+          <p className="mt-1 rounded-md bg-neutral-200 p-2 text-sm wrap-break-word text-gray-800 shadow dark:bg-neutral-600 dark:text-white">
             {comment.content}
           </p>
         )}
@@ -237,7 +237,7 @@ export const CommentItem = ({
 
         <button
           onClick={handleLike}
-          className={`mt-2 flex items-center gap-1 rounded p-1 text-xs transition-colors hover:bg-gray-50 dark:hover:bg-neutral-600 ${likedByCurrentUser ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}
+          className={`mt-2 flex cursor-pointer items-center gap-1 rounded-md p-1 text-xs transition-colors hover:bg-gray-50 dark:hover:bg-neutral-600 ${likedByCurrentUser ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}
         >
           <Heart
             size={12}
