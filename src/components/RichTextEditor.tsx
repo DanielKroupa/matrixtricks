@@ -89,6 +89,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         {/* Align */}
         <Button
           type="button"
+          title="Align left"
           variant={
             editor.isActive({ textAlign: "left" }) ? "default" : "outline"
           }
@@ -100,6 +101,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </Button>
         <Button
           type="button"
+          title="Align center"
           variant={
             editor.isActive({ textAlign: "center" }) ? "default" : "outline"
           }
@@ -111,6 +113,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </Button>
         <Button
           type="button"
+          title="Align right"
           variant={
             editor.isActive({ textAlign: "right" }) ? "default" : "outline"
           }
@@ -125,6 +128,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         {/* Styling font */}
         <Button
           type="button"
+          title="Bold text"
           variant={editor.isActive("bold") ? "default" : "outline"}
           className="cursor-pointer border-neutral-400 bg-neutral-400 text-white hover:bg-neutral-500 dark:bg-neutral-600"
           size="sm"
@@ -134,6 +138,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </Button>
         <Button
           type="button"
+          title="Italic text"
           variant={editor.isActive("italic") ? "default" : "outline"}
           size="sm"
           className="cursor-pointer border-neutral-400 bg-neutral-400 text-white hover:bg-neutral-500 dark:bg-neutral-600"
@@ -143,6 +148,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         </Button>
         <Button
           type="button"
+          title="Underline text"
           variant={editor.isActive("underline") ? "default" : "outline"}
           className="cursor-pointer border-neutral-400 bg-neutral-400 text-white hover:bg-neutral-500 dark:bg-neutral-600"
           size="sm"
@@ -153,7 +159,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
         <Separator orientation="vertical" className="h-6 w-6" />
         {/* Change color of font */}
         <select
-          className="rounded border px-2 py-1 text-sm"
+          className="rounded border border-neutral-400 px-2 py-1 text-sm"
           defaultValue={""}
           onChange={(e) =>
             editor.chain().focus().setColor(e.target.value).run()
