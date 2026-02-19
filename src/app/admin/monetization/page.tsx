@@ -1,6 +1,8 @@
 import { getServerSession } from "@/lib/get-session";
 import { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
+import { MonetizationClient } from "./MonetizationClient";
+import { vipPriceService } from "@/application/billing/vip-price.service";
 
 export const metadata: Metadata = {
   title: "Admin settings | Monetization",
@@ -10,6 +12,15 @@ export const metadata: Metadata = {
 export default async function Page() {
   const session = await getServerSession();
   const user = session?.user;
+  const [dbPrices, effectivePrices] = await Promise.all([
+    vipPriceService.listDbPrices(),
+    vipPriceService.listEffectivePrices(),
+  ]);
+  const configuredCurrencies = effectivePrices.map((price) => price.currency);
+  const configuredPriceMap = Object.fromEntries(
+    effectivePrices.map((price) => [price.currency, price.priceId]),
+  );
+  const envPriceMap = vipPriceService.getEnvPriceMap();
 
   if (!user) {
     unauthorized();
@@ -18,11 +29,19 @@ export default async function Page() {
     forbidden();
   }
   return (
-    <div>
-      <h3 className="text-lg font-medium">Monetization</h3>
-      <p className="text-neutral-300 mt-2">
-        Manage pricing, subscriptions, and payouts.
-      </p>
+    <div className="space-y-4">
+      <div>
+        <h3 className="text-lg font-medium">Monetization</h3>
+        <p className="mt-2 text-neutral-300">
+          Manage VIP pricing, manual grants, and billing state.
+        </p>
+      </div>
+      <MonetizationClient
+        configuredCurrencies={configuredCurrencies}
+        configuredPriceMap={configuredPriceMap}
+        initialDbPrices={dbPrices}
+        envPriceMap={envPriceMap}
+      />
     </div>
   );
 }

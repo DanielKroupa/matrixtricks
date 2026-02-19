@@ -48,6 +48,36 @@ export type FanWallMessage = Prisma.FanWallMessageModel
  */
 export type Post = Prisma.PostModel
 /**
+ * Model StripeCustomer
+ * 
+ */
+export type StripeCustomer = Prisma.StripeCustomerModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model VipGrant
+ * 
+ */
+export type VipGrant = Prisma.VipGrantModel
+/**
+ * Model StripeWebhookEvent
+ * 
+ */
+export type StripeWebhookEvent = Prisma.StripeWebhookEventModel
+/**
+ * Model VipPrice
+ * 
+ */
+export type VipPrice = Prisma.VipPriceModel
+/**
+ * Model VipPriceAuditEvent
+ * 
+ */
+export type VipPriceAuditEvent = Prisma.VipPriceAuditEventModel
+/**
  * Model Media
  * 
  */
@@ -72,3 +102,8 @@ export type CommentLike = Prisma.CommentLikeModel
  * 
  */
 export type SiteSetting = Prisma.SiteSettingModel
+/**
+ * Model UserPostPreference
+ * 
+ */
+export type UserPostPreference = Prisma.UserPostPreferenceModel

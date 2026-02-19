@@ -1,7 +1,20 @@
-export default function Badge() {
+import { cn } from "@/lib/utils";
+
+export default function Badge({
+  label = "VIP",
+  className,
+}: {
+  label?: string;
+  className?: string;
+}) {
   return (
-    <span className="absolute ml-8 text-sm select-none font-medium -mt-2 bg-yellow-600 px-2.5 py-0.5 rounded-full">
-      VIP
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full bg-yellow-600 px-2 py-0.5 text-xs font-semibold text-white select-none",
+        className,
+      )}
+    >
+      {label}
     </span>
   );
 }

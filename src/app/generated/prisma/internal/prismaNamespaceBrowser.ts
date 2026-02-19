@@ -57,11 +57,18 @@ export const ModelName = {
   Verification: 'Verification',
   FanWallMessage: 'FanWallMessage',
   Post: 'Post',
+  StripeCustomer: 'StripeCustomer',
+  Subscription: 'Subscription',
+  VipGrant: 'VipGrant',
+  StripeWebhookEvent: 'StripeWebhookEvent',
+  VipPrice: 'VipPrice',
+  VipPriceAuditEvent: 'VipPriceAuditEvent',
   Media: 'Media',
   Comment: 'Comment',
   PostLike: 'PostLike',
   CommentLike: 'CommentLike',
-  SiteSetting: 'SiteSetting'
+  SiteSetting: 'SiteSetting',
+  UserPostPreference: 'UserPostPreference'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -164,6 +171,7 @@ export const PostScalarFieldEnum = {
   rubric: 'rubric',
   isPinned: 'isPinned',
   pinnedAt: 'pinnedAt',
+  vipOnly: 'vipOnly',
   published: 'published',
   scheduledAt: 'scheduledAt',
   createdAt: 'createdAt',
@@ -173,6 +181,90 @@ export const PostScalarFieldEnum = {
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const StripeCustomerScalarFieldEnum = {
+  id: 'id',
+  stripeCustomerId: 'stripeCustomerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type StripeCustomerScalarFieldEnum = (typeof StripeCustomerScalarFieldEnum)[keyof typeof StripeCustomerScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  stripeSubscriptionId: 'stripeSubscriptionId',
+  status: 'status',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  endedAt: 'endedAt',
+  priceId: 'priceId',
+  currency: 'currency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  stripeCustomerId: 'stripeCustomerId'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const VipGrantScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  revokedAt: 'revokedAt',
+  note: 'note',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type VipGrantScalarFieldEnum = (typeof VipGrantScalarFieldEnum)[keyof typeof VipGrantScalarFieldEnum]
+
+
+export const StripeWebhookEventScalarFieldEnum = {
+  id: 'id',
+  stripeEventId: 'stripeEventId',
+  type: 'type',
+  payload: 'payload',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StripeWebhookEventScalarFieldEnum = (typeof StripeWebhookEventScalarFieldEnum)[keyof typeof StripeWebhookEventScalarFieldEnum]
+
+
+export const VipPriceScalarFieldEnum = {
+  id: 'id',
+  currency: 'currency',
+  priceId: 'priceId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VipPriceScalarFieldEnum = (typeof VipPriceScalarFieldEnum)[keyof typeof VipPriceScalarFieldEnum]
+
+
+export const VipPriceAuditEventScalarFieldEnum = {
+  id: 'id',
+  currency: 'currency',
+  previousPriceId: 'previousPriceId',
+  nextPriceId: 'nextPriceId',
+  previousIsActive: 'previousIsActive',
+  nextIsActive: 'nextIsActive',
+  changedByUserId: 'changedByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type VipPriceAuditEventScalarFieldEnum = (typeof VipPriceAuditEventScalarFieldEnum)[keyof typeof VipPriceAuditEventScalarFieldEnum]
 
 
 export const MediaScalarFieldEnum = {
@@ -232,12 +324,33 @@ export const SiteSettingScalarFieldEnum = {
 export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[keyof typeof SiteSettingScalarFieldEnum]
 
 
+export const UserPostPreferenceScalarFieldEnum = {
+  id: 'id',
+  rubric: 'rubric',
+  postsPerPage: 'postsPerPage',
+  sortBy: 'sortBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type UserPostPreferenceScalarFieldEnum = (typeof UserPostPreferenceScalarFieldEnum)[keyof typeof UserPostPreferenceScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull'
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -254,4 +367,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

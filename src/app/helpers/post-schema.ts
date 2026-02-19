@@ -12,6 +12,7 @@ export const postSchema = z.object({
     message: "Rubric is required",
   }),
   scheduledAt: z.string().optional(),
+  vipOnly: z.boolean().optional(),
 });
 
 export type PostFormData = z.infer<typeof postSchema>;

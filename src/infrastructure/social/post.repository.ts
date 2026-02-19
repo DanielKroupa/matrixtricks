@@ -3,12 +3,67 @@ import type { PostSortOption, RubricParam } from "@/domain/social/types";
 
 const emptyUserId = "00000000-0000-0000-0000-000000000000";
 
+type ViewerContext = {
+  viewerUserId?: string;
+  viewerRole?: string | null;
+  viewerHasVip?: boolean;
+};
+
+function toPlainText(content: string | null | undefined) {
+  if (!content) {
+    return "";
+  }
+
+  return content
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function createTeaser(content: string | null | undefined, maxLength = 220) {
+  const plainText = toPlainText(content);
+
+  if (!plainText) {
+    return "";
+  }
+
+  if (plainText.length <= maxLength) {
+    return plainText;
+  }
+
+  return `${plainText.slice(0, maxLength)}...`;
+}
+
+function canAccessVipPost(
+  post: { vipOnly: boolean; authorId: string },
+  viewer: ViewerContext,
+) {
+  if (!post.vipOnly) {
+    return true;
+  }
+
+  if (viewer.viewerRole === "admin") {
+    return true;
+  }
+
+  if (viewer.viewerUserId && viewer.viewerUserId === post.authorId) {
+    return true;
+  }
+
+  return Boolean(viewer.viewerHasVip);
+}
+
 export const postRepository = {
   async getRubricPosts(
     rubric: RubricParam,
     page = 1,
     limit = 12,
     sortBy: PostSortOption = "newest",
+    viewer: ViewerContext = {},
   ) {
     const skip = (page - 1) * limit;
 
@@ -43,31 +98,87 @@ export const postRepository = {
     const hasMore = posts.length > limit;
     const paginatedPosts = hasMore ? posts.slice(0, limit) : posts;
 
+    const mappedPosts = paginatedPosts.map((post) => {
+      const canAccess = canAccessVipPost(post, viewer);
+
+      if (canAccess) {
+        return {
+          ...post,
+          isLocked: false,
+        };
+      }
+
+      return {
+        ...post,
+        isLocked: true,
+        content: createTeaser(post.content),
+        media: post.media.map((item) => ({ ...item, isBlurred: true })),
+      };
+    });
+
     return {
-      posts: paginatedPosts,
+      posts: mappedPosts,
       hasMore,
     };
   },
 
-  async getPostDetails(postId: string, userId?: string) {
-    const viewer = userId ?? emptyUserId;
-    return prisma.post.findUnique({
+  async getPostDetails(postId: string, viewerContext: ViewerContext = {}) {
+    const viewerUserId = viewerContext.viewerUserId ?? emptyUserId;
+
+    const post = await prisma.post.findUnique({
       where: { id: postId },
       include: {
         media: true,
-        author: { select: { name: true, image: true, username: true } },
+        author: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            username: true,
+            role: true,
+          },
+        },
         comments: {
           orderBy: { createdAt: "desc" },
           include: {
-            user: { select: { name: true, image: true, username: true } },
-            likes: { where: { userId: viewer } },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                username: true,
+                role: true,
+              },
+            },
+            likes: { where: { userId: viewerUserId } },
             _count: { select: { likes: true } },
           },
         },
-        likes: { where: { userId: viewer } },
+        likes: { where: { userId: viewerUserId } },
         _count: { select: { likes: true, comments: true } },
       },
     });
+
+    if (!post) {
+      return null;
+    }
+
+    const canAccess = canAccessVipPost(post, viewerContext);
+
+    if (canAccess) {
+      return {
+        ...post,
+        isLocked: false,
+      };
+    }
+
+    return {
+      ...post,
+      isLocked: true,
+      comments: [],
+      content: createTeaser(post.content, 320),
+      media: post.media.map((item) => ({ ...item, isBlurred: true })),
+    };
   },
 
   async createComment(data: {

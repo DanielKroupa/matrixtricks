@@ -1,0 +1,14 @@
+import { Stripe } from "stripe";
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY!;
+
+if (!stripeSecretKey) {
+  console.warn(
+    "STRIPE_SECRET_KEY is not set. Stripe billing routes will fail until configured.",
+  );
+}
+
+export const stripe = new Stripe(stripeSecretKey, {
+  apiVersion: "2025-08-27.basil",
+  typescript: true,
+});

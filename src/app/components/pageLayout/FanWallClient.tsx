@@ -19,6 +19,7 @@ type FanwallUser = {
   username: string | null;
   image: string | null;
   role: string | null;
+  isVipActive?: boolean;
 };
 
 type FanwallMessage = {
@@ -146,7 +147,7 @@ function PinnedMessageCard({
             width={65}
             height={65}
           />
-          <Badge />
+          {message.user?.isVipActive && <Badge className="-mt-2 ml-8" />}
         </div>
         <div className="flex flex-col space-y-1">
           {message.title && <h5 className="font-medium">{message.title}</h5>}
@@ -257,6 +258,7 @@ function FanwallMessageItem({
         )}
         <p className="flex items-center gap-2">
           <span>{authorName}</span>
+          {message.user?.isVipActive && <Badge />}
           <time
             className="text-xs text-neutral-500"
             dateTime={message.createdAt}

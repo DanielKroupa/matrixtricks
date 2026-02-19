@@ -12,6 +12,7 @@ export const TextCard = ({ post }: TextCardProps) => {
   const preview = getTextPreview(post.content ?? "", 150);
   const likesCount = post?._count?.likes ?? 0;
   const sharesCount = post?.shareCount ?? 0;
+  const isLocked = Boolean(post?.isLocked);
 
   return (
     <a
@@ -22,11 +23,23 @@ export const TextCard = ({ post }: TextCardProps) => {
         <h3 className="mb-2 text-base leading-snug font-semibold text-neutral-900 dark:text-white">
           {post.title}
         </h3>
+        {isLocked && (
+          <p className="mb-2 text-xs font-medium text-yellow-700 dark:text-yellow-400">
+            VIP only content
+          </p>
+        )}
         {preview ? (
-          <p className="text-sm text-neutral-600 dark:text-neutral-300">
+          <p
+            className={`text-sm text-neutral-600 dark:text-neutral-300 ${isLocked ? "blur-[2px]" : ""}`}
+          >
             {preview}
           </p>
         ) : null}
+        {isLocked && (
+          <p className="mt-2 text-xs font-medium text-cyan-700 dark:text-cyan-400">
+            Unlock full post with VIP subscription
+          </p>
+        )}
       </div>
 
       <div className="flex items-center justify-end gap-2 border-t border-neutral-400 px-4 py-3 text-sm text-neutral-700 hover:border-neutral-500 md:justify-start dark:border-neutral-500 dark:text-neutral-300 dark:hover:border-neutral-500">

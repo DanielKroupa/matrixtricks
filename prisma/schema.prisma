@@ -22,23 +22,43 @@ enum PostSortOption {
   COMMENT_COUNT
 }
 
+enum SubscriptionStatus {
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+  PAUSED
+}
+
+enum EntitlementSource {
+  STRIPE
+  MANUAL
+}
+
 model User {
-  id              String               @id
-  name            String
-  email           String
-  emailVerified   Boolean              @default(false)
-  image           String?
-  role            String?
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
-  sessions        Session[]
-  accounts        Account[]
-  fanWallMessages FanWallMessage[]
-  posts           Post[]
-  comments        Comment[]
-  postLikes       PostLike[]
-  commentLikes    CommentLike[]
-  postPreferences UserPostPreference[]
+  id                  String               @id
+  name                String
+  email               String
+  emailVerified       Boolean              @default(false)
+  image               String?
+  role                String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  sessions            Session[]
+  accounts            Account[]
+  fanWallMessages     FanWallMessage[]
+  posts               Post[]
+  comments            Comment[]
+  postLikes           PostLike[]
+  commentLikes        CommentLike[]
+  postPreferences     UserPostPreference[]
+  stripeCustomer      StripeCustomer?
+  subscriptions       Subscription[]
+  vipGrants           VipGrant[]
+  vipPriceAuditEvents VipPriceAuditEvent[]
 
   username        String?
   displayUsername String?
@@ -122,6 +142,7 @@ model Post {
   rubric      RubricType
   isPinned    Boolean    @default(false)
   pinnedAt    DateTime?
+  vipOnly     Boolean    @default(false)
   published   Boolean    @default(false)
   scheduledAt DateTime?
   createdAt   DateTime   @default(now())
@@ -138,8 +159,108 @@ model Post {
   @@index([authorId])
   @@index([rubric])
   @@index([published, createdAt])
+  @@index([rubric, published, vipOnly, createdAt])
   @@index([rubric, isPinned, pinnedAt])
   @@map("post")
+}
+
+model StripeCustomer {
+  id               String         @id @default(cuid())
+  stripeCustomerId String         @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  userId           String         @unique
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions    Subscription[]
+
+  @@index([userId])
+  @@map("stripe_customer")
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  stripeSubscriptionId String             @unique
+  status               SubscriptionStatus
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  endedAt              DateTime?
+  priceId              String?
+  currency             String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stripeCustomerId String?
+  customer         StripeCustomer? @relation(fields: [stripeCustomerId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([stripeCustomerId])
+  @@index([currentPeriodEnd])
+  @@map("subscription")
+}
+
+model VipGrant {
+  id              String            @id @default(cuid())
+  source          EntitlementSource @default(MANUAL)
+  startsAt        DateTime          @default(now())
+  endsAt          DateTime?
+  revokedAt       DateTime?
+  note            String?
+  createdByUserId String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startsAt])
+  @@index([userId, endsAt])
+  @@index([userId, revokedAt])
+  @@map("vip_grant")
+}
+
+model StripeWebhookEvent {
+  id            String   @id @default(cuid())
+  stripeEventId String   @unique
+  type          String
+  payload       Json?
+  processedAt   DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  @@index([type])
+  @@map("stripe_webhook_event")
+}
+
+model VipPrice {
+  id        String   @id @default(cuid())
+  currency  String   @unique
+  priceId   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("vip_price")
+}
+
+model VipPriceAuditEvent {
+  id               String   @id @default(cuid())
+  currency         String
+  previousPriceId  String?
+  nextPriceId      String?
+  previousIsActive Boolean?
+  nextIsActive     Boolean
+  changedByUserId  String?
+  createdAt        DateTime @default(now())
+
+  changedByUser User? @relation(fields: [changedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([currency, createdAt])
+  @@index([changedByUserId])
+  @@map("vip_price_audit_event")
 }
 
 model Media {

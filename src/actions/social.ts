@@ -5,10 +5,11 @@ import {
   CreateCommentSchema,
   UpdateCommentSchema,
 } from "@/app/helpers/social-schema";
-import { z } from "zod";
+import type { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { postService } from "@/application/social/post.service";
-import { PostSortOption, RubricParam } from "@/domain/social/types";
+import type { PostSortOption, RubricParam } from "@/domain/social/types";
+import { entitlementService } from "@/application/billing/entitlement.service";
 
 export async function getRubricPostsPage(
   rubric: RubricParam,
@@ -16,7 +17,16 @@ export async function getRubricPostsPage(
   limit: number = 10,
   sortBy: PostSortOption = "newest",
 ) {
-  return postService.listByRubric(rubric, page, limit, sortBy);
+  const session = await getServerSession();
+  const viewerUserId = session?.user?.id;
+  const viewerRole = session?.user?.role;
+  const vipStatus = await entitlementService.getUserVipStatus(viewerUserId);
+
+  return postService.listByRubric(rubric, page, limit, sortBy, {
+    viewerUserId: viewerUserId ?? undefined,
+    viewerRole,
+    viewerHasVip: vipStatus.isVipActive,
+  });
 }
 
 export async function getRubricPosts(
@@ -47,8 +57,15 @@ export async function getVideoPosts(
 // Get post details
 export async function getPostDetails(postId: string) {
   const session = await getServerSession();
-  const userId = session?.user?.id;
-  return postService.getDetails(postId, userId ?? undefined);
+  const viewerUserId = session?.user?.id;
+  const viewerRole = session?.user?.role;
+  const vipStatus = await entitlementService.getUserVipStatus(viewerUserId);
+
+  return postService.getDetails(postId, {
+    viewerUserId: viewerUserId ?? undefined,
+    viewerRole,
+    viewerHasVip: vipStatus.isVipActive,
+  });
 }
 
 // Create comment
@@ -111,8 +128,8 @@ export async function updateComment(data: z.infer<typeof UpdateCommentSchema>) {
 
     revalidatePath("/");
     return { success: true, comment: updatedComment };
-  } catch (error: any) {
-    const message = error?.message ?? "Forbidden";
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Forbidden";
     return { error: message };
   }
 }
@@ -134,8 +151,8 @@ export async function deleteComment(commentId: string) {
   try {
     await postService.ensureCommentOwnerOrAdmin(commentId, userId, isAdmin);
     await postService.deleteComment({ commentId });
-  } catch (error: any) {
-    const message = error?.message ?? "Forbidden";
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Forbidden";
     return { error: message };
   }
 

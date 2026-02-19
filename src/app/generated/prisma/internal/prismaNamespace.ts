@@ -390,11 +390,18 @@ export const ModelName = {
   Verification: 'Verification',
   FanWallMessage: 'FanWallMessage',
   Post: 'Post',
+  StripeCustomer: 'StripeCustomer',
+  Subscription: 'Subscription',
+  VipGrant: 'VipGrant',
+  StripeWebhookEvent: 'StripeWebhookEvent',
+  VipPrice: 'VipPrice',
+  VipPriceAuditEvent: 'VipPriceAuditEvent',
   Media: 'Media',
   Comment: 'Comment',
   PostLike: 'PostLike',
   CommentLike: 'CommentLike',
-  SiteSetting: 'SiteSetting'
+  SiteSetting: 'SiteSetting',
+  UserPostPreference: 'UserPostPreference'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -410,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting"
+    modelProps: "user" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "stripeCustomer" | "subscription" | "vipGrant" | "stripeWebhookEvent" | "vipPrice" | "vipPriceAuditEvent" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting" | "userPostPreference"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -858,6 +865,450 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StripeCustomer: {
+      payload: Prisma.$StripeCustomerPayload<ExtArgs>
+      fields: Prisma.StripeCustomerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StripeCustomerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StripeCustomerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        findFirst: {
+          args: Prisma.StripeCustomerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StripeCustomerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        findMany: {
+          args: Prisma.StripeCustomerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        create: {
+          args: Prisma.StripeCustomerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        createMany: {
+          args: Prisma.StripeCustomerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StripeCustomerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        delete: {
+          args: Prisma.StripeCustomerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        update: {
+          args: Prisma.StripeCustomerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        deleteMany: {
+          args: Prisma.StripeCustomerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StripeCustomerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StripeCustomerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        upsert: {
+          args: Prisma.StripeCustomerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        aggregate: {
+          args: Prisma.StripeCustomerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStripeCustomer>
+        }
+        groupBy: {
+          args: Prisma.StripeCustomerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeCustomerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StripeCustomerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeCustomerCountAggregateOutputType> | number
+        }
+      }
+    }
+    Subscription: {
+      payload: Prisma.$SubscriptionPayload<ExtArgs>
+      fields: Prisma.SubscriptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubscriptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubscriptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>
+        }
+        findFirst: {
+          args: Prisma.SubscriptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubscriptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>
+        }
+        findMany: {
+          args: Prisma.SubscriptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>[]
+        }
+        create: {
+          args: Prisma.SubscriptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>
+        }
+        createMany: {
+          args: Prisma.SubscriptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubscriptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>[]
+        }
+        delete: {
+          args: Prisma.SubscriptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>
+        }
+        update: {
+          args: Prisma.SubscriptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.SubscriptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubscriptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubscriptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.SubscriptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubscriptionPayload>
+        }
+        aggregate: {
+          args: Prisma.SubscriptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubscription>
+        }
+        groupBy: {
+          args: Prisma.SubscriptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubscriptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubscriptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubscriptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    VipGrant: {
+      payload: Prisma.$VipGrantPayload<ExtArgs>
+      fields: Prisma.VipGrantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VipGrantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VipGrantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>
+        }
+        findFirst: {
+          args: Prisma.VipGrantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VipGrantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>
+        }
+        findMany: {
+          args: Prisma.VipGrantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>[]
+        }
+        create: {
+          args: Prisma.VipGrantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>
+        }
+        createMany: {
+          args: Prisma.VipGrantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VipGrantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>[]
+        }
+        delete: {
+          args: Prisma.VipGrantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>
+        }
+        update: {
+          args: Prisma.VipGrantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>
+        }
+        deleteMany: {
+          args: Prisma.VipGrantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VipGrantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VipGrantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>[]
+        }
+        upsert: {
+          args: Prisma.VipGrantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipGrantPayload>
+        }
+        aggregate: {
+          args: Prisma.VipGrantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVipGrant>
+        }
+        groupBy: {
+          args: Prisma.VipGrantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VipGrantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VipGrantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VipGrantCountAggregateOutputType> | number
+        }
+      }
+    }
+    StripeWebhookEvent: {
+      payload: Prisma.$StripeWebhookEventPayload<ExtArgs>
+      fields: Prisma.StripeWebhookEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StripeWebhookEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StripeWebhookEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>
+        }
+        findFirst: {
+          args: Prisma.StripeWebhookEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StripeWebhookEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>
+        }
+        findMany: {
+          args: Prisma.StripeWebhookEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>[]
+        }
+        create: {
+          args: Prisma.StripeWebhookEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>
+        }
+        createMany: {
+          args: Prisma.StripeWebhookEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StripeWebhookEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>[]
+        }
+        delete: {
+          args: Prisma.StripeWebhookEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>
+        }
+        update: {
+          args: Prisma.StripeWebhookEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.StripeWebhookEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StripeWebhookEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StripeWebhookEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.StripeWebhookEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeWebhookEventPayload>
+        }
+        aggregate: {
+          args: Prisma.StripeWebhookEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStripeWebhookEvent>
+        }
+        groupBy: {
+          args: Prisma.StripeWebhookEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeWebhookEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StripeWebhookEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeWebhookEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    VipPrice: {
+      payload: Prisma.$VipPricePayload<ExtArgs>
+      fields: Prisma.VipPriceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VipPriceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VipPriceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>
+        }
+        findFirst: {
+          args: Prisma.VipPriceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VipPriceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>
+        }
+        findMany: {
+          args: Prisma.VipPriceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>[]
+        }
+        create: {
+          args: Prisma.VipPriceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>
+        }
+        createMany: {
+          args: Prisma.VipPriceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VipPriceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>[]
+        }
+        delete: {
+          args: Prisma.VipPriceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>
+        }
+        update: {
+          args: Prisma.VipPriceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>
+        }
+        deleteMany: {
+          args: Prisma.VipPriceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VipPriceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VipPriceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>[]
+        }
+        upsert: {
+          args: Prisma.VipPriceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPricePayload>
+        }
+        aggregate: {
+          args: Prisma.VipPriceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVipPrice>
+        }
+        groupBy: {
+          args: Prisma.VipPriceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VipPriceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VipPriceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VipPriceCountAggregateOutputType> | number
+        }
+      }
+    }
+    VipPriceAuditEvent: {
+      payload: Prisma.$VipPriceAuditEventPayload<ExtArgs>
+      fields: Prisma.VipPriceAuditEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VipPriceAuditEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VipPriceAuditEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>
+        }
+        findFirst: {
+          args: Prisma.VipPriceAuditEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VipPriceAuditEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>
+        }
+        findMany: {
+          args: Prisma.VipPriceAuditEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>[]
+        }
+        create: {
+          args: Prisma.VipPriceAuditEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>
+        }
+        createMany: {
+          args: Prisma.VipPriceAuditEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VipPriceAuditEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>[]
+        }
+        delete: {
+          args: Prisma.VipPriceAuditEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>
+        }
+        update: {
+          args: Prisma.VipPriceAuditEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.VipPriceAuditEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VipPriceAuditEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VipPriceAuditEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.VipPriceAuditEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VipPriceAuditEventPayload>
+        }
+        aggregate: {
+          args: Prisma.VipPriceAuditEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVipPriceAuditEvent>
+        }
+        groupBy: {
+          args: Prisma.VipPriceAuditEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VipPriceAuditEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VipPriceAuditEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VipPriceAuditEventCountAggregateOutputType> | number
+        }
+      }
+    }
     Media: {
       payload: Prisma.$MediaPayload<ExtArgs>
       fields: Prisma.MediaFieldRefs
@@ -1228,6 +1679,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserPostPreference: {
+      payload: Prisma.$UserPostPreferencePayload<ExtArgs>
+      fields: Prisma.UserPostPreferenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserPostPreferenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserPostPreferenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>
+        }
+        findFirst: {
+          args: Prisma.UserPostPreferenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserPostPreferenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>
+        }
+        findMany: {
+          args: Prisma.UserPostPreferenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>[]
+        }
+        create: {
+          args: Prisma.UserPostPreferenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>
+        }
+        createMany: {
+          args: Prisma.UserPostPreferenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserPostPreferenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>[]
+        }
+        delete: {
+          args: Prisma.UserPostPreferenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>
+        }
+        update: {
+          args: Prisma.UserPostPreferenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>
+        }
+        deleteMany: {
+          args: Prisma.UserPostPreferenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserPostPreferenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserPostPreferenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>[]
+        }
+        upsert: {
+          args: Prisma.UserPostPreferenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPostPreferencePayload>
+        }
+        aggregate: {
+          args: Prisma.UserPostPreferenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserPostPreference>
+        }
+        groupBy: {
+          args: Prisma.UserPostPreferenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserPostPreferenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserPostPreferenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserPostPreferenceCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1351,6 +1876,7 @@ export const PostScalarFieldEnum = {
   rubric: 'rubric',
   isPinned: 'isPinned',
   pinnedAt: 'pinnedAt',
+  vipOnly: 'vipOnly',
   published: 'published',
   scheduledAt: 'scheduledAt',
   createdAt: 'createdAt',
@@ -1360,6 +1886,90 @@ export const PostScalarFieldEnum = {
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const StripeCustomerScalarFieldEnum = {
+  id: 'id',
+  stripeCustomerId: 'stripeCustomerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type StripeCustomerScalarFieldEnum = (typeof StripeCustomerScalarFieldEnum)[keyof typeof StripeCustomerScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  stripeSubscriptionId: 'stripeSubscriptionId',
+  status: 'status',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  endedAt: 'endedAt',
+  priceId: 'priceId',
+  currency: 'currency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  stripeCustomerId: 'stripeCustomerId'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const VipGrantScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  revokedAt: 'revokedAt',
+  note: 'note',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type VipGrantScalarFieldEnum = (typeof VipGrantScalarFieldEnum)[keyof typeof VipGrantScalarFieldEnum]
+
+
+export const StripeWebhookEventScalarFieldEnum = {
+  id: 'id',
+  stripeEventId: 'stripeEventId',
+  type: 'type',
+  payload: 'payload',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StripeWebhookEventScalarFieldEnum = (typeof StripeWebhookEventScalarFieldEnum)[keyof typeof StripeWebhookEventScalarFieldEnum]
+
+
+export const VipPriceScalarFieldEnum = {
+  id: 'id',
+  currency: 'currency',
+  priceId: 'priceId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VipPriceScalarFieldEnum = (typeof VipPriceScalarFieldEnum)[keyof typeof VipPriceScalarFieldEnum]
+
+
+export const VipPriceAuditEventScalarFieldEnum = {
+  id: 'id',
+  currency: 'currency',
+  previousPriceId: 'previousPriceId',
+  nextPriceId: 'nextPriceId',
+  previousIsActive: 'previousIsActive',
+  nextIsActive: 'nextIsActive',
+  changedByUserId: 'changedByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type VipPriceAuditEventScalarFieldEnum = (typeof VipPriceAuditEventScalarFieldEnum)[keyof typeof VipPriceAuditEventScalarFieldEnum]
 
 
 export const MediaScalarFieldEnum = {
@@ -1419,12 +2029,33 @@ export const SiteSettingScalarFieldEnum = {
 export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[keyof typeof SiteSettingScalarFieldEnum]
 
 
+export const UserPostPreferenceScalarFieldEnum = {
+  id: 'id',
+  rubric: 'rubric',
+  postsPerPage: 'postsPerPage',
+  sortBy: 'sortBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type UserPostPreferenceScalarFieldEnum = (typeof UserPostPreferenceScalarFieldEnum)[keyof typeof UserPostPreferenceScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1441,6 +2072,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1509,6 +2149,62 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'SubscriptionStatus'
+ */
+export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'SubscriptionStatus[]'
+ */
+export type ListEnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EntitlementSource'
+ */
+export type EnumEntitlementSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EntitlementSource'>
+    
+
+
+/**
+ * Reference to a field of type 'EntitlementSource[]'
+ */
+export type ListEnumEntitlementSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EntitlementSource[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'PostSortOption'
+ */
+export type EnumPostSortOptionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostSortOption'>
+    
+
+
+/**
+ * Reference to a field of type 'PostSortOption[]'
+ */
+export type ListEnumPostSortOptionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostSortOption[]'>
     
 
 
@@ -1626,11 +2322,18 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   fanWallMessage?: Prisma.FanWallMessageOmit
   post?: Prisma.PostOmit
+  stripeCustomer?: Prisma.StripeCustomerOmit
+  subscription?: Prisma.SubscriptionOmit
+  vipGrant?: Prisma.VipGrantOmit
+  stripeWebhookEvent?: Prisma.StripeWebhookEventOmit
+  vipPrice?: Prisma.VipPriceOmit
+  vipPriceAuditEvent?: Prisma.VipPriceAuditEventOmit
   media?: Prisma.MediaOmit
   comment?: Prisma.CommentOmit
   postLike?: Prisma.PostLikeOmit
   commentLike?: Prisma.CommentLikeOmit
   siteSetting?: Prisma.SiteSettingOmit
+  userPostPreference?: Prisma.UserPostPreferenceOmit
 }
 
 /* Types for Logging */

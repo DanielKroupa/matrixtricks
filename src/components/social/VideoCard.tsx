@@ -16,6 +16,7 @@ export const VideoCard = ({ post }: VideoCardProps) => {
   const rubricSlug =
     typeof post.rubric === "string" ? post.rubric.toLowerCase() : "videos";
   const postHref = `/rubrics/${rubricSlug}/post/${post.id}`;
+  const isLocked = Boolean(post?.isLocked);
   // Ideally we have a thumbnail field or we use a video tag to show poster.
 
   return (
@@ -32,7 +33,7 @@ export const VideoCard = ({ post }: VideoCardProps) => {
         videoMedia.type === "video" ? (
           <video
             src={thumbnailUrl}
-            className="h-full w-full object-cover"
+            className={`h-full w-full object-cover ${isLocked ? "blur-sm" : ""}`}
             muted
             playsInline
             preload="metadata"
@@ -42,12 +43,20 @@ export const VideoCard = ({ post }: VideoCardProps) => {
             src={thumbnailUrl}
             alt={post.title}
             fill
-            className="object-cover"
+            className={`object-cover ${isLocked ? "blur-sm" : ""}`}
           />
         )
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gray-800">
           <Play className="h-12 w-12 text-white" />
+        </div>
+      )}
+
+      {isLocked && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/35">
+          <div className="rounded-full bg-black/65 px-3 py-1 text-xs font-semibold text-yellow-300">
+            VIP LOCKED
+          </div>
         </div>
       )}
 

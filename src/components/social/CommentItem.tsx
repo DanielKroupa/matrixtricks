@@ -7,6 +7,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import type { CommentViewModel } from "./hooks/useComments";
+import Badge from "@/app/components/ui/Badge";
 
 function renderCommentBody(content: string, className?: string) {
   const paragraphs = content.split("\n");
@@ -170,6 +171,7 @@ export const CommentItem = ({
         <div className="flex items-start justify-between">
           <div>
             <span className="text-sm font-semibold">{displayName}</span>
+            {user?.isVipActive && <Badge className="ml-2" />}
             <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
               {new Date(comment.createdAt).toLocaleDateString()}
             </span>

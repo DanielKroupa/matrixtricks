@@ -30,18 +30,26 @@ export type PostCountsDTO = {
 };
 
 export type AuthorDTO = {
+  id?: string;
   name: string | null;
   image: string | null;
   username: string | null;
+  role?: string | null;
+  isVipActive?: boolean;
 };
 
 export type PostDTO = {
   id: string;
   title: string;
   content: string | null;
+  type?: string;
   rubric: RubricParam;
+  vipOnly?: boolean;
+  isLocked?: boolean;
+  isPinned?: boolean;
   published: boolean;
   shareCount: number;
+  authorId?: string;
   media: MediaDTO[];
   author?: AuthorDTO;
   likes?: Array<{ id: string; userId: string; postId: string }>; // minimal for liked flag

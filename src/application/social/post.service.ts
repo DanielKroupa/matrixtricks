@@ -1,5 +1,12 @@
 import type { PostSortOption, RubricParam } from "@/domain/social/types";
 import { postRepository } from "@/infrastructure/social/post.repository";
+import { entitlementService } from "@/application/billing/entitlement.service";
+
+type ViewerContext = {
+  viewerUserId?: string;
+  viewerRole?: string | null;
+  viewerHasVip?: boolean;
+};
 
 export const postService = {
   async listByRubric(
@@ -7,12 +14,53 @@ export const postService = {
     page = 1,
     limit = 12,
     sortBy: PostSortOption = "newest",
+    viewerContext: ViewerContext = {},
   ) {
-    return postRepository.getRubricPosts(rubric, page, limit, sortBy);
+    return postRepository.getRubricPosts(
+      rubric,
+      page,
+      limit,
+      sortBy,
+      viewerContext,
+    );
   },
 
-  async getDetails(postId: string, userId?: string) {
-    return postRepository.getPostDetails(postId, userId ?? undefined);
+  async getDetails(postId: string, viewerContext: ViewerContext = {}) {
+    const post = await postRepository.getPostDetails(postId, viewerContext);
+
+    if (!post) {
+      return null;
+    }
+
+    const userIds = [
+      post.authorId,
+      ...post.comments
+        .map((comment) => comment.user?.id || comment.userId)
+        .filter((id): id is string => Boolean(id)),
+    ];
+
+    const vipStatusMap = await entitlementService.getVipStatusMap(userIds);
+
+    return {
+      ...post,
+      author: post.author
+        ? {
+            ...post.author,
+            isVipActive: vipStatusMap.get(post.authorId) ?? false,
+          }
+        : post.author,
+      comments: post.comments.map((comment) => ({
+        ...comment,
+        user: comment.user
+          ? {
+              ...comment.user,
+              isVipActive:
+                vipStatusMap.get(comment.user.id || comment.userId || "") ??
+                false,
+            }
+          : comment.user,
+      })),
+    };
   },
 
   async createComment(params: {

@@ -42,6 +42,7 @@ export type PostMinAggregateOutputType = {
   rubric: $Enums.RubricType | null
   isPinned: boolean | null
   pinnedAt: Date | null
+  vipOnly: boolean | null
   published: boolean | null
   scheduledAt: Date | null
   createdAt: Date | null
@@ -58,6 +59,7 @@ export type PostMaxAggregateOutputType = {
   rubric: $Enums.RubricType | null
   isPinned: boolean | null
   pinnedAt: Date | null
+  vipOnly: boolean | null
   published: boolean | null
   scheduledAt: Date | null
   createdAt: Date | null
@@ -74,6 +76,7 @@ export type PostCountAggregateOutputType = {
   rubric: number
   isPinned: number
   pinnedAt: number
+  vipOnly: number
   published: number
   scheduledAt: number
   createdAt: number
@@ -100,6 +103,7 @@ export type PostMinAggregateInputType = {
   rubric?: true
   isPinned?: true
   pinnedAt?: true
+  vipOnly?: true
   published?: true
   scheduledAt?: true
   createdAt?: true
@@ -116,6 +120,7 @@ export type PostMaxAggregateInputType = {
   rubric?: true
   isPinned?: true
   pinnedAt?: true
+  vipOnly?: true
   published?: true
   scheduledAt?: true
   createdAt?: true
@@ -132,6 +137,7 @@ export type PostCountAggregateInputType = {
   rubric?: true
   isPinned?: true
   pinnedAt?: true
+  vipOnly?: true
   published?: true
   scheduledAt?: true
   createdAt?: true
@@ -235,6 +241,7 @@ export type PostGroupByOutputType = {
   rubric: $Enums.RubricType
   isPinned: boolean
   pinnedAt: Date | null
+  vipOnly: boolean
   published: boolean
   scheduledAt: Date | null
   createdAt: Date
@@ -274,6 +281,7 @@ export type PostWhereInput = {
   rubric?: Prisma.EnumRubricTypeFilter<"Post"> | $Enums.RubricType
   isPinned?: Prisma.BoolFilter<"Post"> | boolean
   pinnedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+  vipOnly?: Prisma.BoolFilter<"Post"> | boolean
   published?: Prisma.BoolFilter<"Post"> | boolean
   scheduledAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -294,6 +302,7 @@ export type PostOrderByWithRelationInput = {
   rubric?: Prisma.SortOrder
   isPinned?: Prisma.SortOrder
   pinnedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  vipOnly?: Prisma.SortOrder
   published?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -317,6 +326,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   rubric?: Prisma.EnumRubricTypeFilter<"Post"> | $Enums.RubricType
   isPinned?: Prisma.BoolFilter<"Post"> | boolean
   pinnedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+  vipOnly?: Prisma.BoolFilter<"Post"> | boolean
   published?: Prisma.BoolFilter<"Post"> | boolean
   scheduledAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -337,6 +347,7 @@ export type PostOrderByWithAggregationInput = {
   rubric?: Prisma.SortOrder
   isPinned?: Prisma.SortOrder
   pinnedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  vipOnly?: Prisma.SortOrder
   published?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -361,6 +372,7 @@ export type PostScalarWhereWithAggregatesInput = {
   rubric?: Prisma.EnumRubricTypeWithAggregatesFilter<"Post"> | $Enums.RubricType
   isPinned?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   pinnedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
+  vipOnly?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   published?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   scheduledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
@@ -377,6 +389,7 @@ export type PostCreateInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -396,6 +409,7 @@ export type PostUncheckedCreateInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -415,6 +429,7 @@ export type PostUpdateInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,6 +449,7 @@ export type PostUncheckedUpdateInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -453,6 +469,7 @@ export type PostCreateManyInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -469,6 +486,7 @@ export type PostUpdateManyMutationInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -484,6 +502,7 @@ export type PostUncheckedUpdateManyInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -510,6 +529,7 @@ export type PostCountOrderByAggregateInput = {
   rubric?: Prisma.SortOrder
   isPinned?: Prisma.SortOrder
   pinnedAt?: Prisma.SortOrder
+  vipOnly?: Prisma.SortOrder
   published?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -530,6 +550,7 @@ export type PostMaxOrderByAggregateInput = {
   rubric?: Prisma.SortOrder
   isPinned?: Prisma.SortOrder
   pinnedAt?: Prisma.SortOrder
+  vipOnly?: Prisma.SortOrder
   published?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -546,6 +567,7 @@ export type PostMinOrderByAggregateInput = {
   rubric?: Prisma.SortOrder
   isPinned?: Prisma.SortOrder
   pinnedAt?: Prisma.SortOrder
+  vipOnly?: Prisma.SortOrder
   published?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -667,6 +689,7 @@ export type PostCreateWithoutAuthorInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -685,6 +708,7 @@ export type PostUncheckedCreateWithoutAuthorInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -732,6 +756,7 @@ export type PostScalarWhereInput = {
   rubric?: Prisma.EnumRubricTypeFilter<"Post"> | $Enums.RubricType
   isPinned?: Prisma.BoolFilter<"Post"> | boolean
   pinnedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+  vipOnly?: Prisma.BoolFilter<"Post"> | boolean
   published?: Prisma.BoolFilter<"Post"> | boolean
   scheduledAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -748,6 +773,7 @@ export type PostCreateWithoutMediaInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -766,6 +792,7 @@ export type PostUncheckedCreateWithoutMediaInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -800,6 +827,7 @@ export type PostUpdateWithoutMediaInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -818,6 +846,7 @@ export type PostUncheckedUpdateWithoutMediaInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -836,6 +865,7 @@ export type PostCreateWithoutCommentsInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -854,6 +884,7 @@ export type PostUncheckedCreateWithoutCommentsInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -888,6 +919,7 @@ export type PostUpdateWithoutCommentsInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -906,6 +938,7 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -924,6 +957,7 @@ export type PostCreateWithoutLikesInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -942,6 +976,7 @@ export type PostUncheckedCreateWithoutLikesInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -976,6 +1011,7 @@ export type PostUpdateWithoutLikesInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -994,6 +1030,7 @@ export type PostUncheckedUpdateWithoutLikesInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1012,6 +1049,7 @@ export type PostCreateManyAuthorInput = {
   rubric: $Enums.RubricType
   isPinned?: boolean
   pinnedAt?: Date | string | null
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: Date | string | null
   createdAt?: Date | string
@@ -1027,6 +1065,7 @@ export type PostUpdateWithoutAuthorInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1045,6 +1084,7 @@ export type PostUncheckedUpdateWithoutAuthorInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1063,6 +1103,7 @@ export type PostUncheckedUpdateManyWithoutAuthorInput = {
   rubric?: Prisma.EnumRubricTypeFieldUpdateOperationsInput | $Enums.RubricType
   isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pinnedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  vipOnly?: Prisma.BoolFieldUpdateOperationsInput | boolean
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1127,6 +1168,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   rubric?: boolean
   isPinned?: boolean
   pinnedAt?: boolean
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: boolean
   createdAt?: boolean
@@ -1148,6 +1190,7 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   rubric?: boolean
   isPinned?: boolean
   pinnedAt?: boolean
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: boolean
   createdAt?: boolean
@@ -1165,6 +1208,7 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   rubric?: boolean
   isPinned?: boolean
   pinnedAt?: boolean
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: boolean
   createdAt?: boolean
@@ -1182,6 +1226,7 @@ export type PostSelectScalar = {
   rubric?: boolean
   isPinned?: boolean
   pinnedAt?: boolean
+  vipOnly?: boolean
   published?: boolean
   scheduledAt?: boolean
   createdAt?: boolean
@@ -1190,7 +1235,7 @@ export type PostSelectScalar = {
   shareCount?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "type" | "rubric" | "isPinned" | "pinnedAt" | "published" | "scheduledAt" | "createdAt" | "updatedAt" | "authorId" | "shareCount", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "type" | "rubric" | "isPinned" | "pinnedAt" | "vipOnly" | "published" | "scheduledAt" | "createdAt" | "updatedAt" | "authorId" | "shareCount", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   media?: boolean | Prisma.Post$mediaArgs<ExtArgs>
@@ -1221,6 +1266,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     rubric: $Enums.RubricType
     isPinned: boolean
     pinnedAt: Date | null
+    vipOnly: boolean
     published: boolean
     scheduledAt: Date | null
     createdAt: Date
@@ -1661,6 +1707,7 @@ export interface PostFieldRefs {
   readonly rubric: Prisma.FieldRef<"Post", 'RubricType'>
   readonly isPinned: Prisma.FieldRef<"Post", 'Boolean'>
   readonly pinnedAt: Prisma.FieldRef<"Post", 'DateTime'>
+  readonly vipOnly: Prisma.FieldRef<"Post", 'Boolean'>
   readonly published: Prisma.FieldRef<"Post", 'Boolean'>
   readonly scheduledAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>

@@ -17,3 +17,36 @@ export const RubricType = {
 } as const
 
 export type RubricType = (typeof RubricType)[keyof typeof RubricType]
+
+
+export const PostSortOption = {
+  NEWEST: 'NEWEST',
+  OLDEST: 'OLDEST',
+  SHARE_COUNT: 'SHARE_COUNT',
+  LIKE_COUNT: 'LIKE_COUNT',
+  COMMENT_COUNT: 'COMMENT_COUNT'
+} as const
+
+export type PostSortOption = (typeof PostSortOption)[keyof typeof PostSortOption]
+
+
+export const SubscriptionStatus = {
+  INCOMPLETE: 'INCOMPLETE',
+  INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED',
+  TRIALING: 'TRIALING',
+  ACTIVE: 'ACTIVE',
+  PAST_DUE: 'PAST_DUE',
+  CANCELED: 'CANCELED',
+  UNPAID: 'UNPAID',
+  PAUSED: 'PAUSED'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const EntitlementSource = {
+  STRIPE: 'STRIPE',
+  MANUAL: 'MANUAL'
+} as const
+
+export type EntitlementSource = (typeof EntitlementSource)[keyof typeof EntitlementSource]

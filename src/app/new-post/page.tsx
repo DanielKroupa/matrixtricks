@@ -37,6 +37,7 @@ export default function NewPostPage() {
       type: undefined,
       rubric: undefined,
       scheduledAt: undefined,
+      vipOnly: false,
     },
   });
 
@@ -53,6 +54,7 @@ export default function NewPostPage() {
       if (data.scheduledAt) {
         formData.append("scheduledAt", data.scheduledAt);
       }
+      formData.append("vipOnly", String(vipOnly));
 
       const response = await fetch("/api/posts", {
         method: "POST",

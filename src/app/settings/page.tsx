@@ -1,4 +1,7 @@
 import { getServerSession } from "@/lib/get-session";
+import { entitlementService } from "@/application/billing/entitlement.service";
+import { vipPriceService } from "@/application/billing/vip-price.service";
+import { VipCheckoutCard } from "./VipCheckoutCard";
 
 import { unauthorized } from "next/navigation";
 import Link from "next/link";
@@ -6,6 +9,12 @@ import Link from "next/link";
 export default async function Page() {
   const session = await getServerSession();
   const user = session?.user;
+  const vipStatus = await entitlementService.getUserVipStatus(user?.id);
+  const effectivePrices = await vipPriceService.listEffectivePrices();
+  const configuredCurrencies = effectivePrices.map((price) => price.currency);
+  const vipExpiresText = vipStatus.expiresAt
+    ? vipStatus.expiresAt.toLocaleDateString("cs-CZ")
+    : "No expiry";
 
   if (!user) {
     unauthorized();
@@ -32,16 +41,24 @@ export default async function Page() {
         </div>
         <div className="flex gap-4">
           <p className="">
-            VIP: <span>Active</span>
+            VIP: <span>{vipStatus.isVipActive ? "Active" : "Inactive"}</span>
           </p>
 
-          <div className="block space-y-2">
-            <p>
-              1 Month Subscription <span>(expires 24.12.25)</span>
-            </p>
-            <Link href="" className="rounded-md bg-neutral-600 px-3 py-2">
-              Buy VIP
-            </Link>
+          <div className="space-y-2">
+            <VipCheckoutCard
+              isVipActive={vipStatus.isVipActive}
+              vipExpiresText={vipExpiresText}
+              currencies={configuredCurrencies}
+              isAdmin={user?.role === "admin"}
+            />
+            {user?.role === "admin" ? (
+              <Link
+                href="/admin/monetization"
+                className="rounded-md bg-neutral-600 px-3 py-2"
+              >
+                Manage VIP
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

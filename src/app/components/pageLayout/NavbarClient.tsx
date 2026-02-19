@@ -14,13 +14,19 @@ import { RiAdminFill } from "react-icons/ri";
 
 import { authClient } from "@/lib/auth-client";
 import { User } from "@/lib/auth";
+import Badge from "../ui/Badge";
 
 type Props = {
   initialSession: any;
   user?: User | null;
+  isVipActive?: boolean;
 };
 
-export default function NavbarClient({ initialSession, user }: Props) {
+export default function NavbarClient({
+  initialSession,
+  user,
+  isVipActive = false,
+}: Props) {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -154,6 +160,7 @@ export default function NavbarClient({ initialSession, user }: Props) {
               <p className="font-medium text-black dark:text-white">
                 {displayName}
               </p>
+              {isVipActive && <Badge className="ml-1" />}
               <ChevronDownIcon
                 size={18}
                 className={`transition-transform duration-200 ${profileMenuOpen ? "rotate-180" : "rotate-0"}`}
