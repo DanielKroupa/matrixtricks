@@ -215,10 +215,9 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
       </div>
       <EditorContent
         editor={editor}
-        className="prose dark:prose-invert min-h-50 max-w-none bg-neutral-400 p-4 text-sm outline-none sm:text-base dark:bg-neutral-500"
+        className="prose dark:prose-invert min-h-50 max-w-none rounded-b-md border-r-2 border-b-2 border-l-2 border-neutral-300 bg-neutral-200 p-4 text-sm outline-none sm:text-base dark:border-neutral-600 dark:bg-neutral-500"
         rows={15}
         cols={15}
-        placeholder="Enter text here..."
       />
     </div>
   );

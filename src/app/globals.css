@@ -19,6 +19,11 @@ html.dark {
   --foreground: #ededed;
 }
 
+/* Golden text color */
+.font-golden {
+  @apply bg-linear-to-r from-[#F4BF4F] via-[#C1973E] to-[#F4BF4F] bg-clip-text text-transparent;
+}
+
 body {
   font-family: var(--font-poppins), sans-serif;
   color: var(--foreground);

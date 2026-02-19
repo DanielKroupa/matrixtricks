@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostFormData } from "@/app/helpers/post-schema";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { Spinner } from "@/components/ui/spinner";
 import { RichTextEditor } from "@/components/RichTextEditor";
@@ -19,6 +20,7 @@ const rubrics = [
 export default function NewPostPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const [vipOnly, setVipOnly] = useState(false);
 
   const {
     register,
@@ -82,6 +84,7 @@ export default function NewPostPage() {
       // Reset form
       reset();
       setMediaFiles([]);
+      setVipOnly(false);
     } catch (error) {
       console.error(error);
       alert("Error");
@@ -272,6 +275,31 @@ export default function NewPostPage() {
               {...register("scheduledAt")}
               className="rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
             />
+          </div>
+
+          <div className="mb-4 flex items-center">
+            <label
+              htmlFor="vip-only"
+              className="flex cursor-pointer items-center gap-2 select-none"
+            >
+              <input
+                id="vip-only"
+                type="checkbox"
+                checked={vipOnly}
+                onChange={(e) => setVipOnly(e.target.checked)}
+                className="peer sr-only"
+                aria-checked={vipOnly}
+              />
+
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-gray-400 bg-neutral-300 transition-colors peer-checked:border-cyan-700 peer-checked:bg-cyan-700 dark:border-gray-600 dark:bg-neutral-800">
+                {vipOnly && <FaCheck size={14} className="text-white" />}
+              </span>
+
+              <p className="text-base text-neutral-700 dark:text-neutral-300">
+                Show this content only for{" "}
+                <span className="font-golden font-semibold">VIP</span> users.
+              </p>
+            </label>
           </div>
 
           <PrimaryButton type="submit" disabled={isLoading}>
