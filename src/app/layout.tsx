@@ -4,8 +4,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { LoginModal } from "./components/authLayout/LoginModal";
-import DevBreakpointBadge from "@/components/ui/DevBreakpointBadge";
 import { ThemeProvider } from "next-themes";
+import DevBreakpointBadgeClient from "../components/ui/DevBreakpointBadgeClient";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -31,7 +31,7 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
 
-          {process.env.NODE_ENV !== "production" && <DevBreakpointBadge />}
+          <DevBreakpointBadgeClient />
 
           <LoginModal />
         </AuthProvider>

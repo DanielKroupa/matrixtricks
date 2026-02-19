@@ -29,7 +29,7 @@ export default function DevBreakpointBadge() {
     <div
       role="status"
       aria-label={`Current breakpoint: ${bp}`}
-      className="fixed bottom-4 left-16 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/80 font-mono text-sm text-white shadow-lg"
+      className="fixed bottom-4 left-16 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/80 font-mono text-sm text-white shadow-lg dark:bg-white/25"
     >
       <span aria-hidden>{bp}</span>
     </div>
