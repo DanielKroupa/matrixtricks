@@ -30,9 +30,7 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
-
           <DevBreakpointBadgeClient />
-
           <LoginModal />
         </AuthProvider>
       </body>
