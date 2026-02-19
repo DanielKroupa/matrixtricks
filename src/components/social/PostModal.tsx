@@ -180,6 +180,10 @@ export const PostModal = ({
   const media = fullPost?.media?.[0] || initialPost.media?.[0];
   const postTitle = fullPost?.title ?? initialPost.title;
   const postContent = fullPost?.content ?? initialPost.content ?? "";
+  const normalizedPostContent = postContent.replace(
+    /<p>(?:\s|&nbsp;|<br\s*\/?>)*<\/p>/gi,
+    "<p><br></p>",
+  );
   const isPinned = Boolean(fullPost?.isPinned ?? initialPost.isPinned);
   const rubricName = String(fullPost?.rubric ?? initialPost.rubric ?? "");
   const isTextRubric = rubricName.toUpperCase() === "TEXTS";
@@ -297,7 +301,7 @@ export const PostModal = ({
           <div className="px-4 py-5 sm:px-6">
             <div
               className="prose dark:prose-invert max-w-none text-sm sm:text-base"
-              dangerouslySetInnerHTML={{ __html: postContent }}
+              dangerouslySetInnerHTML={{ __html: normalizedPostContent }}
             />
           </div>
 
@@ -468,7 +472,7 @@ export const PostModal = ({
               <div className="absolute inset-0 overflow-y-auto p-6 pt-16 pb-20 md:p-8 md:pt-16 md:pb-24">
                 <div
                   className="prose prose-invert max-w-none text-sm md:text-base"
-                  dangerouslySetInnerHTML={{ __html: postContent }}
+                  dangerouslySetInnerHTML={{ __html: normalizedPostContent }}
                 />
               </div>
 

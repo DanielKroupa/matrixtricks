@@ -1,6 +1,6 @@
-import { Navbar } from "../components/layout/Navbar";
+import { Navbar } from "../components/pageLayout/Navbar";
 import AdminSidebar from "./AdminSidebar";
-import { Copyright } from "../components/layout/Copyright";
+import { Copyright } from "../components/pageLayout/Copyright";
 
 export default async function Layout({
   children,

@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   updatePasswordSchema,
   UpdatePasswordData,
-} from "../helpers/update-password-schema";
+} from "../../helpers/update-password-schema";
 
 import { Spinner } from "@/components/ui/spinner";
 import { useForm } from "react-hook-form";
@@ -61,13 +61,13 @@ export default function UpdatePasswordForm() {
 
   return (
     <form
-      className="md:ml-10 ml-0 w-full self-end"
+      className="ml-0 w-full self-end md:ml-10"
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* Input change password */}
-      <div className="flex gap-2 border-b-2 border-l-2 rounded-br-md rounded-bl-md border-r-2 border-neutral-300 dark:border-neutral-600">
-        <div className="w-full ">
-          <h3 className="text-lg dark:bg-neutral-600 bg-neutral-300 p-1 text-center">
+      <div className="flex gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-600">
+        <div className="w-full">
+          <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-600">
             Change sign in password:
           </h3>
           <div className="space-y-4 p-4">
@@ -76,11 +76,11 @@ export default function UpdatePasswordForm() {
               <input
                 type="password"
                 autoComplete="current-password"
-                className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-full  outline-none"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
                 {...register("currentPassword")}
               />
               {errors.currentPassword && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.currentPassword.message}
                 </p>
               )}
@@ -90,11 +90,11 @@ export default function UpdatePasswordForm() {
               <input
                 type="password"
                 autoComplete="new-password"
-                className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-full  outline-none"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
                 {...register("newPassword")}
               />
               {errors.newPassword && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.newPassword.message}
                 </p>
               )}
@@ -104,22 +104,21 @@ export default function UpdatePasswordForm() {
               <input
                 type="password"
                 autoComplete="new-password"
-                className="dark:bg-neutral-700 bg-neutral-300 rounded px-2 py-1.5 md:w-72 w-full  outline-none"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
                 {...register("confirmNewPassword")}
               />
               {errors.confirmNewPassword && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.confirmNewPassword.message}
                 </p>
               )}
             </div>
             {error && (
-              <p className="text-red-500 text-sm font-medium mt-1">{error}</p>
+              <p className="mt-1 text-sm font-medium text-red-500">{error}</p>
             )}
             <button
               type="submit"
-              className={`dark:bg-cyan-900 bg-cyan-800 text-white py-2 px-3 rounded mr-2 md:w-fit w-full cursor-pointer shadow-md flex justify-center items-center gap-2 
-                ${loading ? "opacity-50 cursor-not-allowed" : "opacity-100 cursor-pointer"}`}
+              className={`mr-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md md:w-fit dark:bg-cyan-900 ${loading ? "cursor-not-allowed opacity-50" : "cursor-pointer opacity-100"}`}
               disabled={loading}
             >
               {loading ? (

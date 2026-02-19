@@ -98,6 +98,23 @@ function formatExactTime(iso: string) {
   return date.toLocaleString("cs-CZ");
 }
 
+function renderFanwallBody(body: string, className: string) {
+  const paragraphs = body.split("\n");
+
+  return (
+    <div className={className}>
+      {paragraphs.map((paragraphText, index) => (
+        <p
+          key={`${index}-${paragraphText.length}`}
+          className={index > 0 ? "mt-2" : undefined}
+        >
+          {paragraphText || "\u00A0"}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 type PinnedMessageCardProps = {
   message: FanwallMessage;
   isAdmin: boolean;
@@ -144,7 +161,10 @@ function PinnedMessageCard({
             </time>
           </p>
           <div className="rounded-lg bg-neutral-200 px-4 py-2 shadow dark:bg-neutral-500">
-            <p className="text-sm font-normal md:text-base">{message.body}</p>
+            {renderFanwallBody(
+              message.body,
+              "text-sm font-normal md:text-base",
+            )}
           </div>
           {isAdmin && (
             <>
@@ -272,7 +292,7 @@ function FanwallMessageItem({
               </div>
             </div>
           ) : (
-            <p className="text-sm font-light md:text-base">{message.body}</p>
+            renderFanwallBody(message.body, "text-sm font-light md:text-base")
           )}
         </div>
         {(canEdit || canDelete || isAdmin) && (

@@ -1,14 +1,14 @@
-import { Navbar } from "../components/layout/Navbar";
+import { Navbar } from "../components/pageLayout/Navbar";
 import { Banner } from "../components/Banner";
-import { PostSettings } from "../components/layout/PostSettings";
-import { GoalBar } from "../components/layout/GoalBar";
-import { Rubrics } from "../components/layout/Rubrics";
+import { PostSettings } from "../components/pageLayout/PostSettings";
+import { GoalBar } from "../components/pageLayout/GoalBar";
+import { Rubrics } from "../components/pageLayout/Rubrics";
 import { Monetization } from "../components/Monetization";
 import { Bio } from "../components/Bio";
 import { Title } from "../components/Title";
-import { Footer } from "../components/layout/Footer";
-import { OtherProjects } from "../components/layout/OtherProjects";
-import { FanWall } from "../components/layout/FanWall";
+import { Footer } from "../components/pageLayout/Footer";
+import { OtherProjects } from "../components/pageLayout/OtherProjects";
+import { FanWall } from "../components/pageLayout/FanWall";
 
 export default function SiteLayout({
   children,
@@ -25,7 +25,7 @@ export default function SiteLayout({
       <Bio />
 
       <Monetization />
-      <div className="flex md:flex-row flex-col md:justify-between gap-2 px-2">
+      <div className="flex flex-col gap-2 px-2 md:flex-row md:justify-between">
         <Rubrics />
         <GoalBar />
         <PostSettings />

@@ -3,7 +3,7 @@
 import {
   updateProfileSchema,
   type UpdateProfileFormData,
-} from "../helpers/update-profile-schema";
+} from "../../helpers/update-profile-schema";
 import type { User } from "@/lib/auth";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -12,8 +12,8 @@ import { authClient } from "@/lib/auth-client";
 import { updateSiteSettings } from "@/actions/site-settings";
 
 import { useRouter } from "next/navigation";
-import AvatarUpload from "./AvatarUpload";
-import AutoResizeTextarea from "../components/ui/form/AutoResizeTextarea";
+import AvatarUpload from "../../admin/AvatarUpload";
+import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 
 import { Spinner } from "@/components/ui/spinner";
 

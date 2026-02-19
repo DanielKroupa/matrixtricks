@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { getServerSession } from "@/lib/get-session";
 import { forbidden, unauthorized } from "next/navigation";
-import { ProfileDetailsForm } from "./profile-details-form";
-import UpdatePasswordForm from "./update-password-form";
+import { ProfileDetailsForm } from "../components/adminPage/profile-details-form";
+import UpdatePasswordForm from "../components/adminPage/update-password-form";
 import { getSiteSettings } from "@/app/helpers/main-title";
 
 export const metadata: Metadata = {

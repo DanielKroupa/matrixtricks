@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
+import { Extension } from "@tiptap/core";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -63,9 +64,46 @@ const colors = [
 ];
 
 export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+  const normalizeEmptyParagraphs = (html: string) =>
+    html.replace(/<p>(?:\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, "<p><br></p>");
+
+  const TrimTrailingSpaceOnEnter = Extension.create({
+    name: "trimTrailingSpaceOnEnter",
+    addKeyboardShortcuts() {
+      return {
+        Enter: () => {
+          try {
+            const { state, dispatch } = this.editor.view;
+            const { selection } = state;
+            const $from = selection.$from;
+            if (!selection.empty) return false;
+            const start = $from.start();
+            const pos = $from.pos;
+            const textBefore = state.doc.textBetween(start, pos, "", "");
+            const lastChar = textBefore.slice(-1);
+            if (lastChar === " " || lastChar === "\u00A0") {
+              const tr = state.tr.delete(pos - 1, pos);
+              dispatch(tr.scrollIntoView());
+              // Perform default split/block behavior
+              // Use commands.splitBlock() to mimic Enter
+              // `this.editor` is available and has commands
+              // Delay call to ensure transaction applied
+              this.editor.commands.splitBlock();
+              return true;
+            }
+          } catch (e) {
+            // If anything goes wrong, let default Enter behavior run
+            return false;
+          }
+          return false;
+        },
+      };
+    },
+  });
   const editor = useEditor({
     extensions: [
       StarterKit,
+      TrimTrailingSpaceOnEnter,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -75,7 +113,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
     content: value,
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      onChange(normalizeEmptyParagraphs(editor.getHTML()));
     },
   });
 
@@ -177,7 +215,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
       </div>
       <EditorContent
         editor={editor}
-        className="prose min-h-50 max-w-none bg-neutral-400 p-4 text-white outline-none dark:bg-neutral-500"
+        className="prose dark:prose-invert min-h-50 max-w-none bg-neutral-400 p-4 text-sm outline-none sm:text-base dark:bg-neutral-500"
         rows={15}
         cols={15}
         placeholder="Enter text here..."

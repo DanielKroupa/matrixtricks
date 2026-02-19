@@ -1,5 +1,5 @@
-import { Navbar } from "../components/layout/Navbar";
-import { Copyright } from "../components/layout/Copyright";
+import { Navbar } from "../components/pageLayout/Navbar";
+import { Copyright } from "../components/pageLayout/Copyright";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

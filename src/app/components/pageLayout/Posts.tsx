@@ -16,6 +16,8 @@ interface Post {
 export function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const normalizeEmptyParagraphs = (html: string) =>
+    html.replace(/<p>(?:\s|&nbsp;|<br\s*\/?>)*<\/p>/gi, "<p><br></p>");
 
   useEffect(() => {
     fetch("/api/posts?rubric=videos")
@@ -38,7 +40,11 @@ export function Posts() {
           <h2 className="text-xl font-bold">{post.title}</h2>
           <p className="text-sm text-gray-500">{post.rubric}</p>
           {post.content && (
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: normalizeEmptyParagraphs(post.content),
+              }}
+            />
           )}
           <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
             {post.media.map((media) => (

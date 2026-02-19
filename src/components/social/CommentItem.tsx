@@ -8,6 +8,23 @@ import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import type { CommentViewModel } from "./hooks/useComments";
 
+function renderCommentBody(content: string, className?: string) {
+  const paragraphs = content.split("\n");
+
+  return (
+    <div className={className}>
+      {paragraphs.map((paragraphText, index) => (
+        <p
+          key={`${index}-${paragraphText.length}`}
+          className={index > 0 ? "mt-2" : undefined}
+        >
+          {paragraphText || "\u00A0"}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 export const CommentItem = ({
   comment,
   session,
@@ -227,9 +244,9 @@ export const CommentItem = ({
             </div>
           </div>
         ) : (
-          <p className="mt-1 rounded-md bg-neutral-200 p-2 text-sm wrap-break-word text-gray-800 shadow dark:bg-neutral-600 dark:text-white">
-            {comment.content}
-          </p>
+          <div className="mt-1 rounded-md bg-neutral-200 p-2 text-sm wrap-break-word text-gray-800 shadow dark:bg-neutral-600 dark:text-white">
+            {renderCommentBody(comment.content)}
+          </div>
         )}
         {actionError && (
           <p className="mt-1 text-xs text-red-500">{actionError}</p>
