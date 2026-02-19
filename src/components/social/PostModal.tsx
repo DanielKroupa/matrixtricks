@@ -490,8 +490,13 @@ export const PostModal = ({
                   title="Share"
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
                 >
-                  <Share2 size={16} />
-                  <span>Share {shareCount}</span>
+                  <Image
+                    src="/icons/share.svg"
+                    alt="Share"
+                    width={16}
+                    height={16}
+                  />
+                  <span>{shareCount}</span>
                 </button>
               </div>
             </div>
