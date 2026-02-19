@@ -96,6 +96,8 @@ export const PostModal = ({
   const currentUserId = sessionUser?.id ?? null;
   const isAdmin = sessionUser?.role === "admin";
   const postAuthorId = fullPost?.authorId ?? initialPost.authorId;
+  const postAuthor = fullPost?.author ?? initialPost.author ?? null;
+  const postAuthorName = postAuthor?.name ?? postAuthor?.username ?? null;
   const canManagePost =
     Boolean(currentUserId && postAuthorId && currentUserId === postAuthorId) ||
     isAdmin;
@@ -272,10 +274,17 @@ export const PostModal = ({
       <div className="mx-auto w-full max-w-5xl p-4 sm:p-6">
         <div className="overflow-hidden rounded-xl border border-neutral-400 bg-neutral-200/75 shadow dark:border-neutral-700 dark:bg-neutral-700/75">
           <div className="flex items-center justify-between border-b border-neutral-300 px-4 py-3 sm:px-6 dark:border-neutral-700">
-            <h1 className="line-clamp-2 flex items-center gap-2 text-lg font-semibold text-neutral-900 dark:text-white">
-              {isPinned && <BsFillPinAngleFill className="shrink-0" />}
-              {postTitle}
-            </h1>
+            <div>
+              <h1 className="line-clamp-2 flex items-center gap-2 text-lg font-semibold text-neutral-900 dark:text-white">
+                {isPinned && <BsFillPinAngleFill className="shrink-0" />}
+                {postTitle}
+              </h1>
+              {postAuthorName ? (
+                <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-300">
+                  {postAuthorName}
+                </p>
+              ) : null}
+            </div>
             <div className="flex items-center gap-2">{postActionsMenu}</div>
           </div>
 
@@ -396,6 +405,9 @@ export const PostModal = ({
                   {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
+                {postAuthorName ? (
+                  <p className="mt-1 text-xs text-white/90">{postAuthorName}</p>
+                ) : null}
               </div>
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
@@ -432,6 +444,9 @@ export const PostModal = ({
                   {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
+                {postAuthorName ? (
+                  <p className="mt-1 text-xs text-white/90">{postAuthorName}</p>
+                ) : null}
               </div>
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
@@ -467,6 +482,9 @@ export const PostModal = ({
                   {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
+                {postAuthorName ? (
+                  <p className="mt-1 text-xs text-white/90">{postAuthorName}</p>
+                ) : null}
               </div>
 
               <div className="absolute inset-0 overflow-y-auto p-6 pt-16 pb-20 md:p-8 md:pt-16 md:pb-24">

@@ -2,6 +2,8 @@ import { getServerSession } from "@/lib/get-session";
 import { entitlementService } from "@/application/billing/entitlement.service";
 import { vipPriceService } from "@/application/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
+import { getCurrentUserOnlineVisibility } from "@/app/helpers/online-visibility";
+import { OnlineVisibilityToggle } from "./OnlineVisibilityToggle";
 
 import { unauthorized } from "next/navigation";
 import Link from "next/link";
@@ -11,6 +13,7 @@ export default async function Page() {
   const user = session?.user;
   const vipStatus = await entitlementService.getUserVipStatus(user?.id);
   const effectivePrices = await vipPriceService.listEffectivePrices();
+  const onlineVisibility = await getCurrentUserOnlineVisibility();
   const configuredCurrencies = effectivePrices.map((price) => price.currency);
   const vipExpiresText = vipStatus.expiresAt
     ? vipStatus.expiresAt.toLocaleDateString("cs-CZ")
@@ -25,19 +28,7 @@ export default async function Page() {
         <h3 className="bg-neutral-600 p-2 font-medium">User info</h3>
         <span className="text-xl">{user?.name} </span>
         <div className="flex items-center gap-4">
-          <div className="">
-            <button className="flex items-center justify-center gap-1.5 rounded-md bg-neutral-500 px-2 py-1.5">
-              <span className="flex size-3 rounded-full bg-green-500 p-1"></span>
-              Online
-            </button>
-          </div>
-          <div> / </div>
-          <div>
-            <button className="flex items-center justify-center gap-1.5 rounded-md bg-neutral-500 px-2 py-1.5">
-              <span className="flex size-3 rounded-full bg-amber-600 p-1"></span>
-              Offline
-            </button>
-          </div>
+          <OnlineVisibilityToggle initialEnabled={onlineVisibility.enabled} />
         </div>
         <div className="flex gap-4">
           <p className="">

@@ -74,6 +74,10 @@ export const auth = betterAuth({
         type: "string",
         input: false,
       },
+      onlineVisibility: {
+        type: "boolean",
+        input: false,
+      },
     },
   },
 

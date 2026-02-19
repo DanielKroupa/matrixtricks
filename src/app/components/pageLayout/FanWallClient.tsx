@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 import Badge from "../ui/Badge";
+import { usePresenceStatuses } from "@/context/PresenceContext";
 
 import { BsPinFill } from "react-icons/bs";
 import { BsFillPinAngleFill } from "react-icons/bs";
@@ -118,6 +119,7 @@ function renderFanwallBody(body: string, className: string) {
 
 type PinnedMessageCardProps = {
   message: FanwallMessage;
+  isAuthorOnline: boolean;
   isAdmin: boolean;
   isMenuOpen: boolean;
   onToggleMenu: () => void;
@@ -127,6 +129,7 @@ type PinnedMessageCardProps = {
 
 function PinnedMessageCard({
   message,
+  isAuthorOnline,
   isAdmin,
   isMenuOpen,
   onToggleMenu,
@@ -139,7 +142,7 @@ function PinnedMessageCard({
   return (
     <div className="bg-neutral-300 py-4 shadow-lg dark:bg-[#353535]">
       <div className="group relative flex flex-row items-center justify-baseline gap-2 px-2 md:gap-4 md:px-6">
-        <div>
+        <div className="relative">
           <Image
             src={avatarSrc}
             alt="profile-avatar"
@@ -147,6 +150,12 @@ function PinnedMessageCard({
             width={65}
             height={65}
           />
+          {message.userId ? (
+            <span
+              title={isAuthorOnline ? "Online" : "Offline"}
+              className={`absolute right-0 bottom-0 z-10 flex size-3 rounded-full border-2 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "bg-amber-600"}`}
+            />
+          ) : null}
           {message.user?.isVipActive && <Badge className="-mt-2 ml-8" />}
         </div>
         <div className="flex flex-col space-y-1">
@@ -199,6 +208,7 @@ function PinnedMessageCard({
 
 type FanwallMessageItemProps = {
   message: FanwallMessage;
+  isAuthorOnline: boolean;
   sessionUser: FanwallUser | null;
   isAdmin: boolean;
   isEditing: boolean;
@@ -217,6 +227,7 @@ type FanwallMessageItemProps = {
 
 function FanwallMessageItem({
   message,
+  isAuthorOnline,
   sessionUser,
   isAdmin,
   isEditing,
@@ -240,7 +251,7 @@ function FanwallMessageItem({
 
   return (
     <div className="group relative flex flex-row items-start justify-baseline gap-2 px-2 py-4 md:gap-4 md:px-6">
-      <div className="md:w-auto">
+      <div className="relative md:w-auto">
         <Image
           src={avatarSrc}
           alt="profile-avatar"
@@ -249,6 +260,12 @@ function FanwallMessageItem({
           loading="lazy"
           height={65}
         />
+        {message.userId ? (
+          <span
+            title={isAuthorOnline ? "Online" : "Offline"}
+            className={`absolute right-0 bottom-0 z-10 flex size-3 rounded-full border-2 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "bg-amber-600"}`}
+          />
+        ) : null}
       </div>
       <div className="flex w-4/5 flex-col space-y-1">
         {message.title && (
@@ -467,6 +484,14 @@ export default function FanWallClient({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingBody, setEditingBody] = useState("");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const messageAuthorIds = useMemo(
+    () =>
+      messages
+        .map((message) => message.userId)
+        .filter((userId): userId is string => Boolean(userId)),
+    [messages],
+  );
+  const presenceStatuses = usePresenceStatuses(messageAuthorIds);
 
   const pinnedMessage = useMemo(
     () => messages.find((message) => message.isPinned) || null,
@@ -851,6 +876,11 @@ export default function FanWallClient({
       {pinnedMessage && (
         <PinnedMessageCard
           message={pinnedMessage}
+          isAuthorOnline={
+            pinnedMessage.userId
+              ? Boolean(presenceStatuses[pinnedMessage.userId])
+              : false
+          }
           isAdmin={isAdmin}
           isMenuOpen={openMenuId === pinnedMessage.id}
           onToggleMenu={() => toggleMenu(pinnedMessage.id)}
@@ -882,6 +912,11 @@ export default function FanWallClient({
             <FanwallMessageItem
               key={message.id}
               message={message}
+              isAuthorOnline={
+                message.userId
+                  ? Boolean(presenceStatuses[message.userId])
+                  : false
+              }
               sessionUser={sessionUser}
               isAdmin={isAdmin}
               isEditing={editingId === message.id}

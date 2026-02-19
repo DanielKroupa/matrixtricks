@@ -8,6 +8,7 @@ import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import type { CommentViewModel } from "./hooks/useComments";
 import Badge from "@/app/components/ui/Badge";
+import { usePresenceStatuses } from "@/context/PresenceContext";
 
 function renderCommentBody(content: string, className?: string) {
   const paragraphs = content.split("\n");
@@ -66,6 +67,10 @@ export const CommentItem = ({
     (like) => like.userId === currentUserId,
   );
   const likeCount = comment._count?.likes ?? 0;
+  const presenceStatuses = usePresenceStatuses([comment.userId]);
+  const isAuthorOnline = comment.userId
+    ? Boolean(presenceStatuses[comment.userId])
+    : false;
 
   useEffect(() => {
     setEditedContent(comment.content);
@@ -152,7 +157,7 @@ export const CommentItem = ({
 
   return (
     <div className="flex gap-3 border-neutral-300 py-3 dark:border-neutral-600">
-      <div className="flex shrink-0">
+      <div className="relative flex shrink-0">
         {avatarUrl ? (
           <Image
             src={avatarUrl}
@@ -166,6 +171,12 @@ export const CommentItem = ({
             <UserIcon size={16} className="text-gray-500 dark:text-gray-400" />
           </div>
         )}
+        {comment.userId ? (
+          <span
+            title={isAuthorOnline ? "Online" : "Offline"}
+            className={`absolute right-0 bottom-0 z-10 flex size-3 rounded-full border-2 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "bg-amber-600"}`}
+          />
+        ) : null}
       </div>
       <div className="flex-1">
         <div className="flex items-start justify-between">

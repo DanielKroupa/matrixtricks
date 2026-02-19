@@ -45,6 +45,7 @@ model User {
   emailVerified       Boolean              @default(false)
   image               String?
   role                String?
+  onlineVisibility    Boolean              @default(true)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   sessions            Session[]
