@@ -1,5 +1,5 @@
 "use client";
-import { JSX, ReactNode, useState } from "react";
+import { JSX, ReactNode, useEffect, useMemo, useState } from "react";
 import { CommentItem } from "./CommentItem";
 import { Send, Smile } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -32,6 +32,94 @@ export const CommentSection = ({
     removeComment,
   } = useComments(initialComments, session);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isWriteCheckLoading, setIsWriteCheckLoading] = useState(false);
+  const [writeBlockMessages, setWriteBlockMessages] = useState<{
+    create: string | null;
+    update: string | null;
+    delete: string | null;
+  }>({
+    create: null,
+    update: null,
+    delete: null,
+  });
+
+  const writeBlockMessage = writeBlockMessages.create;
+
+  const isWriteBlocked = useMemo(
+    () => Boolean(writeBlockMessage),
+    [writeBlockMessage],
+  );
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadWriteAccess = async () => {
+      setIsWriteCheckLoading(true);
+      try {
+        const loadActionBlock = async (
+          action: "COMMENT_CREATE" | "COMMENT_UPDATE" | "COMMENT_DELETE",
+          label: string,
+        ) => {
+          const response = await fetch(
+            `/api/moderation/write-access?action=${action}`,
+            {
+              cache: "no-store",
+            },
+          );
+
+          const payload = (await response.json()) as {
+            blocked?: boolean;
+            reason?: string;
+            endsAt?: string | null;
+          };
+
+          if (!response.ok || !payload.blocked) {
+            return null;
+          }
+
+          const endsAtLabel = payload.endsAt
+            ? ` until ${new Date(payload.endsAt).toLocaleString("cs-CZ")}`
+            : " permanently";
+
+          return `You are blocked from ${label}${endsAtLabel}. Reason: ${payload.reason ?? "No reason provided"}`;
+        };
+
+        const [createMessage, updateMessage, deleteMessage] = await Promise.all(
+          [
+            loadActionBlock("COMMENT_CREATE", "writing comments"),
+            loadActionBlock("COMMENT_UPDATE", "editing comments"),
+            loadActionBlock("COMMENT_DELETE", "deleting comments"),
+          ],
+        );
+
+        if (!isCancelled) {
+          setWriteBlockMessages({
+            create: createMessage,
+            update: updateMessage,
+            delete: deleteMessage,
+          });
+        }
+      } catch {
+        if (!isCancelled) {
+          setWriteBlockMessages({
+            create: null,
+            update: null,
+            delete: null,
+          });
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsWriteCheckLoading(false);
+        }
+      }
+    };
+
+    loadWriteAccess();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   const onEmojiClick = (emojiObject: any) => {
     setContent((prev) => prev + emojiObject.emoji);
@@ -39,11 +127,21 @@ export const CommentSection = ({
   };
 
   const handleCommentUpdated = async (commentId: string, content: string) => {
+    if (writeBlockMessages.update) {
+      setError(writeBlockMessages.update);
+      return false;
+    }
+
     const updated = await updateCommentContent(commentId, content);
     return Boolean(updated);
   };
 
   const handleCommentDeleted = async (commentId: string) => {
+    if (writeBlockMessages.delete) {
+      setError(writeBlockMessages.delete);
+      return false;
+    }
+
     const success = await removeComment(commentId);
     return success;
   };
@@ -51,6 +149,11 @@ export const CommentSection = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (isWriteBlocked) {
+      setError(writeBlockMessage || "You are blocked from writing comments.");
+      return;
+    }
 
     try {
       const newComment = await addComment(
@@ -86,6 +189,8 @@ export const CommentSection = ({
               key={comment.id}
               comment={comment}
               session={session}
+              editBlockMessage={writeBlockMessages.update}
+              deleteBlockMessage={writeBlockMessages.delete}
               onCommentUpdated={(commentId, content) =>
                 handleCommentUpdated(commentId, content)
               }
@@ -98,7 +203,13 @@ export const CommentSection = ({
 
       <div className="mt-auto border-t border-neutral-300 bg-gray-50 p-4 dark:border-neutral-600 dark:bg-neutral-800">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {(error || writeBlockMessage || isWriteCheckLoading) && (
+            <p className="text-sm text-red-500">
+              {isWriteCheckLoading
+                ? "Checking write access..."
+                : (writeBlockMessage ?? error)}
+            </p>
+          )}
 
           {!session && (
             <input
@@ -107,6 +218,7 @@ export const CommentSection = ({
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               required={!session}
+              disabled={loading || isWriteBlocked || isWriteCheckLoading}
             />
           )}
 
@@ -126,18 +238,25 @@ export const CommentSection = ({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
+              disabled={loading || isWriteBlocked || isWriteCheckLoading}
             />
             <div className="absolute right-2 bottom-2 flex gap-1">
               <button
                 type="button"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                disabled={loading || isWriteBlocked || isWriteCheckLoading}
                 className="rounded-full p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-yellow-500 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-yellow-500"
               >
                 <Smile size={18} />
               </button>
               <button
                 type="submit"
-                disabled={loading || !content.trim()}
+                disabled={
+                  loading ||
+                  !content.trim() ||
+                  isWriteBlocked ||
+                  isWriteCheckLoading
+                }
                 className="rounded-full bg-cyan-600 p-1.5 text-white transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Send size={16} />

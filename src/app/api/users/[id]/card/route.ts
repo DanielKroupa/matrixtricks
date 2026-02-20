@@ -44,11 +44,13 @@ export async function GET(
 
     const session = await getServerSession();
     const viewerUserId = session?.user?.id;
+    const viewerRole = session?.user?.role;
     const deviceId = await resolveDeviceId();
 
     const data = await userCardService.getUserCard({
       targetUserId: userId,
       viewerUserId,
+      viewerRole,
       deviceId,
     });
 

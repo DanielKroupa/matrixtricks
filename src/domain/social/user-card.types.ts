@@ -11,6 +11,10 @@ export type UserCardData = {
   fansCount: number | null;
   isFan: boolean;
   isSelf: boolean;
+  viewerIsAdmin: boolean;
+  isBlocked: boolean;
+  blockedUntil: string | null;
+  blockedReason: string | null;
 };
 
 export type FanToggleResult = {

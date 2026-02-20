@@ -385,6 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  UserWriteBlock: 'UserWriteBlock',
+  UserIdentityLog: 'UserIdentityLog',
+  UserBlockAuditEvent: 'UserBlockAuditEvent',
   UserFan: 'UserFan',
   Session: 'Session',
   Account: 'Account',
@@ -419,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userFan" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "postShare" | "stripeCustomer" | "subscription" | "vipGrant" | "stripeWebhookEvent" | "vipPrice" | "vipPriceAuditEvent" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting" | "userPostPreference"
+    modelProps: "user" | "userWriteBlock" | "userIdentityLog" | "userBlockAuditEvent" | "userFan" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "postShare" | "stripeCustomer" | "subscription" | "vipGrant" | "stripeWebhookEvent" | "vipPrice" | "vipPriceAuditEvent" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting" | "userPostPreference"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -494,6 +497,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserWriteBlock: {
+      payload: Prisma.$UserWriteBlockPayload<ExtArgs>
+      fields: Prisma.UserWriteBlockFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserWriteBlockFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserWriteBlockFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>
+        }
+        findFirst: {
+          args: Prisma.UserWriteBlockFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserWriteBlockFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>
+        }
+        findMany: {
+          args: Prisma.UserWriteBlockFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>[]
+        }
+        create: {
+          args: Prisma.UserWriteBlockCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>
+        }
+        createMany: {
+          args: Prisma.UserWriteBlockCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserWriteBlockCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>[]
+        }
+        delete: {
+          args: Prisma.UserWriteBlockDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>
+        }
+        update: {
+          args: Prisma.UserWriteBlockUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserWriteBlockDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserWriteBlockUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserWriteBlockUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserWriteBlockUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserWriteBlockPayload>
+        }
+        aggregate: {
+          args: Prisma.UserWriteBlockAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserWriteBlock>
+        }
+        groupBy: {
+          args: Prisma.UserWriteBlockGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserWriteBlockGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserWriteBlockCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserWriteBlockCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserIdentityLog: {
+      payload: Prisma.$UserIdentityLogPayload<ExtArgs>
+      fields: Prisma.UserIdentityLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserIdentityLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserIdentityLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>
+        }
+        findFirst: {
+          args: Prisma.UserIdentityLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserIdentityLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>
+        }
+        findMany: {
+          args: Prisma.UserIdentityLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>[]
+        }
+        create: {
+          args: Prisma.UserIdentityLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>
+        }
+        createMany: {
+          args: Prisma.UserIdentityLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserIdentityLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>[]
+        }
+        delete: {
+          args: Prisma.UserIdentityLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>
+        }
+        update: {
+          args: Prisma.UserIdentityLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserIdentityLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserIdentityLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserIdentityLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserIdentityLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserIdentityLogPayload>
+        }
+        aggregate: {
+          args: Prisma.UserIdentityLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserIdentityLog>
+        }
+        groupBy: {
+          args: Prisma.UserIdentityLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserIdentityLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserIdentityLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserIdentityLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserBlockAuditEvent: {
+      payload: Prisma.$UserBlockAuditEventPayload<ExtArgs>
+      fields: Prisma.UserBlockAuditEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserBlockAuditEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserBlockAuditEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>
+        }
+        findFirst: {
+          args: Prisma.UserBlockAuditEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserBlockAuditEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>
+        }
+        findMany: {
+          args: Prisma.UserBlockAuditEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>[]
+        }
+        create: {
+          args: Prisma.UserBlockAuditEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>
+        }
+        createMany: {
+          args: Prisma.UserBlockAuditEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserBlockAuditEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>[]
+        }
+        delete: {
+          args: Prisma.UserBlockAuditEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>
+        }
+        update: {
+          args: Prisma.UserBlockAuditEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserBlockAuditEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserBlockAuditEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserBlockAuditEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserBlockAuditEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockAuditEventPayload>
+        }
+        aggregate: {
+          args: Prisma.UserBlockAuditEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserBlockAuditEvent>
+        }
+        groupBy: {
+          args: Prisma.UserBlockAuditEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserBlockAuditEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserBlockAuditEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserBlockAuditEventCountAggregateOutputType> | number
         }
       }
     }
@@ -1959,6 +2184,59 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const UserWriteBlockScalarFieldEnum = {
+  id: 'id',
+  reason: 'reason',
+  isActive: 'isActive',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  scopeCommentCreate: 'scopeCommentCreate',
+  scopeCommentUpdate: 'scopeCommentUpdate',
+  scopeCommentDelete: 'scopeCommentDelete',
+  scopeFanwallCreate: 'scopeFanwallCreate',
+  scopeFanwallUpdate: 'scopeFanwallUpdate',
+  scopeFanwallDelete: 'scopeFanwallDelete',
+  targetUserId: 'targetUserId',
+  targetDeviceId: 'targetDeviceId',
+  targetIp: 'targetIp',
+  createdByUserId: 'createdByUserId',
+  revokedByUserId: 'revokedByUserId'
+} as const
+
+export type UserWriteBlockScalarFieldEnum = (typeof UserWriteBlockScalarFieldEnum)[keyof typeof UserWriteBlockScalarFieldEnum]
+
+
+export const UserIdentityLogScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  deviceId: 'deviceId',
+  ipAddress: 'ipAddress'
+} as const
+
+export type UserIdentityLogScalarFieldEnum = (typeof UserIdentityLogScalarFieldEnum)[keyof typeof UserIdentityLogScalarFieldEnum]
+
+
+export const UserBlockAuditEventScalarFieldEnum = {
+  id: 'id',
+  eventType: 'eventType',
+  reason: 'reason',
+  details: 'details',
+  createdAt: 'createdAt',
+  blockId: 'blockId',
+  performedByUserId: 'performedByUserId',
+  targetUserId: 'targetUserId',
+  targetDeviceId: 'targetDeviceId',
+  targetIp: 'targetIp'
+} as const
+
+export type UserBlockAuditEventScalarFieldEnum = (typeof UserBlockAuditEventScalarFieldEnum)[keyof typeof UserBlockAuditEventScalarFieldEnum]
+
+
 export const UserFanScalarFieldEnum = {
   id: 'id',
   isActive: 'isActive',
@@ -2301,6 +2579,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'RubricType'
  */
 export type EnumRubricTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RubricType'>
@@ -2353,20 +2645,6 @@ export type EnumEntitlementSourceFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'EntitlementSource[]'
  */
 export type ListEnumEntitlementSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EntitlementSource[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -2493,6 +2771,9 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  userWriteBlock?: Prisma.UserWriteBlockOmit
+  userIdentityLog?: Prisma.UserIdentityLogOmit
+  userBlockAuditEvent?: Prisma.UserBlockAuditEventOmit
   userFan?: Prisma.UserFanOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit

@@ -3,6 +3,11 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/get-session";
 import { fanwallCreateSchema } from "@/app/helpers/fanwall-schema";
 import { broadcastFanwallEvent } from "@/lib/fanwall-realtime";
+import { userBlockService } from "@/application/moderation/user-block.service";
+import {
+  resolveIdentityDeviceId,
+  resolveIpAddressFromRequest,
+} from "@/lib/request-identity";
 
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
@@ -112,12 +117,28 @@ export async function POST(request: Request) {
 
   const payload = await request.json();
   const parsed = fanwallCreateSchema.safeParse(payload);
+  const deviceId = await resolveIdentityDeviceId();
+  const ipAddress = resolveIpAddressFromRequest(request);
 
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.flatten().fieldErrors },
       { status: 400 },
     );
+  }
+
+  try {
+    await userBlockService.assertCanWrite(
+      {
+        userId: user?.id ?? null,
+        deviceId,
+        ipAddress,
+      },
+      "FANWALL_CREATE",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Forbidden";
+    return NextResponse.json({ error: message }, { status: 403 });
   }
 
   if (!user) {
@@ -154,6 +175,12 @@ export async function POST(request: Request) {
   });
 
   const responsePayload = serializeMessage(created);
+  await userBlockService.recordIdentity({
+    userId: user?.id ?? null,
+    deviceId,
+    ipAddress,
+    source: "FANWALL",
+  });
   await broadcastFanwallEvent("fanwall:created", responsePayload);
 
   return NextResponse.json({ message: responsePayload }, { status: 201 });

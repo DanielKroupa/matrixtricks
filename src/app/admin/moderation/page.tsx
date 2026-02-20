@@ -1,6 +1,9 @@
 import { getServerSession } from "@/lib/get-session";
 import { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
+import { userBlockService } from "@/application/moderation/user-block.service";
+import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const metadata: Metadata = {
   title: "Admin settings | Moderation",
@@ -17,12 +20,131 @@ export default async function Page() {
   if (user?.role !== "admin") {
     forbidden();
   }
+
+  async function unblockAction(formData: FormData) {
+    "use server";
+
+    const session = await getServerSession();
+    const user = session?.user;
+
+    if (!user) {
+      unauthorized();
+    }
+
+    if (user.role !== "admin") {
+      forbidden();
+    }
+
+    const targetUserId = String(formData.get("targetUserId") ?? "");
+    if (!targetUserId) {
+      return;
+    }
+
+    await userBlockService.unblockUserByAdmin(targetUserId, user.id);
+    revalidatePath("/admin/moderation");
+  }
+
+  const userWriteBlockDelegate = (
+    prisma as typeof prisma & {
+      userWriteBlock?: {
+        findMany: typeof prisma.userWriteBlock.findMany;
+      };
+    }
+  ).userWriteBlock;
+
+  if (!userWriteBlockDelegate?.findMany) {
+    return (
+      <div>
+        <h3 className="text-lg font-medium">Moderation</h3>
+        <p className="mt-2 text-sm text-red-400">
+          Prisma client is out of sync with the schema. Run{" "}
+          <strong>npx prisma generate</strong>
+          and restart the dev server.
+        </p>
+      </div>
+    );
+  }
+
+  const activeBlocks = await userWriteBlockDelegate.findMany({
+    where: {
+      isActive: true,
+      startsAt: { lte: new Date() },
+      OR: [{ endsAt: null }, { endsAt: { gt: new Date() } }],
+    },
+    orderBy: { createdAt: "desc" },
+    include: {
+      targetUser: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          email: true,
+        },
+      },
+      createdByUser: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
+    },
+  });
+
   return (
     <div>
       <h3 className="text-lg font-medium">Moderation</h3>
-      <p className="text-neutral-300 mt-2">
-        Manage reports, comments, and user content moderation.
+      <p className="mt-2 text-neutral-300">
+        Manage reports, comments, user content moderation and active write
+        blocks.
       </p>
+
+      <div className="mt-6 space-y-3">
+        {activeBlocks.length === 0 ? (
+          <p className="text-sm text-neutral-300">No active blocks.</p>
+        ) : (
+          activeBlocks.map((block) => (
+            <div
+              key={block.id}
+              className="rounded-md border border-neutral-600 bg-neutral-800 p-3"
+            >
+              <p className="text-sm font-medium">
+                {(block.targetUser?.name ||
+                  block.targetUser?.username ||
+                  block.targetUser?.email ||
+                  "Unknown user") +
+                  " — " +
+                  block.reason}
+              </p>
+              <p className="mt-1 text-xs text-neutral-300">
+                Blocked by{" "}
+                {block.createdByUser?.name ||
+                  block.createdByUser?.username ||
+                  "Admin"}
+                {block.endsAt
+                  ? ` until ${block.endsAt.toLocaleString("cs-CZ")}`
+                  : " permanently"}
+              </p>
+
+              {block.targetUserId ? (
+                <form action={unblockAction} className="mt-3">
+                  <input
+                    type="hidden"
+                    name="targetUserId"
+                    value={block.targetUserId}
+                  />
+                  <button
+                    type="submit"
+                    className="cursor-pointer rounded-md bg-red-700 px-3 py-1.5 text-sm text-white hover:bg-red-600"
+                  >
+                    Unblock user
+                  </button>
+                </form>
+              ) : null}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

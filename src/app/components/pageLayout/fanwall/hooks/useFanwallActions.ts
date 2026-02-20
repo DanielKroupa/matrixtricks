@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getApiError,
   removeMessageById,
@@ -34,6 +34,89 @@ export function useFanwallActions({
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingBody, setEditingBody] = useState("");
+  const [isWriteCheckLoading, setIsWriteCheckLoading] = useState(false);
+  const [writeBlockMessages, setWriteBlockMessages] = useState<{
+    create: string | null;
+    update: string | null;
+    delete: string | null;
+  }>({
+    create: null,
+    update: null,
+    delete: null,
+  });
+
+  const writeBlockMessage = writeBlockMessages.create;
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadWriteAccess = async () => {
+      setIsWriteCheckLoading(true);
+      try {
+        const loadActionBlock = async (
+          action: "FANWALL_CREATE" | "FANWALL_UPDATE" | "FANWALL_DELETE",
+          label: string,
+        ) => {
+          const response = await fetch(
+            `/api/moderation/write-access?action=${action}`,
+            {
+              cache: "no-store",
+            },
+          );
+
+          const payload = (await response.json()) as {
+            blocked?: boolean;
+            reason?: string;
+            endsAt?: string | null;
+          };
+
+          if (!response.ok || !payload.blocked) {
+            return null;
+          }
+
+          const endsAtLabel = payload.endsAt
+            ? ` until ${new Date(payload.endsAt).toLocaleString("cs-CZ")}`
+            : " permanently";
+
+          return `You are blocked from ${label}${endsAtLabel}. Reason: ${payload.reason ?? "No reason provided"}`;
+        };
+
+        const [createMessage, updateMessage, deleteMessage] = await Promise.all(
+          [
+            loadActionBlock("FANWALL_CREATE", "writing fanwall messages"),
+            loadActionBlock("FANWALL_UPDATE", "editing fanwall messages"),
+            loadActionBlock("FANWALL_DELETE", "deleting fanwall messages"),
+          ],
+        );
+
+        if (!isCancelled) {
+          setWriteBlockMessages({
+            create: createMessage,
+            update: updateMessage,
+            delete: deleteMessage,
+          });
+        }
+      } catch {
+        if (!isCancelled) {
+          setWriteBlockMessages({
+            create: null,
+            update: null,
+            delete: null,
+          });
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsWriteCheckLoading(false);
+        }
+      }
+    };
+
+    loadWriteAccess();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   async function submitMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,6 +134,11 @@ export function useFanwallActions({
 
     if (!trimmedBody) {
       setError("Message is required.");
+      return;
+    }
+
+    if (writeBlockMessage) {
+      setError(writeBlockMessage);
       return;
     }
 
@@ -96,6 +184,11 @@ export function useFanwallActions({
   }
 
   function startEditing(message: FanwallMessage) {
+    if (writeBlockMessages.update) {
+      setError(writeBlockMessages.update);
+      return;
+    }
+
     setEditingId(message.id);
     setEditingBody(message.body);
   }
@@ -106,6 +199,11 @@ export function useFanwallActions({
   }
 
   async function saveEdit(message: FanwallMessage) {
+    if (writeBlockMessages.update) {
+      setError(writeBlockMessages.update);
+      return;
+    }
+
     const trimmedBody = editingBody.trim();
 
     if (!trimmedBody) {
@@ -145,6 +243,11 @@ export function useFanwallActions({
   }
 
   async function deleteMessage(message: FanwallMessage) {
+    if (writeBlockMessages.delete) {
+      setError(writeBlockMessages.delete);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -208,6 +311,9 @@ export function useFanwallActions({
     loading,
     editingId,
     editingBody,
+    writeBlockMessage,
+    writeBlockMessages,
+    isWriteCheckLoading,
     setNickname,
     setContact,
     setTitle,

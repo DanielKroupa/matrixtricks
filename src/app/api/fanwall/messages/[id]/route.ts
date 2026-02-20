@@ -3,6 +3,11 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/get-session";
 import { fanwallUpdateSchema } from "@/app/helpers/fanwall-schema";
 import { broadcastFanwallEvent } from "@/lib/fanwall-realtime";
+import { userBlockService } from "@/application/moderation/user-block.service";
+import {
+  resolveIdentityDeviceId,
+  resolveIpAddressFromRequest,
+} from "@/lib/request-identity";
 
 function serializeMessage(message: {
   id: string;
@@ -37,9 +42,25 @@ export async function PATCH(
   const session = await getServerSession();
   const user = session?.user;
   const isAdmin = user?.role === "admin";
+  const deviceId = await resolveIdentityDeviceId();
+  const ipAddress = resolveIpAddressFromRequest(request);
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    await userBlockService.assertCanWrite(
+      {
+        userId: user.id,
+        deviceId,
+        ipAddress,
+      },
+      "FANWALL_UPDATE",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Forbidden";
+    return NextResponse.json({ error: message }, { status: 403 });
   }
 
   const payload = await request.json();
@@ -163,9 +184,25 @@ export async function DELETE(
   const session = await getServerSession();
   const user = session?.user;
   const isAdmin = user?.role === "admin";
+  const deviceId = await resolveIdentityDeviceId();
+  const ipAddress = resolveIpAddressFromRequest(request);
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    await userBlockService.assertCanWrite(
+      {
+        userId: user.id,
+        deviceId,
+        ipAddress,
+      },
+      "FANWALL_DELETE",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Forbidden";
+    return NextResponse.json({ error: message }, { status: 403 });
   }
 
   const existing = await prisma.fanWallMessage.findUnique({

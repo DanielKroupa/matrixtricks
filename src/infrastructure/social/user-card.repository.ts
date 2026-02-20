@@ -62,6 +62,7 @@ export const userCardRepository = {
       lastComment,
       fanRecord,
       fansCount,
+      activeBlock,
     ] = await Promise.all([
       prisma.comment.count({ where: { userId: targetUserId } }),
       hasPostShareModel
@@ -96,6 +97,19 @@ export const userCardRepository = {
             },
           })
         : Promise.resolve(0),
+      prisma.userWriteBlock.findFirst({
+        where: {
+          targetUserId,
+          isActive: true,
+          startsAt: { lte: new Date() },
+          OR: [{ endsAt: null }, { endsAt: { gt: new Date() } }],
+        },
+        orderBy: { createdAt: "desc" },
+        select: {
+          reason: true,
+          endsAt: true,
+        },
+      }),
     ]);
 
     return {
@@ -111,6 +125,9 @@ export const userCardRepository = {
       fansCount: isAdminProfile ? fansCount : null,
       isFan: isAdminProfile ? Boolean(fanRecord?.isActive) : false,
       isSelf: Boolean(viewerUserId && viewerUserId === targetUserId),
+      isBlocked: Boolean(activeBlock),
+      blockedUntil: activeBlock?.endsAt ?? null,
+      blockedReason: activeBlock?.reason ?? null,
     };
   },
 

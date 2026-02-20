@@ -7,6 +7,7 @@ import { userCardRepository } from "@/infrastructure/social/user-card.repository
 type CardInput = {
   targetUserId: string;
   viewerUserId?: string | null;
+  viewerRole?: string | null;
   deviceId: string;
 };
 
@@ -32,6 +33,10 @@ export const userCardService = {
       registeredAt:
         safeDateToIso(data.registeredAt) ?? new Date().toISOString(),
       lastCommentAt: safeDateToIso(data.lastCommentAt),
+      viewerIsAdmin: input.viewerRole === "admin",
+      isBlocked: data.isBlocked,
+      blockedUntil: safeDateToIso(data.blockedUntil),
+      blockedReason: data.blockedReason,
     };
   },
 

@@ -34,12 +34,16 @@ export const CommentItem = ({
   onCommentUpdated,
   onCommentDeleted,
   onToggleLike,
+  editBlockMessage,
+  deleteBlockMessage,
 }: {
   comment: CommentViewModel;
   session: any;
   onCommentUpdated: (commentId: string, content: string) => Promise<boolean>;
   onCommentDeleted: (commentId: string) => Promise<boolean>;
   onToggleLike: () => Promise<boolean>;
+  editBlockMessage?: string | null;
+  deleteBlockMessage?: string | null;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -64,6 +68,8 @@ export const CommentItem = ({
   const isOwner = Boolean(comment.userId && currentUserId === comment.userId);
   const canEdit = isOwner;
   const canDelete = isOwner || isAdmin;
+  const isEditBlocked = Boolean(editBlockMessage);
+  const isDeleteBlocked = Boolean(deleteBlockMessage);
   const likedByCurrentUser = (comment.likes ?? []).some(
     (like) => like.userId === currentUserId,
   );
@@ -106,6 +112,14 @@ export const CommentItem = ({
   }, [isMenuOpen]);
 
   const handleStartEdit = () => {
+    if (isEditBlocked) {
+      setActionError(
+        editBlockMessage || "You are blocked from editing comments.",
+      );
+      setIsMenuOpen(false);
+      return;
+    }
+
     setActionError("");
     setEditedContent(comment.content);
     setIsEditing(true);
@@ -114,6 +128,13 @@ export const CommentItem = ({
 
   const handleSaveEdit = async () => {
     if (!canEdit || isSaving) return;
+
+    if (isEditBlocked) {
+      setActionError(
+        editBlockMessage || "You are blocked from editing comments.",
+      );
+      return;
+    }
 
     const trimmedContent = editedContent.trim();
     if (!trimmedContent) {
@@ -137,6 +158,14 @@ export const CommentItem = ({
 
   const handleDelete = async () => {
     if (!canDelete || isSaving) return;
+
+    if (isDeleteBlocked) {
+      setActionError(
+        deleteBlockMessage || "You are blocked from deleting comments.",
+      );
+      setIsMenuOpen(false);
+      return;
+    }
 
     const confirmed = window.confirm(
       "Do you really want to delete this comment?",
@@ -213,7 +242,12 @@ export const CommentItem = ({
                     <button
                       className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
                       onClick={handleStartEdit}
-                      disabled={isSaving}
+                      disabled={isSaving || isEditBlocked}
+                      title={
+                        isEditBlocked
+                          ? (editBlockMessage ?? undefined)
+                          : undefined
+                      }
                     >
                       <FaPen size={12} />
                       Edit
@@ -223,7 +257,12 @@ export const CommentItem = ({
                     <button
                       className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-200/50 dark:text-red-300 dark:hover:bg-neutral-600"
                       onClick={handleDelete}
-                      disabled={isSaving}
+                      disabled={isSaving || isDeleteBlocked}
+                      title={
+                        isDeleteBlocked
+                          ? (deleteBlockMessage ?? undefined)
+                          : undefined
+                      }
                     >
                       <IoTrash size={14} />
                       Delete
@@ -248,7 +287,10 @@ export const CommentItem = ({
                 type="button"
                 className="cursor-pointer rounded-md bg-cyan-700 px-2 py-1 text-xs text-white disabled:opacity-50 dark:bg-cyan-600 dark:hover:bg-cyan-500"
                 onClick={handleSaveEdit}
-                disabled={isSaving}
+                disabled={isSaving || isEditBlocked}
+                title={
+                  isEditBlocked ? (editBlockMessage ?? undefined) : undefined
+                }
               >
                 Save
               </button>

@@ -10,6 +10,7 @@ type AutoResizeTextareaProps = {
   className?: string;
   onChange?: (value: string) => void;
   autocorrect?: string;
+  disabled?: boolean;
 };
 
 export default function AutoResizeTextarea({
@@ -20,6 +21,7 @@ export default function AutoResizeTextarea({
   className,
   onChange,
   autocorrect,
+  disabled,
 }: AutoResizeTextareaProps) {
   const [internalValue, setInternalValue] = useState(value ?? "");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -63,6 +65,7 @@ export default function AutoResizeTextarea({
       placeholder={placeholder}
       name={name}
       required={required}
+      disabled={disabled}
       autoCorrect="off"
       className={
         className ||

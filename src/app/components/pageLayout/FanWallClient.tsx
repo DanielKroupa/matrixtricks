@@ -189,6 +189,8 @@ type FanwallMessageItemProps = {
   editingBody: string;
   isMenuOpen: boolean;
   loading: boolean;
+  updateBlockMessage: string | null;
+  deleteBlockMessage: string | null;
   onToggleMenu: () => void;
   onStartEdit: (message: FanwallMessage) => void;
   onStopEdit: () => void;
@@ -208,6 +210,8 @@ function FanwallMessageItem({
   editingBody,
   isMenuOpen,
   loading,
+  updateBlockMessage,
+  deleteBlockMessage,
   onToggleMenu,
   onStartEdit,
   onStopEdit,
@@ -222,6 +226,8 @@ function FanwallMessageItem({
   const isOwner = sessionUser?.id && message.userId === sessionUser.id;
   const canEdit = Boolean(isOwner || isAdmin);
   const canDelete = Boolean(isOwner || isAdmin);
+  const isUpdateBlocked = Boolean(updateBlockMessage);
+  const isDeleteBlocked = Boolean(deleteBlockMessage);
 
   return (
     <div className="group relative flex flex-row items-start justify-baseline gap-2 px-2 py-4 md:gap-4 md:px-6">
@@ -268,13 +274,19 @@ function FanwallMessageItem({
               <AutoResizeTextarea
                 value={editingBody}
                 onChange={onChangeEditingBody}
+                disabled={loading || isUpdateBlocked}
               />
               <div className="flex gap-2">
                 <button
                   type="button"
                   className="text-dark cursor-pointer rounded-md bg-cyan-600 px-2 py-1 text-sm text-white"
                   onClick={() => onSaveEdit(message)}
-                  disabled={loading}
+                  disabled={loading || isUpdateBlocked}
+                  title={
+                    isUpdateBlocked
+                      ? (updateBlockMessage ?? undefined)
+                      : undefined
+                  }
                 >
                   Save
                 </button>
@@ -319,6 +331,12 @@ function FanwallMessageItem({
                 {canEdit && !isEditing && (
                   <button
                     className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
+                    disabled={loading || isUpdateBlocked}
+                    title={
+                      isUpdateBlocked
+                        ? (updateBlockMessage ?? undefined)
+                        : undefined
+                    }
                     onClick={() => {
                       onStartEdit(message);
                       onCloseMenu();
@@ -332,6 +350,8 @@ function FanwallMessageItem({
                   <button
                     title="Delete post"
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-100 dark:text-red-300 dark:hover:bg-neutral-500"
+                    disabled={loading || isDeleteBlocked}
+                    aria-disabled={loading || isDeleteBlocked}
                     onClick={() => {
                       onDelete(message);
                       onCloseMenu();
@@ -359,6 +379,8 @@ type FanwallFormProps = {
   body: string;
   error: FanwallError;
   loading: boolean;
+  isWriteCheckLoading: boolean;
+  writeBlockMessage: string | null;
   messageLabel: string;
   onNicknameChange: (value: string) => void;
   onContactChange: (value: string) => void;
@@ -376,6 +398,8 @@ function FanwallForm({
   body,
   error,
   loading,
+  isWriteCheckLoading,
+  writeBlockMessage,
   messageLabel,
   onNicknameChange,
   onContactChange,
@@ -383,6 +407,8 @@ function FanwallForm({
   onBodyChange,
   onSubmit,
 }: FanwallFormProps) {
+  const isWriteBlocked = Boolean(writeBlockMessage);
+
   return (
     <form
       onSubmit={onSubmit}
@@ -396,6 +422,7 @@ function FanwallForm({
             value={nickname}
             onChange={(e) => onNicknameChange(e.target.value)}
             className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 shadow-md ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-96 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
+            disabled={loading || isWriteBlocked || isWriteCheckLoading}
           />
           <input
             type="text"
@@ -403,6 +430,7 @@ function FanwallForm({
             value={contact}
             onChange={(e) => onContactChange(e.target.value)}
             className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 shadow-md ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-96 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
+            disabled={loading || isWriteBlocked || isWriteCheckLoading}
           />
         </div>
       )}
@@ -415,18 +443,22 @@ function FanwallForm({
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
             className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-1/2 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
+            disabled={loading || isWriteBlocked || isWriteCheckLoading}
           />
         )}
         <AutoResizeTextarea
           placeholder="Type a message... Show your support or ask a question"
           value={body}
           onChange={onBodyChange}
+          disabled={loading || isWriteBlocked || isWriteCheckLoading}
         />
       </div>
 
-      {error && (
+      {(error || writeBlockMessage || isWriteCheckLoading) && (
         <p className="mt-2 text-sm text-red-500" role="alert">
-          {error}
+          {isWriteCheckLoading
+            ? "Checking write access..."
+            : (writeBlockMessage ?? error)}
         </p>
       )}
 
@@ -437,7 +469,7 @@ function FanwallForm({
         <button
           type="submit"
           className="flex cursor-pointer items-center gap-2 rounded-md bg-cyan-700 px-4 py-2 text-sm text-white shadow transition-colors hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={loading}
+          disabled={loading || isWriteBlocked || isWriteCheckLoading}
         >
           {loading ? "Sending..." : "Send message"}
           <PiPaperPlaneRightFill />
@@ -479,6 +511,9 @@ export default function FanWallClient({
     body,
     error,
     loading,
+    isWriteCheckLoading,
+    writeBlockMessage,
+    writeBlockMessages,
     editingId,
     editingBody,
     setNickname,
@@ -611,6 +646,8 @@ export default function FanWallClient({
               editingBody={editingBody}
               isMenuOpen={openMenuId === message.id}
               loading={loading}
+              updateBlockMessage={writeBlockMessages.update}
+              deleteBlockMessage={writeBlockMessages.delete}
               onToggleMenu={() => toggleMenu(message.id)}
               onStartEdit={startEditing}
               onStopEdit={stopEditing}
@@ -632,6 +669,8 @@ export default function FanWallClient({
         body={body}
         error={error}
         loading={loading}
+        isWriteCheckLoading={isWriteCheckLoading}
+        writeBlockMessage={writeBlockMessage}
         messageLabel={messageLabel}
         onNicknameChange={setNickname}
         onContactChange={setContact}

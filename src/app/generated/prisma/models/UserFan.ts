@@ -497,10 +497,6 @@ export type UserFanUncheckedUpdateManyWithoutTargetUserNestedInput = {
   deleteMany?: Prisma.UserFanScalarWhereInput | Prisma.UserFanScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type UserFanCreateWithoutSourceUserInput = {
   id?: string
   isActive?: boolean

@@ -245,6 +245,11 @@ export type UserWhereInput = {
   fansGiven?: Prisma.UserFanListRelationFilter
   fansReceived?: Prisma.UserFanListRelationFilter
   postShares?: Prisma.PostShareListRelationFilter
+  writeBlocksReceived?: Prisma.UserWriteBlockListRelationFilter
+  writeBlocksCreated?: Prisma.UserWriteBlockListRelationFilter
+  writeBlocksRevoked?: Prisma.UserWriteBlockListRelationFilter
+  identityLogs?: Prisma.UserIdentityLogListRelationFilter
+  blockAuditEvents?: Prisma.UserBlockAuditEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -274,6 +279,11 @@ export type UserOrderByWithRelationInput = {
   fansGiven?: Prisma.UserFanOrderByRelationAggregateInput
   fansReceived?: Prisma.UserFanOrderByRelationAggregateInput
   postShares?: Prisma.PostShareOrderByRelationAggregateInput
+  writeBlocksReceived?: Prisma.UserWriteBlockOrderByRelationAggregateInput
+  writeBlocksCreated?: Prisma.UserWriteBlockOrderByRelationAggregateInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockOrderByRelationAggregateInput
+  identityLogs?: Prisma.UserIdentityLogOrderByRelationAggregateInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -306,6 +316,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   fansGiven?: Prisma.UserFanListRelationFilter
   fansReceived?: Prisma.UserFanListRelationFilter
   postShares?: Prisma.PostShareListRelationFilter
+  writeBlocksReceived?: Prisma.UserWriteBlockListRelationFilter
+  writeBlocksCreated?: Prisma.UserWriteBlockListRelationFilter
+  writeBlocksRevoked?: Prisma.UserWriteBlockListRelationFilter
+  identityLogs?: Prisma.UserIdentityLogListRelationFilter
+  blockAuditEvents?: Prisma.UserBlockAuditEventListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -369,6 +384,11 @@ export type UserCreateInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -398,6 +418,11 @@ export type UserUncheckedCreateInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUpdateInput = {
@@ -427,6 +452,11 @@ export type UserUpdateInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -456,6 +486,11 @@ export type UserUncheckedUpdateInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -542,14 +577,14 @@ export type UserMinOrderByAggregateInput = {
   displayUsername?: Prisma.SortOrder
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -566,6 +601,84 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutWriteBlocksReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksReceivedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWriteBlocksReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutWriteBlocksCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksCreatedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWriteBlocksCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutWriteBlocksRevokedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksRevokedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksRevokedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWriteBlocksRevokedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutWriteBlocksReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksReceivedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWriteBlocksReceivedInput
+  upsert?: Prisma.UserUpsertWithoutWriteBlocksReceivedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWriteBlocksReceivedInput, Prisma.UserUpdateWithoutWriteBlocksReceivedInput>, Prisma.UserUncheckedUpdateWithoutWriteBlocksReceivedInput>
+}
+
+export type UserUpdateOneRequiredWithoutWriteBlocksCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksCreatedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWriteBlocksCreatedInput
+  upsert?: Prisma.UserUpsertWithoutWriteBlocksCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWriteBlocksCreatedInput, Prisma.UserUpdateWithoutWriteBlocksCreatedInput>, Prisma.UserUncheckedUpdateWithoutWriteBlocksCreatedInput>
+}
+
+export type UserUpdateOneWithoutWriteBlocksRevokedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksRevokedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksRevokedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWriteBlocksRevokedInput
+  upsert?: Prisma.UserUpsertWithoutWriteBlocksRevokedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWriteBlocksRevokedInput, Prisma.UserUpdateWithoutWriteBlocksRevokedInput>, Prisma.UserUncheckedUpdateWithoutWriteBlocksRevokedInput>
+}
+
+export type UserCreateNestedOneWithoutIdentityLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIdentityLogsInput, Prisma.UserUncheckedCreateWithoutIdentityLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIdentityLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutIdentityLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutIdentityLogsInput, Prisma.UserUncheckedCreateWithoutIdentityLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutIdentityLogsInput
+  upsert?: Prisma.UserUpsertWithoutIdentityLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIdentityLogsInput, Prisma.UserUpdateWithoutIdentityLogsInput>, Prisma.UserUncheckedUpdateWithoutIdentityLogsInput>
+}
+
+export type UserCreateNestedOneWithoutBlockAuditEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockAuditEventsInput, Prisma.UserUncheckedCreateWithoutBlockAuditEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockAuditEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutBlockAuditEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockAuditEventsInput, Prisma.UserUncheckedCreateWithoutBlockAuditEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockAuditEventsInput
+  upsert?: Prisma.UserUpsertWithoutBlockAuditEventsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlockAuditEventsInput, Prisma.UserUpdateWithoutBlockAuditEventsInput>, Prisma.UserUncheckedUpdateWithoutBlockAuditEventsInput>
 }
 
 export type UserCreateNestedOneWithoutFansReceivedInput = {
@@ -786,6 +899,746 @@ export type UserUpdateOneRequiredWithoutPostPreferencesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPostPreferencesInput, Prisma.UserUpdateWithoutPostPreferencesInput>, Prisma.UserUncheckedUpdateWithoutPostPreferencesInput>
 }
 
+export type UserCreateWithoutWriteBlocksReceivedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserUncheckedCreateWithoutWriteBlocksReceivedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserCreateOrConnectWithoutWriteBlocksReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksReceivedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksReceivedInput>
+}
+
+export type UserCreateWithoutWriteBlocksCreatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserUncheckedCreateWithoutWriteBlocksCreatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserCreateOrConnectWithoutWriteBlocksCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksCreatedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksCreatedInput>
+}
+
+export type UserCreateWithoutWriteBlocksRevokedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserUncheckedCreateWithoutWriteBlocksRevokedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserCreateOrConnectWithoutWriteBlocksRevokedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksRevokedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksRevokedInput>
+}
+
+export type UserUpsertWithoutWriteBlocksReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWriteBlocksReceivedInput, Prisma.UserUncheckedUpdateWithoutWriteBlocksReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksReceivedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWriteBlocksReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWriteBlocksReceivedInput, Prisma.UserUncheckedUpdateWithoutWriteBlocksReceivedInput>
+}
+
+export type UserUpdateWithoutWriteBlocksReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWriteBlocksReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserUpsertWithoutWriteBlocksCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWriteBlocksCreatedInput, Prisma.UserUncheckedUpdateWithoutWriteBlocksCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksCreatedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWriteBlocksCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWriteBlocksCreatedInput, Prisma.UserUncheckedUpdateWithoutWriteBlocksCreatedInput>
+}
+
+export type UserUpdateWithoutWriteBlocksCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWriteBlocksCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserUpsertWithoutWriteBlocksRevokedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWriteBlocksRevokedInput, Prisma.UserUncheckedUpdateWithoutWriteBlocksRevokedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWriteBlocksRevokedInput, Prisma.UserUncheckedCreateWithoutWriteBlocksRevokedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWriteBlocksRevokedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWriteBlocksRevokedInput, Prisma.UserUncheckedUpdateWithoutWriteBlocksRevokedInput>
+}
+
+export type UserUpdateWithoutWriteBlocksRevokedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWriteBlocksRevokedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserCreateWithoutIdentityLogsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserUncheckedCreateWithoutIdentityLogsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
+}
+
+export type UserCreateOrConnectWithoutIdentityLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutIdentityLogsInput, Prisma.UserUncheckedCreateWithoutIdentityLogsInput>
+}
+
+export type UserUpsertWithoutIdentityLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutIdentityLogsInput, Prisma.UserUncheckedUpdateWithoutIdentityLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutIdentityLogsInput, Prisma.UserUncheckedCreateWithoutIdentityLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutIdentityLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutIdentityLogsInput, Prisma.UserUncheckedUpdateWithoutIdentityLogsInput>
+}
+
+export type UserUpdateWithoutIdentityLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutIdentityLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
+}
+
+export type UserCreateWithoutBlockAuditEventsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBlockAuditEventsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBlockAuditEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockAuditEventsInput, Prisma.UserUncheckedCreateWithoutBlockAuditEventsInput>
+}
+
+export type UserUpsertWithoutBlockAuditEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBlockAuditEventsInput, Prisma.UserUncheckedUpdateWithoutBlockAuditEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockAuditEventsInput, Prisma.UserUncheckedCreateWithoutBlockAuditEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBlockAuditEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBlockAuditEventsInput, Prisma.UserUncheckedUpdateWithoutBlockAuditEventsInput>
+}
+
+export type UserUpdateWithoutBlockAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBlockAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutFansReceivedInput = {
   id: string
   name: string
@@ -812,6 +1665,11 @@ export type UserCreateWithoutFansReceivedInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutFansReceivedInput = {
@@ -840,6 +1698,11 @@ export type UserUncheckedCreateWithoutFansReceivedInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutFansReceivedInput = {
@@ -873,6 +1736,11 @@ export type UserCreateWithoutFansGivenInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutFansGivenInput = {
@@ -901,6 +1769,11 @@ export type UserUncheckedCreateWithoutFansGivenInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutFansGivenInput = {
@@ -945,6 +1818,11 @@ export type UserUpdateWithoutFansReceivedInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFansReceivedInput = {
@@ -973,6 +1851,11 @@ export type UserUncheckedUpdateWithoutFansReceivedInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUpsertWithoutFansGivenInput = {
@@ -1012,6 +1895,11 @@ export type UserUpdateWithoutFansGivenInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFansGivenInput = {
@@ -1040,6 +1928,11 @@ export type UserUncheckedUpdateWithoutFansGivenInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1068,6 +1961,11 @@ export type UserCreateWithoutSessionsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1096,6 +1994,11 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1140,6 +2043,11 @@ export type UserUpdateWithoutSessionsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1168,6 +2076,11 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1196,6 +2109,11 @@ export type UserCreateWithoutAccountsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1224,6 +2142,11 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1268,6 +2191,11 @@ export type UserUpdateWithoutAccountsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1296,6 +2224,11 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutFanWallMessagesInput = {
@@ -1324,6 +2257,11 @@ export type UserCreateWithoutFanWallMessagesInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutFanWallMessagesInput = {
@@ -1352,6 +2290,11 @@ export type UserUncheckedCreateWithoutFanWallMessagesInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutFanWallMessagesInput = {
@@ -1396,6 +2339,11 @@ export type UserUpdateWithoutFanWallMessagesInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFanWallMessagesInput = {
@@ -1424,6 +2372,11 @@ export type UserUncheckedUpdateWithoutFanWallMessagesInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutPostsInput = {
@@ -1452,6 +2405,11 @@ export type UserCreateWithoutPostsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutPostsInput = {
@@ -1480,6 +2438,11 @@ export type UserUncheckedCreateWithoutPostsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutPostsInput = {
@@ -1524,6 +2487,11 @@ export type UserUpdateWithoutPostsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostsInput = {
@@ -1552,6 +2520,11 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutPostSharesInput = {
@@ -1580,6 +2553,11 @@ export type UserCreateWithoutPostSharesInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutPostSharesInput = {
@@ -1608,6 +2586,11 @@ export type UserUncheckedCreateWithoutPostSharesInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutPostSharesInput = {
@@ -1652,6 +2635,11 @@ export type UserUpdateWithoutPostSharesInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostSharesInput = {
@@ -1680,6 +2668,11 @@ export type UserUncheckedUpdateWithoutPostSharesInput = {
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutStripeCustomerInput = {
@@ -1708,6 +2701,11 @@ export type UserCreateWithoutStripeCustomerInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutStripeCustomerInput = {
@@ -1736,6 +2734,11 @@ export type UserUncheckedCreateWithoutStripeCustomerInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutStripeCustomerInput = {
@@ -1780,6 +2783,11 @@ export type UserUpdateWithoutStripeCustomerInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStripeCustomerInput = {
@@ -1808,6 +2816,11 @@ export type UserUncheckedUpdateWithoutStripeCustomerInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionsInput = {
@@ -1836,6 +2849,11 @@ export type UserCreateWithoutSubscriptionsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -1864,6 +2882,11 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -1908,6 +2931,11 @@ export type UserUpdateWithoutSubscriptionsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -1936,6 +2964,11 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutVipGrantsInput = {
@@ -1964,6 +2997,11 @@ export type UserCreateWithoutVipGrantsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutVipGrantsInput = {
@@ -1992,6 +3030,11 @@ export type UserUncheckedCreateWithoutVipGrantsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutVipGrantsInput = {
@@ -2036,6 +3079,11 @@ export type UserUpdateWithoutVipGrantsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVipGrantsInput = {
@@ -2064,6 +3112,11 @@ export type UserUncheckedUpdateWithoutVipGrantsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutVipPriceAuditEventsInput = {
@@ -2092,6 +3145,11 @@ export type UserCreateWithoutVipPriceAuditEventsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutVipPriceAuditEventsInput = {
@@ -2120,6 +3178,11 @@ export type UserUncheckedCreateWithoutVipPriceAuditEventsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutVipPriceAuditEventsInput = {
@@ -2164,6 +3227,11 @@ export type UserUpdateWithoutVipPriceAuditEventsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVipPriceAuditEventsInput = {
@@ -2192,6 +3260,11 @@ export type UserUncheckedUpdateWithoutVipPriceAuditEventsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -2220,6 +3293,11 @@ export type UserCreateWithoutCommentsInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -2248,6 +3326,11 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -2292,6 +3375,11 @@ export type UserUpdateWithoutCommentsInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -2320,6 +3408,11 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutPostLikesInput = {
@@ -2348,6 +3441,11 @@ export type UserCreateWithoutPostLikesInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutPostLikesInput = {
@@ -2376,6 +3474,11 @@ export type UserUncheckedCreateWithoutPostLikesInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutPostLikesInput = {
@@ -2420,6 +3523,11 @@ export type UserUpdateWithoutPostLikesInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostLikesInput = {
@@ -2448,6 +3556,11 @@ export type UserUncheckedUpdateWithoutPostLikesInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutCommentLikesInput = {
@@ -2476,6 +3589,11 @@ export type UserCreateWithoutCommentLikesInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentLikesInput = {
@@ -2504,6 +3622,11 @@ export type UserUncheckedCreateWithoutCommentLikesInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentLikesInput = {
@@ -2548,6 +3671,11 @@ export type UserUpdateWithoutCommentLikesInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentLikesInput = {
@@ -2576,6 +3704,11 @@ export type UserUncheckedUpdateWithoutCommentLikesInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserCreateWithoutPostPreferencesInput = {
@@ -2604,6 +3737,11 @@ export type UserCreateWithoutPostPreferencesInput = {
   fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserUncheckedCreateWithoutPostPreferencesInput = {
@@ -2632,6 +3770,11 @@ export type UserUncheckedCreateWithoutPostPreferencesInput = {
   fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
   fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
   postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutTargetUserInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutCreatedByUserInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedCreateNestedManyWithoutRevokedByUserInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedCreateNestedManyWithoutUserInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedCreateNestedManyWithoutPerformedByUserInput
 }
 
 export type UserCreateOrConnectWithoutPostPreferencesInput = {
@@ -2676,6 +3819,11 @@ export type UserUpdateWithoutPostPreferencesInput = {
   fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUpdateManyWithoutPerformedByUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostPreferencesInput = {
@@ -2704,6 +3852,11 @@ export type UserUncheckedUpdateWithoutPostPreferencesInput = {
   fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
   fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
   postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+  writeBlocksReceived?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutTargetUserNestedInput
+  writeBlocksCreated?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutCreatedByUserNestedInput
+  writeBlocksRevoked?: Prisma.UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput
+  identityLogs?: Prisma.UserIdentityLogUncheckedUpdateManyWithoutUserNestedInput
+  blockAuditEvents?: Prisma.UserBlockAuditEventUncheckedUpdateManyWithoutPerformedByUserNestedInput
 }
 
 
@@ -2726,6 +3879,11 @@ export type UserCountOutputType = {
   fansGiven: number
   fansReceived: number
   postShares: number
+  writeBlocksReceived: number
+  writeBlocksCreated: number
+  writeBlocksRevoked: number
+  identityLogs: number
+  blockAuditEvents: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2743,6 +3901,11 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   fansGiven?: boolean | UserCountOutputTypeCountFansGivenArgs
   fansReceived?: boolean | UserCountOutputTypeCountFansReceivedArgs
   postShares?: boolean | UserCountOutputTypeCountPostSharesArgs
+  writeBlocksReceived?: boolean | UserCountOutputTypeCountWriteBlocksReceivedArgs
+  writeBlocksCreated?: boolean | UserCountOutputTypeCountWriteBlocksCreatedArgs
+  writeBlocksRevoked?: boolean | UserCountOutputTypeCountWriteBlocksRevokedArgs
+  identityLogs?: boolean | UserCountOutputTypeCountIdentityLogsArgs
+  blockAuditEvents?: boolean | UserCountOutputTypeCountBlockAuditEventsArgs
 }
 
 /**
@@ -2853,6 +4016,41 @@ export type UserCountOutputTypeCountPostSharesArgs<ExtArgs extends runtime.Types
   where?: Prisma.PostShareWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWriteBlocksReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWriteBlockWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWriteBlocksCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWriteBlockWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWriteBlocksRevokedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWriteBlockWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountIdentityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserIdentityLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBlockAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserBlockAuditEventWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2881,6 +4079,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   fansGiven?: boolean | Prisma.User$fansGivenArgs<ExtArgs>
   fansReceived?: boolean | Prisma.User$fansReceivedArgs<ExtArgs>
   postShares?: boolean | Prisma.User$postSharesArgs<ExtArgs>
+  writeBlocksReceived?: boolean | Prisma.User$writeBlocksReceivedArgs<ExtArgs>
+  writeBlocksCreated?: boolean | Prisma.User$writeBlocksCreatedArgs<ExtArgs>
+  writeBlocksRevoked?: boolean | Prisma.User$writeBlocksRevokedArgs<ExtArgs>
+  identityLogs?: boolean | Prisma.User$identityLogsArgs<ExtArgs>
+  blockAuditEvents?: boolean | Prisma.User$blockAuditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2943,6 +4146,11 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   fansGiven?: boolean | Prisma.User$fansGivenArgs<ExtArgs>
   fansReceived?: boolean | Prisma.User$fansReceivedArgs<ExtArgs>
   postShares?: boolean | Prisma.User$postSharesArgs<ExtArgs>
+  writeBlocksReceived?: boolean | Prisma.User$writeBlocksReceivedArgs<ExtArgs>
+  writeBlocksCreated?: boolean | Prisma.User$writeBlocksCreatedArgs<ExtArgs>
+  writeBlocksRevoked?: boolean | Prisma.User$writeBlocksRevokedArgs<ExtArgs>
+  identityLogs?: boolean | Prisma.User$identityLogsArgs<ExtArgs>
+  blockAuditEvents?: boolean | Prisma.User$blockAuditEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2966,6 +4174,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     fansGiven: Prisma.$UserFanPayload<ExtArgs>[]
     fansReceived: Prisma.$UserFanPayload<ExtArgs>[]
     postShares: Prisma.$PostSharePayload<ExtArgs>[]
+    writeBlocksReceived: Prisma.$UserWriteBlockPayload<ExtArgs>[]
+    writeBlocksCreated: Prisma.$UserWriteBlockPayload<ExtArgs>[]
+    writeBlocksRevoked: Prisma.$UserWriteBlockPayload<ExtArgs>[]
+    identityLogs: Prisma.$UserIdentityLogPayload<ExtArgs>[]
+    blockAuditEvents: Prisma.$UserBlockAuditEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3388,6 +4601,11 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   fansGiven<T extends Prisma.User$fansGivenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$fansGivenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fansReceived<T extends Prisma.User$fansReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$fansReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   postShares<T extends Prisma.User$postSharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postSharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostSharePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  writeBlocksReceived<T extends Prisma.User$writeBlocksReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$writeBlocksReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserWriteBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  writeBlocksCreated<T extends Prisma.User$writeBlocksCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$writeBlocksCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserWriteBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  writeBlocksRevoked<T extends Prisma.User$writeBlocksRevokedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$writeBlocksRevokedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserWriteBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  identityLogs<T extends Prisma.User$identityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$identityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserIdentityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blockAuditEvents<T extends Prisma.User$blockAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBlockAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4168,6 +5386,126 @@ export type User$postSharesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.PostShareScalarFieldEnum | Prisma.PostShareScalarFieldEnum[]
+}
+
+/**
+ * User.writeBlocksReceived
+ */
+export type User$writeBlocksReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserWriteBlock
+   */
+  select?: Prisma.UserWriteBlockSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserWriteBlock
+   */
+  omit?: Prisma.UserWriteBlockOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserWriteBlockInclude<ExtArgs> | null
+  where?: Prisma.UserWriteBlockWhereInput
+  orderBy?: Prisma.UserWriteBlockOrderByWithRelationInput | Prisma.UserWriteBlockOrderByWithRelationInput[]
+  cursor?: Prisma.UserWriteBlockWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserWriteBlockScalarFieldEnum | Prisma.UserWriteBlockScalarFieldEnum[]
+}
+
+/**
+ * User.writeBlocksCreated
+ */
+export type User$writeBlocksCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserWriteBlock
+   */
+  select?: Prisma.UserWriteBlockSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserWriteBlock
+   */
+  omit?: Prisma.UserWriteBlockOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserWriteBlockInclude<ExtArgs> | null
+  where?: Prisma.UserWriteBlockWhereInput
+  orderBy?: Prisma.UserWriteBlockOrderByWithRelationInput | Prisma.UserWriteBlockOrderByWithRelationInput[]
+  cursor?: Prisma.UserWriteBlockWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserWriteBlockScalarFieldEnum | Prisma.UserWriteBlockScalarFieldEnum[]
+}
+
+/**
+ * User.writeBlocksRevoked
+ */
+export type User$writeBlocksRevokedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserWriteBlock
+   */
+  select?: Prisma.UserWriteBlockSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserWriteBlock
+   */
+  omit?: Prisma.UserWriteBlockOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserWriteBlockInclude<ExtArgs> | null
+  where?: Prisma.UserWriteBlockWhereInput
+  orderBy?: Prisma.UserWriteBlockOrderByWithRelationInput | Prisma.UserWriteBlockOrderByWithRelationInput[]
+  cursor?: Prisma.UserWriteBlockWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserWriteBlockScalarFieldEnum | Prisma.UserWriteBlockScalarFieldEnum[]
+}
+
+/**
+ * User.identityLogs
+ */
+export type User$identityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserIdentityLog
+   */
+  select?: Prisma.UserIdentityLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserIdentityLog
+   */
+  omit?: Prisma.UserIdentityLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIdentityLogInclude<ExtArgs> | null
+  where?: Prisma.UserIdentityLogWhereInput
+  orderBy?: Prisma.UserIdentityLogOrderByWithRelationInput | Prisma.UserIdentityLogOrderByWithRelationInput[]
+  cursor?: Prisma.UserIdentityLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserIdentityLogScalarFieldEnum | Prisma.UserIdentityLogScalarFieldEnum[]
+}
+
+/**
+ * User.blockAuditEvents
+ */
+export type User$blockAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserBlockAuditEvent
+   */
+  select?: Prisma.UserBlockAuditEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserBlockAuditEvent
+   */
+  omit?: Prisma.UserBlockAuditEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserBlockAuditEventInclude<ExtArgs> | null
+  where?: Prisma.UserBlockAuditEventWhereInput
+  orderBy?: Prisma.UserBlockAuditEventOrderByWithRelationInput | Prisma.UserBlockAuditEventOrderByWithRelationInput[]
+  cursor?: Prisma.UserBlockAuditEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserBlockAuditEventScalarFieldEnum | Prisma.UserBlockAuditEventScalarFieldEnum[]
 }
 
 /**

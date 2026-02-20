@@ -11,6 +11,12 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { Tooltip } from "@/app/components/ui/Tooltip";
+import {
+  BlockUserDialog,
+  type BlockScopes,
+  type BlockType,
+} from "./BlockUserDialog";
 
 type UserCardResponse = {
   id: string;
@@ -25,6 +31,10 @@ type UserCardResponse = {
   fansCount: number | null;
   isFan: boolean;
   isSelf: boolean;
+  viewerIsAdmin: boolean;
+  isBlocked: boolean;
+  blockedUntil: string | null;
+  blockedReason: string | null;
 };
 
 type FanToggleResponse = {
@@ -42,15 +52,24 @@ const VIEWPORT_PADDING = 8;
 const TRIGGER_GAP = 10;
 const HOVER_OPEN_DELAY_MS = 350;
 
+const defaultBlockScopes: BlockScopes = {
+  commentCreate: true,
+  commentUpdate: true,
+  commentDelete: true,
+  fanwallCreate: true,
+  fanwallUpdate: true,
+  fanwallDelete: true,
+};
+
 function formatDateTime(value: string | null) {
   if (!value) {
-    return "Nikdy";
+    return "Never";
   }
 
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return "Neznámé";
+    return "Unknown";
   }
 
   return new Intl.DateTimeFormat("cs-CZ", {
@@ -105,6 +124,13 @@ export function UserInfoBubble({
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<UserCardResponse | null>(null);
   const [fanLoading, setFanLoading] = useState(false);
+  const [isBlockDialogOpen, setIsBlockDialogOpen] = useState(false);
+  const [blockReason, setBlockReason] = useState("");
+  const [blockType, setBlockType] = useState<BlockType>("permanent");
+  const [blockUntil, setBlockUntil] = useState("");
+  const [blockScopes, setBlockScopes] =
+    useState<BlockScopes>(defaultBlockScopes);
+  const [blockLoading, setBlockLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -365,6 +391,137 @@ export function UserInfoBubble({
     }
   };
 
+  const handleCreateBlock = async () => {
+    if (!userId || !data?.viewerIsAdmin || data.isSelf || blockLoading) {
+      return;
+    }
+
+    const reason = blockReason.trim();
+
+    if (reason.length < 3) {
+      setError("Block reason must have at least 3 characters.");
+      return;
+    }
+
+    if (blockType === "temporary" && !blockUntil) {
+      setError("Please choose block end date and time.");
+      return;
+    }
+
+    setBlockLoading(true);
+    setError(null);
+
+    try {
+      const endsAtIso =
+        blockType === "temporary" && blockUntil
+          ? new Date(blockUntil).toISOString()
+          : null;
+
+      const response = await fetch(`/api/users/${userId}/block`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          reason,
+          endsAt: endsAtIso,
+          scopes: blockScopes,
+        }),
+      });
+
+      const payload = (await response.json()) as
+        | { error?: string }
+        | { block: { endsAt: string | null } };
+
+      if (!response.ok) {
+        const message =
+          typeof payload === "object" && payload && "error" in payload
+            ? payload.error || "Failed to block user"
+            : "Failed to block user";
+        throw new Error(message);
+      }
+
+      const blockedUntil =
+        typeof payload === "object" && payload && "block" in payload
+          ? payload.block.endsAt
+          : null;
+
+      setData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          isBlocked: true,
+          blockedUntil,
+          blockedReason: reason,
+        };
+      });
+
+      setIsBlockDialogOpen(false);
+      setBlockReason("");
+      setBlockType("permanent");
+      setBlockUntil("");
+      setBlockScopes(defaultBlockScopes);
+    } catch (blockError) {
+      const message =
+        blockError instanceof Error
+          ? blockError.message
+          : "Failed to block user";
+      setError(message);
+    } finally {
+      setBlockLoading(false);
+    }
+  };
+
+  const handleUnblock = async () => {
+    if (!userId || !data?.viewerIsAdmin || blockLoading) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Do you really want to unblock this user?",
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setBlockLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/users/${userId}/block`, {
+        method: "DELETE",
+      });
+
+      const payload = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(payload.error || "Failed to unblock user");
+      }
+
+      setData((prev) => {
+        if (!prev) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          isBlocked: false,
+          blockedUntil: null,
+          blockedReason: null,
+        };
+      });
+    } catch (unblockError) {
+      const message =
+        unblockError instanceof Error
+          ? unblockError.message
+          : "Failed to unblock user";
+      setError(message);
+    } finally {
+      setBlockLoading(false);
+    }
+  };
+
   if (!userId) {
     return <>{children}</>;
   }
@@ -388,7 +545,7 @@ export function UserInfoBubble({
 
             {loading ? (
               <div className="py-6 text-center text-sm text-neutral-500 dark:text-neutral-300">
-                Načítám profil…
+                Loading profile data...
               </div>
             ) : error ? (
               <div className="py-4 text-center text-sm text-red-500">
@@ -437,7 +594,7 @@ export function UserInfoBubble({
                         className="w-full cursor-pointer rounded-md bg-cyan-700 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-600 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-600 dark:hover:bg-cyan-500"
                       >
                         {fanLoading
-                          ? "Ukládám…"
+                          ? "Working…"
                           : data.isFan
                             ? "Unfan"
                             : `Become a fan (${data.fansCount ?? 0})`}
@@ -450,6 +607,57 @@ export function UserInfoBubble({
                   <p>Registered: {formatDateTime(data.registeredAt)}</p>
                   <p>Last comment: {formatDateTime(data.lastCommentAt)}</p>
                 </div>
+
+                <div className="flex items-center justify-center gap-2 border-t border-neutral-300 pt-3 dark:border-neutral-600">
+                  <Tooltip text="Coming Soon" position="top">
+                    <button
+                      type="button"
+                      disabled
+                      className="flex w-full cursor-not-allowed gap-2 rounded-md border border-neutral-400 px-3 py-2 text-xs font-medium text-neutral-500 opacity-80 dark:border-neutral-500 dark:text-neutral-300"
+                    >
+                      <Image
+                        src="/icons/mail.svg"
+                        alt="mail"
+                        width={24}
+                        style={{ height: "auto" }}
+                        height={20}
+                        className="invert-50 dark:invert-0"
+                      />
+                      Message
+                    </button>
+                  </Tooltip>
+
+                  {data.viewerIsAdmin && !data.isSelf ? (
+                    data.isBlocked ? (
+                      <button
+                        type="button"
+                        onClick={handleUnblock}
+                        disabled={blockLoading}
+                        className="w-fit cursor-pointer rounded-md bg-red-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {blockLoading ? "Working…" : "Unblock User"}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsBlockDialogOpen(true)}
+                        disabled={blockLoading}
+                        className="w-fit cursor-pointer rounded-md bg-red-700 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Block User
+                      </button>
+                    )
+                  ) : null}
+                </div>
+
+                {data.isBlocked ? (
+                  <p className="text-[11px] text-red-600 dark:text-red-300">
+                    Blocked{" "}
+                    {data.blockedUntil
+                      ? `until ${formatDateTime(data.blockedUntil)}`
+                      : "permanently"}
+                  </p>
+                ) : null}
               </div>
             ) : null}
           </div>,
@@ -469,6 +677,27 @@ export function UserInfoBubble({
         {children}
       </span>
       {card}
+      {mounted ? (
+        <BlockUserDialog
+          isOpen={isBlockDialogOpen}
+          blockReason={blockReason}
+          onBlockReasonChange={setBlockReason}
+          blockType={blockType}
+          onBlockTypeChange={setBlockType}
+          blockUntil={blockUntil}
+          onBlockUntilChange={setBlockUntil}
+          blockScopes={blockScopes}
+          onBlockScopeChange={(key, value) =>
+            setBlockScopes((prev) => ({
+              ...prev,
+              [key]: value,
+            }))
+          }
+          blockLoading={blockLoading}
+          onClose={() => setIsBlockDialogOpen(false)}
+          onConfirm={handleCreateBlock}
+        />
+      ) : null}
     </>
   );
 }

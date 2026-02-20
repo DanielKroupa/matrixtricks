@@ -52,6 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  UserWriteBlock: 'UserWriteBlock',
+  UserIdentityLog: 'UserIdentityLog',
+  UserBlockAuditEvent: 'UserBlockAuditEvent',
   UserFan: 'UserFan',
   Session: 'Session',
   Account: 'Account',
@@ -104,6 +107,59 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserWriteBlockScalarFieldEnum = {
+  id: 'id',
+  reason: 'reason',
+  isActive: 'isActive',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  scopeCommentCreate: 'scopeCommentCreate',
+  scopeCommentUpdate: 'scopeCommentUpdate',
+  scopeCommentDelete: 'scopeCommentDelete',
+  scopeFanwallCreate: 'scopeFanwallCreate',
+  scopeFanwallUpdate: 'scopeFanwallUpdate',
+  scopeFanwallDelete: 'scopeFanwallDelete',
+  targetUserId: 'targetUserId',
+  targetDeviceId: 'targetDeviceId',
+  targetIp: 'targetIp',
+  createdByUserId: 'createdByUserId',
+  revokedByUserId: 'revokedByUserId'
+} as const
+
+export type UserWriteBlockScalarFieldEnum = (typeof UserWriteBlockScalarFieldEnum)[keyof typeof UserWriteBlockScalarFieldEnum]
+
+
+export const UserIdentityLogScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  deviceId: 'deviceId',
+  ipAddress: 'ipAddress'
+} as const
+
+export type UserIdentityLogScalarFieldEnum = (typeof UserIdentityLogScalarFieldEnum)[keyof typeof UserIdentityLogScalarFieldEnum]
+
+
+export const UserBlockAuditEventScalarFieldEnum = {
+  id: 'id',
+  eventType: 'eventType',
+  reason: 'reason',
+  details: 'details',
+  createdAt: 'createdAt',
+  blockId: 'blockId',
+  performedByUserId: 'performedByUserId',
+  targetUserId: 'targetUserId',
+  targetDeviceId: 'targetDeviceId',
+  targetIp: 'targetIp'
+} as const
+
+export type UserBlockAuditEventScalarFieldEnum = (typeof UserBlockAuditEventScalarFieldEnum)[keyof typeof UserBlockAuditEventScalarFieldEnum]
 
 
 export const UserFanScalarFieldEnum = {

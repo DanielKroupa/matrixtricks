@@ -10,6 +10,11 @@ import { revalidatePath } from "next/cache";
 import { postService } from "@/application/social/post.service";
 import type { PostSortOption, RubricParam } from "@/domain/social/types";
 import { entitlementService } from "@/application/billing/entitlement.service";
+import { userBlockService } from "@/application/moderation/user-block.service";
+import {
+  resolveIdentityDeviceId,
+  resolveIpAddressFromServerHeaders,
+} from "@/lib/request-identity";
 
 export async function getRubricPostsPage(
   rubric: RubricParam,
@@ -78,9 +83,25 @@ export async function createComment(data: z.infer<typeof CreateCommentSchema>) {
   const { content, postId, nickname } = validation.data;
   const session = await getServerSession();
   const userId = session?.user?.id;
+  const deviceId = await resolveIdentityDeviceId();
+  const ipAddress = await resolveIpAddressFromServerHeaders();
 
   if (!userId && !nickname) {
     return { error: "Nickname required for anonymous users" };
+  }
+
+  try {
+    await userBlockService.assertCanWrite(
+      {
+        userId: userId ?? null,
+        deviceId,
+        ipAddress,
+      },
+      "COMMENT_CREATE",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Forbidden";
+    return { error: message };
   }
 
   const comment = await postService.createComment({
@@ -88,6 +109,13 @@ export async function createComment(data: z.infer<typeof CreateCommentSchema>) {
     postId,
     userId: userId || null,
     nickname: userId ? null : (nickname ?? null),
+  });
+
+  await userBlockService.recordIdentity({
+    userId: userId ?? null,
+    deviceId,
+    ipAddress,
+    source: "COMMENT",
   });
 
   revalidatePath("/");
@@ -103,9 +131,25 @@ export async function updateComment(data: z.infer<typeof UpdateCommentSchema>) {
 
   const session = await getServerSession();
   const userId = session?.user?.id;
+  const deviceId = await resolveIdentityDeviceId();
+  const ipAddress = await resolveIpAddressFromServerHeaders();
 
   if (!userId) {
     return { error: "Unauthorized" };
+  }
+
+  try {
+    await userBlockService.assertCanWrite(
+      {
+        userId,
+        deviceId,
+        ipAddress,
+      },
+      "COMMENT_UPDATE",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Forbidden";
+    return { error: message };
   }
 
   const { commentId, content } = validation.data;
@@ -143,9 +187,25 @@ export async function deleteComment(commentId: string) {
   const session = await getServerSession();
   const userId = session?.user?.id;
   const isAdmin = session?.user?.role === "admin";
+  const deviceId = await resolveIdentityDeviceId();
+  const ipAddress = await resolveIpAddressFromServerHeaders();
 
   if (!userId) {
     return { error: "Unauthorized" };
+  }
+
+  try {
+    await userBlockService.assertCanWrite(
+      {
+        userId,
+        deviceId,
+        ipAddress,
+      },
+      "COMMENT_DELETE",
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Forbidden";
+    return { error: message };
   }
 
   try {

@@ -39,15 +39,15 @@ enum EntitlementSource {
 }
 
 model User {
-  id                  String               @id
+  id                  String                @id
   name                String
   email               String
-  emailVerified       Boolean              @default(false)
+  emailVerified       Boolean               @default(false)
   image               String?
   role                String?
-  onlineVisibility    Boolean              @default(true)
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  onlineVisibility    Boolean               @default(true)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
   sessions            Session[]
   accounts            Account[]
   fanWallMessages     FanWallMessage[]
@@ -60,9 +60,14 @@ model User {
   subscriptions       Subscription[]
   vipGrants           VipGrant[]
   vipPriceAuditEvents VipPriceAuditEvent[]
-  fansGiven           UserFan[]            @relation("fan_source_user")
-  fansReceived        UserFan[]            @relation("fan_target_user")
+  fansGiven           UserFan[]             @relation("fan_source_user")
+  fansReceived        UserFan[]             @relation("fan_target_user")
   postShares          PostShare[]
+  writeBlocksReceived UserWriteBlock[]      @relation("write_block_target_user")
+  writeBlocksCreated  UserWriteBlock[]      @relation("write_block_created_by_user")
+  writeBlocksRevoked  UserWriteBlock[]      @relation("write_block_revoked_by_user")
+  identityLogs        UserIdentityLog[]
+  blockAuditEvents    UserBlockAuditEvent[] @relation("block_audit_performed_by_user")
 
   username        String?
   displayUsername String?
@@ -70,6 +75,82 @@ model User {
   @@unique([email])
   @@unique([username])
   @@map("user")
+}
+
+model UserWriteBlock {
+  id        String    @id @default(cuid())
+  reason    String
+  isActive  Boolean   @default(true)
+  startsAt  DateTime  @default(now())
+  endsAt    DateTime?
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  scopeCommentCreate Boolean @default(true)
+  scopeCommentUpdate Boolean @default(true)
+  scopeCommentDelete Boolean @default(true)
+  scopeFanwallCreate Boolean @default(true)
+  scopeFanwallUpdate Boolean @default(true)
+  scopeFanwallDelete Boolean @default(true)
+
+  targetUserId   String?
+  targetUser     User?   @relation("write_block_target_user", fields: [targetUserId], references: [id], onDelete: Cascade)
+  targetDeviceId String?
+  targetIp       String?
+
+  createdByUserId String
+  createdByUser   User   @relation("write_block_created_by_user", fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  revokedByUserId String?
+  revokedByUser   User?   @relation("write_block_revoked_by_user", fields: [revokedByUserId], references: [id], onDelete: SetNull)
+
+  auditEvents UserBlockAuditEvent[]
+
+  @@index([isActive, endsAt])
+  @@index([targetUserId, isActive])
+  @@index([targetDeviceId, isActive])
+  @@index([targetIp, isActive])
+  @@map("user_write_block")
+}
+
+model UserIdentityLog {
+  id        String   @id @default(cuid())
+  source    String
+  createdAt DateTime @default(now())
+
+  userId    String?
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  deviceId  String?
+  ipAddress String?
+
+  @@index([userId, createdAt])
+  @@index([deviceId, createdAt])
+  @@index([ipAddress, createdAt])
+  @@map("user_identity_log")
+}
+
+model UserBlockAuditEvent {
+  id        String   @id @default(cuid())
+  eventType String
+  reason    String?
+  details   Json?
+  createdAt DateTime @default(now())
+
+  blockId String?
+  block   UserWriteBlock? @relation(fields: [blockId], references: [id], onDelete: SetNull)
+
+  performedByUserId String?
+  performedByUser   User?   @relation("block_audit_performed_by_user", fields: [performedByUserId], references: [id], onDelete: SetNull)
+
+  targetUserId   String?
+  targetDeviceId String?
+  targetIp       String?
+
+  @@index([blockId, createdAt])
+  @@index([performedByUserId, createdAt])
+  @@index([targetUserId, createdAt])
+  @@map("user_block_audit_event")
 }
 
 model UserFan {
