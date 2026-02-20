@@ -76,7 +76,7 @@ export default function UpdatePasswordForm() {
               <input
                 type="password"
                 autoComplete="current-password"
-                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600"
                 {...register("currentPassword")}
               />
               {errors.currentPassword && (
@@ -90,7 +90,7 @@ export default function UpdatePasswordForm() {
               <input
                 type="password"
                 autoComplete="new-password"
-                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
                 {...register("newPassword")}
               />
               {errors.newPassword && (
@@ -104,7 +104,7 @@ export default function UpdatePasswordForm() {
               <input
                 type="password"
                 autoComplete="new-password"
-                className="w-full rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
+                className="w-full rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
                 {...register("confirmNewPassword")}
               />
               {errors.confirmNewPassword && (

@@ -126,8 +126,9 @@ export function ProfileDetailsForm({
           <label>Nickname:</label>
           <input
             type="text"
+            autoComplete="off"
             placeholder={user.name || "Enter nickname"}
-            className="w-auto rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
+            className="w-auto rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
             {...register("nickname")}
           />
           {errors.nickname && (
@@ -140,8 +141,9 @@ export function ProfileDetailsForm({
           <label>Edit main title:</label>
           <input
             type="text"
+            autoComplete="off"
             placeholder={initialTitle || "Enter main title"}
-            className="w-auto rounded bg-neutral-300 px-2 py-1.5 outline-none md:w-72 dark:bg-neutral-700"
+            className="w-auto rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
             {...register("title")}
           />
           {errors.title && (

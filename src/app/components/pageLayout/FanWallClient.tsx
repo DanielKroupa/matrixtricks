@@ -107,7 +107,7 @@ function PinnedMessageCard({
   const avatarSrc = getAvatarSrc(message);
 
   return (
-    <div className="bg-neutral-300 py-4 shadow-lg dark:bg-[#353535]">
+    <div className="bg-neutral-300 py-3 shadow-lg dark:bg-[#353535]">
       <div className="group relative flex flex-row items-center justify-baseline gap-2 px-2 md:gap-4 md:px-6">
         <div className="relative">
           <Image
@@ -405,7 +405,7 @@ function FanwallForm({
             placeholder="Title"
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
-            className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 shadow-md ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-1/2 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
+            className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-1/2 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
           />
         )}
         <AutoResizeTextarea

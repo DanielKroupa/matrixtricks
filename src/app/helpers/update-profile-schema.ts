@@ -3,8 +3,7 @@ import { z } from "zod";
 export const updateProfileSchema = z.object({
   nickname: z
     .string()
-    .nonempty({ message: "Nickname is required" })
-    .min(1, { message: "Nickname is required" })
+    .nonempty({ message: "Nickname must not be empty" })
     .min(3, { message: "Nickname must be at least 3 characters long" })
     .max(30, { message: "Nickname must be at most 30 characters long" })
     .regex(
@@ -14,13 +13,14 @@ export const updateProfileSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(1, { message: "Title is required" })
+    .nonempty({ message: "Title must not be empty" })
+    .min(3, { message: "Title must be at least 3 characters long" })
     .max(120, { message: "Title must be at most 120 characters long" }),
   bio: z
     .string()
     .trim()
-    .min(1, { message: "Bio is required" })
-    .max(220, { message: "Bio must be at most 220 characters long" }),
+    .nonempty({ message: "Bio must not be empty" })
+    .max(220, { message: "Bio must be max 220 characters long" }),
 });
 
 export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>;
