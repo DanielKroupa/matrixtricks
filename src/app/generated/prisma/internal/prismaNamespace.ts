@@ -385,11 +385,13 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  UserFan: 'UserFan',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
   FanWallMessage: 'FanWallMessage',
   Post: 'Post',
+  PostShare: 'PostShare',
   StripeCustomer: 'StripeCustomer',
   Subscription: 'Subscription',
   VipGrant: 'VipGrant',
@@ -417,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "stripeCustomer" | "subscription" | "vipGrant" | "stripeWebhookEvent" | "vipPrice" | "vipPriceAuditEvent" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting" | "userPostPreference"
+    modelProps: "user" | "userFan" | "session" | "account" | "verification" | "fanWallMessage" | "post" | "postShare" | "stripeCustomer" | "subscription" | "vipGrant" | "stripeWebhookEvent" | "vipPrice" | "vipPriceAuditEvent" | "media" | "comment" | "postLike" | "commentLike" | "siteSetting" | "userPostPreference"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -492,6 +494,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserFan: {
+      payload: Prisma.$UserFanPayload<ExtArgs>
+      fields: Prisma.UserFanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserFanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserFanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>
+        }
+        findFirst: {
+          args: Prisma.UserFanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserFanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>
+        }
+        findMany: {
+          args: Prisma.UserFanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>[]
+        }
+        create: {
+          args: Prisma.UserFanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>
+        }
+        createMany: {
+          args: Prisma.UserFanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserFanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>[]
+        }
+        delete: {
+          args: Prisma.UserFanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>
+        }
+        update: {
+          args: Prisma.UserFanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserFanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserFanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserFanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserFanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserFanPayload>
+        }
+        aggregate: {
+          args: Prisma.UserFanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserFan>
+        }
+        groupBy: {
+          args: Prisma.UserFanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserFanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserFanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserFanCountAggregateOutputType> | number
         }
       }
     }
@@ -862,6 +938,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PostCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PostCountAggregateOutputType> | number
+        }
+      }
+    }
+    PostShare: {
+      payload: Prisma.$PostSharePayload<ExtArgs>
+      fields: Prisma.PostShareFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PostShareFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PostShareFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>
+        }
+        findFirst: {
+          args: Prisma.PostShareFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PostShareFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>
+        }
+        findMany: {
+          args: Prisma.PostShareFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>[]
+        }
+        create: {
+          args: Prisma.PostShareCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>
+        }
+        createMany: {
+          args: Prisma.PostShareCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PostShareCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>[]
+        }
+        delete: {
+          args: Prisma.PostShareDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>
+        }
+        update: {
+          args: Prisma.PostShareUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>
+        }
+        deleteMany: {
+          args: Prisma.PostShareDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PostShareUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PostShareUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>[]
+        }
+        upsert: {
+          args: Prisma.PostShareUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostSharePayload>
+        }
+        aggregate: {
+          args: Prisma.PostShareAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePostShare>
+        }
+        groupBy: {
+          args: Prisma.PostShareGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostShareGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PostShareCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostShareCountAggregateOutputType> | number
         }
       }
     }
@@ -1799,6 +1949,7 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   role: 'role',
+  onlineVisibility: 'onlineVisibility',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   username: 'username',
@@ -1806,6 +1957,21 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserFanScalarFieldEnum = {
+  id: 'id',
+  isActive: 'isActive',
+  deviceId: 'deviceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  activatedAt: 'activatedAt',
+  deactivatedAt: 'deactivatedAt',
+  targetUserId: 'targetUserId',
+  sourceUserId: 'sourceUserId'
+} as const
+
+export type UserFanScalarFieldEnum = (typeof UserFanScalarFieldEnum)[keyof typeof UserFanScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
@@ -1886,6 +2052,16 @@ export const PostScalarFieldEnum = {
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const PostShareScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  postId: 'postId',
+  userId: 'userId'
+} as const
+
+export type PostShareScalarFieldEnum = (typeof PostShareScalarFieldEnum)[keyof typeof PostShareScalarFieldEnum]
 
 
 export const StripeCustomerScalarFieldEnum = {
@@ -2317,11 +2493,13 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  userFan?: Prisma.UserFanOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   fanWallMessage?: Prisma.FanWallMessageOmit
   post?: Prisma.PostOmit
+  postShare?: Prisma.PostShareOmit
   stripeCustomer?: Prisma.StripeCustomerOmit
   subscription?: Prisma.SubscriptionOmit
   vipGrant?: Prisma.VipGrantOmit

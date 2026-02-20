@@ -60,6 +60,9 @@ model User {
   subscriptions       Subscription[]
   vipGrants           VipGrant[]
   vipPriceAuditEvents VipPriceAuditEvent[]
+  fansGiven           UserFan[]            @relation("fan_source_user")
+  fansReceived        UserFan[]            @relation("fan_target_user")
+  postShares          PostShare[]
 
   username        String?
   displayUsername String?
@@ -67,6 +70,27 @@ model User {
   @@unique([email])
   @@unique([username])
   @@map("user")
+}
+
+model UserFan {
+  id            String    @id @default(cuid())
+  isActive      Boolean   @default(true)
+  deviceId      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  activatedAt   DateTime  @default(now())
+  deactivatedAt DateTime?
+
+  targetUserId String
+  targetUser   User   @relation("fan_target_user", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  sourceUserId String?
+  sourceUser   User?   @relation("fan_source_user", fields: [sourceUserId], references: [id], onDelete: SetNull)
+
+  @@unique([targetUserId, deviceId])
+  @@index([targetUserId, isActive])
+  @@index([sourceUserId])
+  @@map("user_fan")
 }
 
 model Session {
@@ -155,7 +179,8 @@ model Post {
   media      Media[]
   comments   Comment[]
   likes      PostLike[]
-  shareCount Int        @default(0)
+  shares     PostShare[]
+  shareCount Int         @default(0)
 
   @@index([authorId])
   @@index([rubric])
@@ -163,6 +188,21 @@ model Post {
   @@index([rubric, published, vipOnly, createdAt])
   @@index([rubric, isPinned, pinnedAt])
   @@map("post")
+}
+
+model PostShare {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([postId, createdAt])
+  @@map("post_share")
 }
 
 model StripeCustomer {

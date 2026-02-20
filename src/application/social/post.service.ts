@@ -125,8 +125,8 @@ export const postService = {
     return { liked: true };
   },
 
-  async incrementShare(postId: string) {
-    await postRepository.incrementShareCount(postId);
+  async incrementShare(postId: string, userId?: string) {
+    await postRepository.incrementShareCount(postId, userId);
     return { success: true } as const;
   },
 };

@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 import { CommentSection } from "./CommentSection";
 import { usePostInteractions } from "./hooks/usePostInteractions";
 import { SocialShareModal } from "./SocialShareModal";
+import { UserInfoBubble } from "./UserInfoBubble";
 
 export const PostModal = ({
   post: initialPost,
@@ -280,9 +281,11 @@ export const PostModal = ({
                 {postTitle}
               </h1>
               {postAuthorName ? (
-                <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-300">
-                  {postAuthorName}
-                </p>
+                <UserInfoBubble userId={postAuthorId}>
+                  <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-300">
+                    {postAuthorName}
+                  </p>
+                </UserInfoBubble>
               ) : null}
             </div>
             <div className="flex items-center gap-2">{postActionsMenu}</div>
@@ -406,7 +409,11 @@ export const PostModal = ({
                   {postTitle}
                 </h2>
                 {postAuthorName ? (
-                  <p className="mt-1 text-xs text-white/90">{postAuthorName}</p>
+                  <UserInfoBubble userId={postAuthorId}>
+                    <p className="mt-1 text-xs text-white/90">
+                      {postAuthorName}
+                    </p>
+                  </UserInfoBubble>
                 ) : null}
               </div>
 
@@ -445,7 +452,11 @@ export const PostModal = ({
                   {postTitle}
                 </h2>
                 {postAuthorName ? (
-                  <p className="mt-1 text-xs text-white/90">{postAuthorName}</p>
+                  <UserInfoBubble userId={postAuthorId}>
+                    <p className="mt-1 text-xs text-white/90">
+                      {postAuthorName}
+                    </p>
+                  </UserInfoBubble>
                 ) : null}
               </div>
 
@@ -483,7 +494,11 @@ export const PostModal = ({
                   {postTitle}
                 </h2>
                 {postAuthorName ? (
-                  <p className="mt-1 text-xs text-white/90">{postAuthorName}</p>
+                  <UserInfoBubble userId={postAuthorId}>
+                    <p className="mt-1 text-xs text-white/90">
+                      {postAuthorName}
+                    </p>
+                  </UserInfoBubble>
                 ) : null}
               </div>
 

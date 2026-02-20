@@ -23,6 +23,11 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model UserFan
+ * 
+ */
+export type UserFan = Prisma.UserFanModel
+/**
  * Model Session
  * 
  */
@@ -47,6 +52,11 @@ export type FanWallMessage = Prisma.FanWallMessageModel
  * 
  */
 export type Post = Prisma.PostModel
+/**
+ * Model PostShare
+ * 
+ */
+export type PostShare = Prisma.PostShareModel
 /**
  * Model StripeCustomer
  * 

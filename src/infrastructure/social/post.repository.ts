@@ -236,10 +236,23 @@ export const postRepository = {
     return prisma.commentLike.delete({ where: { id } });
   },
 
-  async incrementShareCount(postId: string) {
-    return prisma.post.update({
-      where: { id: postId },
-      data: { shareCount: { increment: 1 } },
+  async incrementShareCount(postId: string, userId?: string) {
+    return prisma.$transaction(async (tx) => {
+      const updatedPost = await tx.post.update({
+        where: { id: postId },
+        data: { shareCount: { increment: 1 } },
+      });
+
+      if (userId) {
+        await tx.postShare.create({
+          data: {
+            postId,
+            userId,
+          },
+        });
+      }
+
+      return updatedPost;
     });
   },
 };

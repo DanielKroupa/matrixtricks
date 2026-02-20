@@ -190,6 +190,7 @@ export async function toggleCommentLike(commentId: string) {
 
 // share count
 export async function incrementShareCount(postId: string) {
-  await postService.incrementShare(postId);
+  const session = await getServerSession();
+  await postService.incrementShare(postId, session?.user?.id);
   return { success: true };
 }

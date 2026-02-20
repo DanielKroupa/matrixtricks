@@ -9,6 +9,7 @@ import { useFanwallActions } from "./fanwall/hooks/useFanwallActions";
 import { useFanwallPagination } from "./fanwall/hooks/useFanwallPagination";
 import { useFanwallSocket } from "./fanwall/hooks/useFanwallSocket";
 import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
+import { UserInfoBubble } from "@/components/social/UserInfoBubble";
 import type {
   ApiResponse,
   FanWallClientProps,
@@ -110,13 +111,15 @@ function PinnedMessageCard({
     <div className="bg-neutral-300 py-3 shadow-lg dark:bg-[#353535]">
       <div className="group relative flex flex-row items-center justify-baseline gap-2 px-2 md:gap-4 md:px-6">
         <div className="relative">
-          <Image
-            src={avatarSrc}
-            alt="profile-avatar"
-            className="flex h-20 w-20 rounded-full object-cover md:h-16 md:w-16"
-            width={65}
-            height={65}
-          />
+          <UserInfoBubble userId={message.userId}>
+            <Image
+              src={avatarSrc}
+              alt="profile-avatar"
+              className="flex h-20 w-20 rounded-full object-cover md:h-16 md:w-16"
+              width={65}
+              height={65}
+            />
+          </UserInfoBubble>
 
           {message.userId || isAuthorOnline ? (
             <span
@@ -130,7 +133,9 @@ function PinnedMessageCard({
         <div className="flex flex-col space-y-1">
           {message.title && <h5 className="font-medium">{message.title}</h5>}
           <p className="flex items-center gap-2">
-            <span>{authorName}</span>
+            <UserInfoBubble userId={message.userId}>
+              <span>{authorName}</span>
+            </UserInfoBubble>
             <time
               className="text-xs text-neutral-500"
               dateTime={message.createdAt}
@@ -221,14 +226,16 @@ function FanwallMessageItem({
   return (
     <div className="group relative flex flex-row items-start justify-baseline gap-2 px-2 py-4 md:gap-4 md:px-6">
       <div className="relative md:w-auto">
-        <Image
-          src={avatarSrc}
-          alt="profile-avatar"
-          className="h-16 w-16 rounded-full object-cover"
-          width={65}
-          loading="lazy"
-          height={65}
-        />
+        <UserInfoBubble userId={message.userId}>
+          <Image
+            src={avatarSrc}
+            alt="profile-avatar"
+            className="h-16 w-16 rounded-full object-cover"
+            width={65}
+            loading="lazy"
+            height={65}
+          />
+        </UserInfoBubble>
         {message.userId ? (
           <span
             title={isAuthorOnline ? "Online" : ""}
@@ -243,7 +250,9 @@ function FanwallMessageItem({
           </h5>
         )}
         <p className="flex items-center gap-2">
-          <span>{authorName}</span>
+          <UserInfoBubble userId={message.userId}>
+            <span>{authorName}</span>
+          </UserInfoBubble>
           {message.user?.isVipActive && <Badge />}
           <time
             className="text-xs text-neutral-500"

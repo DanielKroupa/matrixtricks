@@ -52,11 +52,13 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  UserFan: 'UserFan',
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
   FanWallMessage: 'FanWallMessage',
   Post: 'Post',
+  PostShare: 'PostShare',
   StripeCustomer: 'StripeCustomer',
   Subscription: 'Subscription',
   VipGrant: 'VipGrant',
@@ -94,6 +96,7 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   role: 'role',
+  onlineVisibility: 'onlineVisibility',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   username: 'username',
@@ -101,6 +104,21 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserFanScalarFieldEnum = {
+  id: 'id',
+  isActive: 'isActive',
+  deviceId: 'deviceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  activatedAt: 'activatedAt',
+  deactivatedAt: 'deactivatedAt',
+  targetUserId: 'targetUserId',
+  sourceUserId: 'sourceUserId'
+} as const
+
+export type UserFanScalarFieldEnum = (typeof UserFanScalarFieldEnum)[keyof typeof UserFanScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
@@ -181,6 +199,16 @@ export const PostScalarFieldEnum = {
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const PostShareScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  postId: 'postId',
+  userId: 'userId'
+} as const
+
+export type PostShareScalarFieldEnum = (typeof PostShareScalarFieldEnum)[keyof typeof PostShareScalarFieldEnum]
 
 
 export const StripeCustomerScalarFieldEnum = {

@@ -9,11 +9,13 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/UserFan'
 export type * from './models/Session'
 export type * from './models/Account'
 export type * from './models/Verification'
 export type * from './models/FanWallMessage'
 export type * from './models/Post'
+export type * from './models/PostShare'
 export type * from './models/StripeCustomer'
 export type * from './models/Subscription'
 export type * from './models/VipGrant'

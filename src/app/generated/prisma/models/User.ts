@@ -31,6 +31,7 @@ export type UserMinAggregateOutputType = {
   emailVerified: boolean | null
   image: string | null
   role: string | null
+  onlineVisibility: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   username: string | null
@@ -44,6 +45,7 @@ export type UserMaxAggregateOutputType = {
   emailVerified: boolean | null
   image: string | null
   role: string | null
+  onlineVisibility: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
   username: string | null
@@ -57,6 +59,7 @@ export type UserCountAggregateOutputType = {
   emailVerified: number
   image: number
   role: number
+  onlineVisibility: number
   createdAt: number
   updatedAt: number
   username: number
@@ -72,6 +75,7 @@ export type UserMinAggregateInputType = {
   emailVerified?: true
   image?: true
   role?: true
+  onlineVisibility?: true
   createdAt?: true
   updatedAt?: true
   username?: true
@@ -85,6 +89,7 @@ export type UserMaxAggregateInputType = {
   emailVerified?: true
   image?: true
   role?: true
+  onlineVisibility?: true
   createdAt?: true
   updatedAt?: true
   username?: true
@@ -98,6 +103,7 @@ export type UserCountAggregateInputType = {
   emailVerified?: true
   image?: true
   role?: true
+  onlineVisibility?: true
   createdAt?: true
   updatedAt?: true
   username?: true
@@ -184,6 +190,7 @@ export type UserGroupByOutputType = {
   emailVerified: boolean
   image: string | null
   role: string | null
+  onlineVisibility: boolean
   createdAt: Date
   updatedAt: Date
   username: string | null
@@ -218,6 +225,7 @@ export type UserWhereInput = {
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringNullableFilter<"User"> | string | null
+  onlineVisibility?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   username?: Prisma.StringNullableFilter<"User"> | string | null
@@ -234,6 +242,9 @@ export type UserWhereInput = {
   subscriptions?: Prisma.SubscriptionListRelationFilter
   vipGrants?: Prisma.VipGrantListRelationFilter
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventListRelationFilter
+  fansGiven?: Prisma.UserFanListRelationFilter
+  fansReceived?: Prisma.UserFanListRelationFilter
+  postShares?: Prisma.PostShareListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -243,6 +254,7 @@ export type UserOrderByWithRelationInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
+  onlineVisibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -259,6 +271,9 @@ export type UserOrderByWithRelationInput = {
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   vipGrants?: Prisma.VipGrantOrderByRelationAggregateInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventOrderByRelationAggregateInput
+  fansGiven?: Prisma.UserFanOrderByRelationAggregateInput
+  fansReceived?: Prisma.UserFanOrderByRelationAggregateInput
+  postShares?: Prisma.PostShareOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -272,6 +287,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringNullableFilter<"User"> | string | null
+  onlineVisibility?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   displayUsername?: Prisma.StringNullableFilter<"User"> | string | null
@@ -287,6 +303,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   subscriptions?: Prisma.SubscriptionListRelationFilter
   vipGrants?: Prisma.VipGrantListRelationFilter
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventListRelationFilter
+  fansGiven?: Prisma.UserFanListRelationFilter
+  fansReceived?: Prisma.UserFanListRelationFilter
+  postShares?: Prisma.PostShareListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -296,6 +315,7 @@ export type UserOrderByWithAggregationInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
+  onlineVisibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -315,6 +335,7 @@ export type UserScalarWhereWithAggregatesInput = {
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  onlineVisibility?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -328,6 +349,7 @@ export type UserCreateInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -344,6 +366,9 @@ export type UserCreateInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -353,6 +378,7 @@ export type UserUncheckedCreateInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -369,6 +395,9 @@ export type UserUncheckedCreateInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -378,6 +407,7 @@ export type UserUpdateInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -394,6 +424,9 @@ export type UserUpdateInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -403,6 +436,7 @@ export type UserUncheckedUpdateInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -419,6 +453,9 @@ export type UserUncheckedUpdateInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -428,6 +465,7 @@ export type UserCreateManyInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -441,6 +479,7 @@ export type UserUpdateManyMutationInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -454,6 +493,7 @@ export type UserUncheckedUpdateManyInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -467,6 +507,7 @@ export type UserCountOrderByAggregateInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  onlineVisibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
@@ -480,6 +521,7 @@ export type UserMaxOrderByAggregateInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  onlineVisibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
@@ -493,6 +535,7 @@ export type UserMinOrderByAggregateInput = {
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  onlineVisibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
@@ -523,6 +566,36 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutFansReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFansReceivedInput, Prisma.UserUncheckedCreateWithoutFansReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFansReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutFansGivenInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFansGivenInput, Prisma.UserUncheckedCreateWithoutFansGivenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFansGivenInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFansReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFansReceivedInput, Prisma.UserUncheckedCreateWithoutFansReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFansReceivedInput
+  upsert?: Prisma.UserUpsertWithoutFansReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFansReceivedInput, Prisma.UserUpdateWithoutFansReceivedInput>, Prisma.UserUncheckedUpdateWithoutFansReceivedInput>
+}
+
+export type UserUpdateOneWithoutFansGivenNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFansGivenInput, Prisma.UserUncheckedCreateWithoutFansGivenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFansGivenInput
+  upsert?: Prisma.UserUpsertWithoutFansGivenInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFansGivenInput, Prisma.UserUpdateWithoutFansGivenInput>, Prisma.UserUncheckedUpdateWithoutFansGivenInput>
 }
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -581,6 +654,20 @@ export type UserUpdateOneRequiredWithoutPostsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutPostsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPostsInput, Prisma.UserUpdateWithoutPostsInput>, Prisma.UserUncheckedUpdateWithoutPostsInput>
+}
+
+export type UserCreateNestedOneWithoutPostSharesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPostSharesInput, Prisma.UserUncheckedCreateWithoutPostSharesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPostSharesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPostSharesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPostSharesInput, Prisma.UserUncheckedCreateWithoutPostSharesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPostSharesInput
+  upsert?: Prisma.UserUpsertWithoutPostSharesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPostSharesInput, Prisma.UserUpdateWithoutPostSharesInput>, Prisma.UserUncheckedUpdateWithoutPostSharesInput>
 }
 
 export type UserCreateNestedOneWithoutStripeCustomerInput = {
@@ -699,6 +786,262 @@ export type UserUpdateOneRequiredWithoutPostPreferencesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPostPreferencesInput, Prisma.UserUpdateWithoutPostPreferencesInput>, Prisma.UserUncheckedUpdateWithoutPostPreferencesInput>
 }
 
+export type UserCreateWithoutFansReceivedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFansReceivedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFansReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFansReceivedInput, Prisma.UserUncheckedCreateWithoutFansReceivedInput>
+}
+
+export type UserCreateWithoutFansGivenInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFansGivenInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFansGivenInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFansGivenInput, Prisma.UserUncheckedCreateWithoutFansGivenInput>
+}
+
+export type UserUpsertWithoutFansReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFansReceivedInput, Prisma.UserUncheckedUpdateWithoutFansReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFansReceivedInput, Prisma.UserUncheckedCreateWithoutFansReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFansReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFansReceivedInput, Prisma.UserUncheckedUpdateWithoutFansReceivedInput>
+}
+
+export type UserUpdateWithoutFansReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFansReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutFansGivenInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFansGivenInput, Prisma.UserUncheckedUpdateWithoutFansGivenInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFansGivenInput, Prisma.UserUncheckedCreateWithoutFansGivenInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFansGivenInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFansGivenInput, Prisma.UserUncheckedUpdateWithoutFansGivenInput>
+}
+
+export type UserUpdateWithoutFansGivenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFansGivenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -706,6 +1049,7 @@ export type UserCreateWithoutSessionsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -721,6 +1065,9 @@ export type UserCreateWithoutSessionsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -730,6 +1077,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -745,6 +1093,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -770,6 +1121,7 @@ export type UserUpdateWithoutSessionsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -785,6 +1137,9 @@ export type UserUpdateWithoutSessionsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -794,6 +1149,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -809,6 +1165,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -818,6 +1177,7 @@ export type UserCreateWithoutAccountsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -833,6 +1193,9 @@ export type UserCreateWithoutAccountsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -842,6 +1205,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -857,6 +1221,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -882,6 +1249,7 @@ export type UserUpdateWithoutAccountsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -897,6 +1265,9 @@ export type UserUpdateWithoutAccountsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -906,6 +1277,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -921,6 +1293,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFanWallMessagesInput = {
@@ -930,6 +1305,7 @@ export type UserCreateWithoutFanWallMessagesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -945,6 +1321,9 @@ export type UserCreateWithoutFanWallMessagesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFanWallMessagesInput = {
@@ -954,6 +1333,7 @@ export type UserUncheckedCreateWithoutFanWallMessagesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -969,6 +1349,9 @@ export type UserUncheckedCreateWithoutFanWallMessagesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFanWallMessagesInput = {
@@ -994,6 +1377,7 @@ export type UserUpdateWithoutFanWallMessagesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1009,6 +1393,9 @@ export type UserUpdateWithoutFanWallMessagesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFanWallMessagesInput = {
@@ -1018,6 +1405,7 @@ export type UserUncheckedUpdateWithoutFanWallMessagesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1033,6 +1421,9 @@ export type UserUncheckedUpdateWithoutFanWallMessagesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPostsInput = {
@@ -1042,6 +1433,7 @@ export type UserCreateWithoutPostsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1057,6 +1449,9 @@ export type UserCreateWithoutPostsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostsInput = {
@@ -1066,6 +1461,7 @@ export type UserUncheckedCreateWithoutPostsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1081,6 +1477,9 @@ export type UserUncheckedCreateWithoutPostsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostsInput = {
@@ -1106,6 +1505,7 @@ export type UserUpdateWithoutPostsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1121,6 +1521,9 @@ export type UserUpdateWithoutPostsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostsInput = {
@@ -1130,6 +1533,7 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1145,6 +1549,137 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPostSharesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserUncheckedCreateWithoutPostSharesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  role?: string | null
+  onlineVisibility?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  username?: string | null
+  displayUsername?: string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedCreateNestedManyWithoutUserInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  postLikes?: Prisma.PostLikeUncheckedCreateNestedManyWithoutUserInput
+  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedCreateNestedManyWithoutUserInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+}
+
+export type UserCreateOrConnectWithoutPostSharesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPostSharesInput, Prisma.UserUncheckedCreateWithoutPostSharesInput>
+}
+
+export type UserUpsertWithoutPostSharesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPostSharesInput, Prisma.UserUncheckedUpdateWithoutPostSharesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPostSharesInput, Prisma.UserUncheckedCreateWithoutPostSharesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPostSharesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPostSharesInput, Prisma.UserUncheckedUpdateWithoutPostSharesInput>
+}
+
+export type UserUpdateWithoutPostSharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPostSharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  fanWallMessages?: Prisma.FanWallMessageUncheckedUpdateManyWithoutUserNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  postLikes?: Prisma.PostLikeUncheckedUpdateManyWithoutUserNestedInput
+  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  postPreferences?: Prisma.UserPostPreferenceUncheckedUpdateManyWithoutUserNestedInput
+  stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateWithoutStripeCustomerInput = {
@@ -1154,6 +1689,7 @@ export type UserCreateWithoutStripeCustomerInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1169,6 +1705,9 @@ export type UserCreateWithoutStripeCustomerInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStripeCustomerInput = {
@@ -1178,6 +1717,7 @@ export type UserUncheckedCreateWithoutStripeCustomerInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1193,6 +1733,9 @@ export type UserUncheckedCreateWithoutStripeCustomerInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStripeCustomerInput = {
@@ -1218,6 +1761,7 @@ export type UserUpdateWithoutStripeCustomerInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1233,6 +1777,9 @@ export type UserUpdateWithoutStripeCustomerInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStripeCustomerInput = {
@@ -1242,6 +1789,7 @@ export type UserUncheckedUpdateWithoutStripeCustomerInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1257,6 +1805,9 @@ export type UserUncheckedUpdateWithoutStripeCustomerInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionsInput = {
@@ -1266,6 +1817,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1281,6 +1833,9 @@ export type UserCreateWithoutSubscriptionsInput = {
   stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -1290,6 +1845,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1305,6 +1861,9 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -1330,6 +1889,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1345,6 +1905,9 @@ export type UserUpdateWithoutSubscriptionsInput = {
   stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -1354,6 +1917,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1369,6 +1933,9 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVipGrantsInput = {
@@ -1378,6 +1945,7 @@ export type UserCreateWithoutVipGrantsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1393,6 +1961,9 @@ export type UserCreateWithoutVipGrantsInput = {
   stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutVipGrantsInput = {
@@ -1402,6 +1973,7 @@ export type UserUncheckedCreateWithoutVipGrantsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1417,6 +1989,9 @@ export type UserUncheckedCreateWithoutVipGrantsInput = {
   stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutVipGrantsInput = {
@@ -1442,6 +2017,7 @@ export type UserUpdateWithoutVipGrantsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1457,6 +2033,9 @@ export type UserUpdateWithoutVipGrantsInput = {
   stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVipGrantsInput = {
@@ -1466,6 +2045,7 @@ export type UserUncheckedUpdateWithoutVipGrantsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1481,6 +2061,9 @@ export type UserUncheckedUpdateWithoutVipGrantsInput = {
   stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVipPriceAuditEventsInput = {
@@ -1490,6 +2073,7 @@ export type UserCreateWithoutVipPriceAuditEventsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1505,6 +2089,9 @@ export type UserCreateWithoutVipPriceAuditEventsInput = {
   stripeCustomer?: Prisma.StripeCustomerCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutVipPriceAuditEventsInput = {
@@ -1514,6 +2101,7 @@ export type UserUncheckedCreateWithoutVipPriceAuditEventsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1529,6 +2117,9 @@ export type UserUncheckedCreateWithoutVipPriceAuditEventsInput = {
   stripeCustomer?: Prisma.StripeCustomerUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutVipPriceAuditEventsInput = {
@@ -1554,6 +2145,7 @@ export type UserUpdateWithoutVipPriceAuditEventsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1569,6 +2161,9 @@ export type UserUpdateWithoutVipPriceAuditEventsInput = {
   stripeCustomer?: Prisma.StripeCustomerUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVipPriceAuditEventsInput = {
@@ -1578,6 +2173,7 @@ export type UserUncheckedUpdateWithoutVipPriceAuditEventsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1593,6 +2189,9 @@ export type UserUncheckedUpdateWithoutVipPriceAuditEventsInput = {
   stripeCustomer?: Prisma.StripeCustomerUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1602,6 +2201,7 @@ export type UserCreateWithoutCommentsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1617,6 +2217,9 @@ export type UserCreateWithoutCommentsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1626,6 +2229,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1641,6 +2245,9 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1666,6 +2273,7 @@ export type UserUpdateWithoutCommentsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1681,6 +2289,9 @@ export type UserUpdateWithoutCommentsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1690,6 +2301,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1705,6 +2317,9 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPostLikesInput = {
@@ -1714,6 +2329,7 @@ export type UserCreateWithoutPostLikesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1729,6 +2345,9 @@ export type UserCreateWithoutPostLikesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostLikesInput = {
@@ -1738,6 +2357,7 @@ export type UserUncheckedCreateWithoutPostLikesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1753,6 +2373,9 @@ export type UserUncheckedCreateWithoutPostLikesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostLikesInput = {
@@ -1778,6 +2401,7 @@ export type UserUpdateWithoutPostLikesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1793,6 +2417,9 @@ export type UserUpdateWithoutPostLikesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostLikesInput = {
@@ -1802,6 +2429,7 @@ export type UserUncheckedUpdateWithoutPostLikesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1817,6 +2445,9 @@ export type UserUncheckedUpdateWithoutPostLikesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentLikesInput = {
@@ -1826,6 +2457,7 @@ export type UserCreateWithoutCommentLikesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1841,6 +2473,9 @@ export type UserCreateWithoutCommentLikesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentLikesInput = {
@@ -1850,6 +2485,7 @@ export type UserUncheckedCreateWithoutCommentLikesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1865,6 +2501,9 @@ export type UserUncheckedCreateWithoutCommentLikesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentLikesInput = {
@@ -1890,6 +2529,7 @@ export type UserUpdateWithoutCommentLikesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1905,6 +2545,9 @@ export type UserUpdateWithoutCommentLikesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentLikesInput = {
@@ -1914,6 +2557,7 @@ export type UserUncheckedUpdateWithoutCommentLikesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1929,6 +2573,9 @@ export type UserUncheckedUpdateWithoutCommentLikesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPostPreferencesInput = {
@@ -1938,6 +2585,7 @@ export type UserCreateWithoutPostPreferencesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1953,6 +2601,9 @@ export type UserCreateWithoutPostPreferencesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPostPreferencesInput = {
@@ -1962,6 +2613,7 @@ export type UserUncheckedCreateWithoutPostPreferencesInput = {
   emailVerified?: boolean
   image?: string | null
   role?: string | null
+  onlineVisibility?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   username?: string | null
@@ -1977,6 +2629,9 @@ export type UserUncheckedCreateWithoutPostPreferencesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   vipGrants?: Prisma.VipGrantUncheckedCreateNestedManyWithoutUserInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedCreateNestedManyWithoutChangedByUserInput
+  fansGiven?: Prisma.UserFanUncheckedCreateNestedManyWithoutSourceUserInput
+  fansReceived?: Prisma.UserFanUncheckedCreateNestedManyWithoutTargetUserInput
+  postShares?: Prisma.PostShareUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPostPreferencesInput = {
@@ -2002,6 +2657,7 @@ export type UserUpdateWithoutPostPreferencesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2017,6 +2673,9 @@ export type UserUpdateWithoutPostPreferencesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPostPreferencesInput = {
@@ -2026,6 +2685,7 @@ export type UserUncheckedUpdateWithoutPostPreferencesInput = {
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2041,6 +2701,9 @@ export type UserUncheckedUpdateWithoutPostPreferencesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   vipGrants?: Prisma.VipGrantUncheckedUpdateManyWithoutUserNestedInput
   vipPriceAuditEvents?: Prisma.VipPriceAuditEventUncheckedUpdateManyWithoutChangedByUserNestedInput
+  fansGiven?: Prisma.UserFanUncheckedUpdateManyWithoutSourceUserNestedInput
+  fansReceived?: Prisma.UserFanUncheckedUpdateManyWithoutTargetUserNestedInput
+  postShares?: Prisma.PostShareUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -2060,6 +2723,9 @@ export type UserCountOutputType = {
   subscriptions: number
   vipGrants: number
   vipPriceAuditEvents: number
+  fansGiven: number
+  fansReceived: number
+  postShares: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2074,6 +2740,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
   vipGrants?: boolean | UserCountOutputTypeCountVipGrantsArgs
   vipPriceAuditEvents?: boolean | UserCountOutputTypeCountVipPriceAuditEventsArgs
+  fansGiven?: boolean | UserCountOutputTypeCountFansGivenArgs
+  fansReceived?: boolean | UserCountOutputTypeCountFansReceivedArgs
+  postShares?: boolean | UserCountOutputTypeCountPostSharesArgs
 }
 
 /**
@@ -2163,6 +2832,27 @@ export type UserCountOutputTypeCountVipPriceAuditEventsArgs<ExtArgs extends runt
   where?: Prisma.VipPriceAuditEventWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFansGivenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserFanWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFansReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserFanWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPostSharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PostShareWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2171,6 +2861,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   emailVerified?: boolean
   image?: boolean
   role?: boolean
+  onlineVisibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   username?: boolean
@@ -2187,6 +2878,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   vipGrants?: boolean | Prisma.User$vipGrantsArgs<ExtArgs>
   vipPriceAuditEvents?: boolean | Prisma.User$vipPriceAuditEventsArgs<ExtArgs>
+  fansGiven?: boolean | Prisma.User$fansGivenArgs<ExtArgs>
+  fansReceived?: boolean | Prisma.User$fansReceivedArgs<ExtArgs>
+  postShares?: boolean | Prisma.User$postSharesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2197,6 +2891,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerified?: boolean
   image?: boolean
   role?: boolean
+  onlineVisibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   username?: boolean
@@ -2210,6 +2905,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerified?: boolean
   image?: boolean
   role?: boolean
+  onlineVisibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   username?: boolean
@@ -2223,13 +2919,14 @@ export type UserSelectScalar = {
   emailVerified?: boolean
   image?: boolean
   role?: boolean
+  onlineVisibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   username?: boolean
   displayUsername?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "createdAt" | "updatedAt" | "username" | "displayUsername", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "onlineVisibility" | "createdAt" | "updatedAt" | "username" | "displayUsername", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -2243,6 +2940,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   vipGrants?: boolean | Prisma.User$vipGrantsArgs<ExtArgs>
   vipPriceAuditEvents?: boolean | Prisma.User$vipPriceAuditEventsArgs<ExtArgs>
+  fansGiven?: boolean | Prisma.User$fansGivenArgs<ExtArgs>
+  fansReceived?: boolean | Prisma.User$fansReceivedArgs<ExtArgs>
+  postShares?: boolean | Prisma.User$postSharesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2263,6 +2963,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     vipGrants: Prisma.$VipGrantPayload<ExtArgs>[]
     vipPriceAuditEvents: Prisma.$VipPriceAuditEventPayload<ExtArgs>[]
+    fansGiven: Prisma.$UserFanPayload<ExtArgs>[]
+    fansReceived: Prisma.$UserFanPayload<ExtArgs>[]
+    postShares: Prisma.$PostSharePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2271,6 +2974,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     emailVerified: boolean
     image: string | null
     role: string | null
+    onlineVisibility: boolean
     createdAt: Date
     updatedAt: Date
     username: string | null
@@ -2681,6 +3385,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vipGrants<T extends Prisma.User$vipGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vipGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VipGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vipPriceAuditEvents<T extends Prisma.User$vipPriceAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vipPriceAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VipPriceAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fansGiven<T extends Prisma.User$fansGivenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$fansGivenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fansReceived<T extends Prisma.User$fansReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$fansReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  postShares<T extends Prisma.User$postSharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$postSharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostSharePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2716,6 +3423,7 @@ export interface UserFieldRefs {
   readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'String'>
+  readonly onlineVisibility: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly username: Prisma.FieldRef<"User", 'String'>
@@ -3388,6 +4096,78 @@ export type User$vipPriceAuditEventsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.VipPriceAuditEventScalarFieldEnum | Prisma.VipPriceAuditEventScalarFieldEnum[]
+}
+
+/**
+ * User.fansGiven
+ */
+export type User$fansGivenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserFan
+   */
+  select?: Prisma.UserFanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserFan
+   */
+  omit?: Prisma.UserFanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserFanInclude<ExtArgs> | null
+  where?: Prisma.UserFanWhereInput
+  orderBy?: Prisma.UserFanOrderByWithRelationInput | Prisma.UserFanOrderByWithRelationInput[]
+  cursor?: Prisma.UserFanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserFanScalarFieldEnum | Prisma.UserFanScalarFieldEnum[]
+}
+
+/**
+ * User.fansReceived
+ */
+export type User$fansReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserFan
+   */
+  select?: Prisma.UserFanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserFan
+   */
+  omit?: Prisma.UserFanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserFanInclude<ExtArgs> | null
+  where?: Prisma.UserFanWhereInput
+  orderBy?: Prisma.UserFanOrderByWithRelationInput | Prisma.UserFanOrderByWithRelationInput[]
+  cursor?: Prisma.UserFanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserFanScalarFieldEnum | Prisma.UserFanScalarFieldEnum[]
+}
+
+/**
+ * User.postShares
+ */
+export type User$postSharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PostShare
+   */
+  select?: Prisma.PostShareSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PostShare
+   */
+  omit?: Prisma.PostShareOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PostShareInclude<ExtArgs> | null
+  where?: Prisma.PostShareWhereInput
+  orderBy?: Prisma.PostShareOrderByWithRelationInput | Prisma.PostShareOrderByWithRelationInput[]
+  cursor?: Prisma.PostShareWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PostShareScalarFieldEnum | Prisma.PostShareScalarFieldEnum[]
 }
 
 /**

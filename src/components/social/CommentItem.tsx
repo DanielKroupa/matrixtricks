@@ -9,6 +9,7 @@ import { IoTrash } from "react-icons/io5";
 import type { CommentViewModel } from "./hooks/useComments";
 import Badge from "@/app/components/ui/Badge";
 import { usePresenceStatuses } from "@/context/PresenceContext";
+import { UserInfoBubble } from "./UserInfoBubble";
 
 function renderCommentBody(content: string, className?: string) {
   const paragraphs = content.split("\n");
@@ -158,19 +159,24 @@ export const CommentItem = ({
   return (
     <div className="flex gap-3 border-neutral-300 py-3 dark:border-neutral-600">
       <div className="relative flex shrink-0">
-        {avatarUrl ? (
-          <Image
-            src={avatarUrl}
-            alt={displayName}
-            width={48}
-            height={48}
-            className="h-12 w-12 rounded-full object-cover"
-          />
-        ) : (
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-600">
-            <UserIcon size={16} className="text-gray-500 dark:text-gray-400" />
-          </div>
-        )}
+        <UserInfoBubble userId={comment.userId}>
+          {avatarUrl ? (
+            <Image
+              src={avatarUrl}
+              alt={displayName}
+              width={48}
+              height={48}
+              className="h-12 w-12 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-600">
+              <UserIcon
+                size={16}
+                className="text-gray-500 dark:text-gray-400"
+              />
+            </div>
+          )}
+        </UserInfoBubble>
         {comment.userId ? (
           <span
             title={isAuthorOnline ? "Online" : ""}
@@ -181,7 +187,9 @@ export const CommentItem = ({
       <div className="flex-1">
         <div className="flex items-start justify-between">
           <div>
-            <span className="text-sm font-semibold">{displayName}</span>
+            <UserInfoBubble userId={comment.userId}>
+              <span className="text-sm font-semibold">{displayName}</span>
+            </UserInfoBubble>
             {user?.isVipActive && <Badge className="ml-2" />}
             <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
               {new Date(comment.createdAt).toLocaleDateString()}
