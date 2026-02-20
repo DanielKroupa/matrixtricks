@@ -10,6 +10,16 @@ type CardInput = {
   deviceId: string;
 };
 
+function safeDateToIso(value: Date | string | null | undefined) {
+  const date = value instanceof Date ? value : new Date(value ?? "");
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return date.toISOString();
+}
+
 export const userCardService = {
   async getUserCard(input: CardInput): Promise<UserCardData | null> {
     const data = await userCardRepository.getUserCardData(input);
@@ -19,10 +29,8 @@ export const userCardService = {
 
     return {
       ...data,
-      registeredAt: data.registeredAt.toISOString(),
-      lastCommentAt: data.lastCommentAt
-        ? data.lastCommentAt.toISOString()
-        : null,
+      registeredAt: safeDateToIso(data.registeredAt) ?? new Date().toISOString(),
+      lastCommentAt: safeDateToIso(data.lastCommentAt),
     };
   },
 

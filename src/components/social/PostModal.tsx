@@ -493,13 +493,6 @@ export const PostModal = ({
                   {isPinned && <BsFillPinAngleFill className="shrink-0" />}
                   {postTitle}
                 </h2>
-                {postAuthorName ? (
-                  <UserInfoBubble userId={postAuthorId}>
-                    <p className="mt-1 text-xs text-white/90">
-                      {postAuthorName}
-                    </p>
-                  </UserInfoBubble>
-                ) : null}
               </div>
 
               <div className="absolute inset-0 overflow-y-auto p-6 pt-16 pb-20 md:p-8 md:pt-16 md:pb-24">

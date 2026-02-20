@@ -43,6 +43,7 @@ export default function RegisterForm() {
       const result = await authClient.signUp.email({
         email,
         name: username,
+
         password,
         callbackURL: "/",
       });
@@ -56,7 +57,7 @@ export default function RegisterForm() {
         window.location.assign("/");
       }
     } catch (err: any) {
-      setError(err?.message || "Something went wrong");
+      setError(err?.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
     }

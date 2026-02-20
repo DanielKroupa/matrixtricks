@@ -13,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 
 type Provider = "google" | "facebook" | "apple";
@@ -40,13 +39,12 @@ export default function LoginForm() {
       setSocialLoading(false);
     }
   };
-  const router = useRouter();
   const { closeModal } = useAuth();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      login: "",
       password: "",
       rememberMe: false,
     },
@@ -59,10 +57,35 @@ export default function LoginForm() {
     formState: { errors },
   } = form;
 
-  async function onSubmit({ email, password, rememberMe }: LoginFormData) {
+  async function resolveLoginEmail(login: string) {
+    const response = await fetch("/api/auth/resolve-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ login }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to resolve login");
+    }
+
+    const data = (await response.json()) as { email?: string | null };
+    return data.email ?? null;
+  }
+
+  async function onSubmit({ login, password, rememberMe }: LoginFormData) {
     setServerError(null);
     setLoading(true);
     try {
+      const normalizedLogin = login.trim();
+      const email = await resolveLoginEmail(normalizedLogin);
+
+      if (!email) {
+        setServerError("Invalid email/username or password");
+        return;
+      }
+
       const { error } = await authClient.signIn.email({
         email,
         password,
@@ -78,10 +101,9 @@ export default function LoginForm() {
         );
         console.log(error);
       } else {
-        // close modal, navigate home and refresh to update session state
+        // close modal and force a full navigation so session cookie is reflected immediately
         closeModal();
-        router.push("/");
-        router.refresh();
+        window.location.assign("/");
       }
     } catch (err: any) {
       setServerError(err?.message || "Something went wrong");
@@ -101,20 +123,20 @@ export default function LoginForm() {
 
       {/* Login Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Email Input */}
+        {/* Email / Username Input */}
         <div>
           <input
-            type="email"
-            {...register("email")}
+            type="text"
+            {...register("login")}
             autoFocus
-            placeholder="Email"
+            placeholder="Email or username"
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
-              errors.email ? "border border-red-500" : ""
+              errors.login ? "border border-red-500" : ""
             }`}
             required
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+          {errors.login && (
+            <p className="mt-1 text-sm text-red-500">{errors.login.message}</p>
           )}
         </div>
 

@@ -3,6 +3,16 @@ import prisma from "@/lib/prisma";
 import FanWallClient from "./FanWallClient";
 import { entitlementService } from "@/application/billing/entitlement.service";
 
+function safeToIso(value: Date | string | null | undefined) {
+  const date = value instanceof Date ? value : new Date(value ?? "");
+
+  if (Number.isNaN(date.getTime())) {
+    return new Date().toISOString();
+  }
+
+  return date.toISOString();
+}
+
 export async function FanWall() {
   const session = await getServerSession();
   const user = session?.user ?? null;
@@ -53,8 +63,8 @@ export async function FanWall() {
           isVipActive: vipStatusMap.get(message.user.id) ?? false,
         }
       : null,
-    createdAt: message.createdAt.toISOString(),
-    updatedAt: message.updatedAt.toISOString(),
+    createdAt: safeToIso(message.createdAt),
+    updatedAt: safeToIso(message.updatedAt),
   }));
 
   return (

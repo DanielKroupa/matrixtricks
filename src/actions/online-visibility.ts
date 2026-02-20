@@ -20,6 +20,7 @@ export async function saveOnlineVisibilityPreferenceAction(input: {
   }
 
   revalidatePath("/settings");
+  revalidatePath("/admin");
   revalidatePath("/", "layout");
 
   return { success: true, enabled: result.enabled };

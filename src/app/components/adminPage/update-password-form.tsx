@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   updatePasswordSchema,
   UpdatePasswordData,
@@ -11,7 +12,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
 
-export default function UpdatePasswordForm() {
+type UpdatePasswordFormProps = {
+  canChangePassword: boolean;
+};
+
+export default function UpdatePasswordForm({
+  canChangePassword,
+}: UpdatePasswordFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -35,6 +42,11 @@ export default function UpdatePasswordForm() {
     currentPassword,
     newPassword,
   }: UpdatePasswordData) {
+    if (!canChangePassword) {
+      setError("This account currently has no local password credential.");
+      return;
+    }
+
     setSuccess(null);
     setError(null);
     setLoading(true);
@@ -59,19 +71,44 @@ export default function UpdatePasswordForm() {
     }
   }
 
+  if (!canChangePassword) {
+    return (
+      <section className="ml-0 w-full self-end md:ml-10">
+        <div className="flex w-fit gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-600">
+          <div className="w-full">
+            <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-600">
+              Change sign in password:
+            </h3>
+            <div className="space-y-3 p-4 px-6">
+              <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                This account uses social sign in and has no local password yet.
+              </p>
+              <Link
+                href="/forgot-password"
+                className="inline-flex w-fit rounded bg-cyan-800 px-3 py-2 text-sm text-white shadow-md dark:bg-cyan-900"
+              >
+                Set password via email
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <form
       className="ml-0 w-full self-end md:ml-10"
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* Input change password */}
-      <div className="flex gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-600">
+      <div className="flex w-fit gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-600">
         <div className="w-full">
           <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-600">
             Change sign in password:
           </h3>
-          <div className="space-y-4 p-4">
-            <div className="flex flex-col gap-1">
+          <div className="space-y-4 p-4 px-6">
+            <div className="flex flex-col justify-center gap-1">
               <label>Current password</label>
               <input
                 type="password"
@@ -115,6 +152,11 @@ export default function UpdatePasswordForm() {
             </div>
             {error && (
               <p className="mt-1 text-sm font-medium text-red-500">{error}</p>
+            )}
+            {success && (
+              <p className="mt-1 text-sm font-medium text-green-500">
+                {success}
+              </p>
             )}
             <button
               type="submit"

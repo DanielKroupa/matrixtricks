@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, Pin, Play } from "lucide-react";
+import { FaLock } from "react-icons/fa6";
 
 // Using exact type would be better, but any for flexibility with Prisma includes
 interface VideoCardProps {
@@ -26,7 +27,7 @@ export const VideoCard = ({ post }: VideoCardProps) => {
     >
       {post.isPinned && (
         <div className="absolute top-2 left-2 z-10 rounded-full bg-black/50 p-1 text-white">
-          <Pin size={14} />
+          <Pin size={14} className="rotate-45 fill-white" />
         </div>
       )}
       {thumbnailUrl ? (
@@ -53,9 +54,10 @@ export const VideoCard = ({ post }: VideoCardProps) => {
       )}
 
       {isLocked && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/35">
-          <div className="rounded-full bg-black/65 px-3 py-1 text-xs font-semibold text-yellow-300">
-            VIP LOCKED
+        <div className="absolute inset-0 z-10 flex items-start justify-center bg-black/35">
+          <div className="font-golden flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-sm font-semibold">
+            <FaLock className="h-3 w-3 fill-yellow-400/80" />
+            VIP
           </div>
         </div>
       )}

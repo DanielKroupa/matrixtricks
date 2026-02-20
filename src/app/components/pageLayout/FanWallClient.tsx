@@ -124,7 +124,7 @@ function PinnedMessageCard({
           {message.userId || isAuthorOnline ? (
             <span
               title={isAuthorOnline ? "Online" : ""}
-              className={`absolute right-0 bottom-0 z-10 flex size-4 rounded-full border-4 border-neutral-300 dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"} `}
+              className={`absolute right-0 bottom-1 z-10 flex size-4 rounded-full border-4 border-neutral-300 dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"} `}
             />
           ) : null}
           {message.user?.isVipActive && <Badge className="-mt-2 ml-8" />}
@@ -239,7 +239,7 @@ function FanwallMessageItem({
         {message.userId ? (
           <span
             title={isAuthorOnline ? "Online" : ""}
-            className={`absolute right-0 bottom-0 z-10 flex size-4 rounded-full border-4 border-neutral-200 dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"}`}
+            className={`absolute right-0 bottom-1 z-10 flex size-4 rounded-full border-4 border-neutral-200 shadow dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"}`}
           />
         ) : null}
       </div>

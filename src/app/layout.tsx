@@ -32,10 +32,7 @@ function getMetadataBase() {
 
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
-  title: {
-    default: "Matrix Tricks",
-    template: "%s | Matrix Tricks",
-  },
+  title: "Matrix Tricks",
   description:
     "Matrix Tricks je social platforma s videi, texty a triky zaměřenými na komunitní obsah.",
   alternates: {

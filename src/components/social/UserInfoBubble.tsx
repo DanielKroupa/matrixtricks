@@ -43,9 +43,15 @@ const TRIGGER_GAP = 10;
 const HOVER_OPEN_DELAY_MS = 350;
 
 function formatDateTime(value: string | null) {
-  value = value ?? "";
+  if (!value) {
+    return "Nikdy";
+  }
 
   const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Neznámé";
+  }
 
   return new Intl.DateTimeFormat("cs-CZ", {
     dateStyle: "medium",

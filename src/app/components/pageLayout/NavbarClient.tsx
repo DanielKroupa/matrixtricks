@@ -194,16 +194,18 @@ export default function NavbarClient({
                     Admin settings
                   </Link>
                 )}
+                {user?.role !== "admin" && (
+                  <Link
+                    href="/settings"
+                    role="menuitem"
+                    onClick={() => setProfileMenuOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
+                  >
+                    <IoSettings className="text-neutral-600 dark:text-neutral-300" />
+                    Settings
+                  </Link>
+                )}
 
-                <Link
-                  href="/settings"
-                  role="menuitem"
-                  onClick={() => setProfileMenuOpen(false)}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
-                >
-                  <IoSettings className="text-neutral-600 dark:text-neutral-300" />
-                  Settings
-                </Link>
                 <div className="my-1 h-px w-full bg-neutral-400/60 dark:bg-neutral-500/60" />
                 <button
                   type="button"
@@ -341,7 +343,7 @@ export default function NavbarClient({
                     Profile
                   </Link>
 
-                  {user?.role === "admin" && (
+                  {user?.role !== "admin" && (
                     <Link
                       href="/admin"
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"

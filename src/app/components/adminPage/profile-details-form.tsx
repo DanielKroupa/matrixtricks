@@ -1,32 +1,33 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { updateSiteSettings } from "@/actions/site-settings";
+import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
+import { Spinner } from "@/components/ui/spinner";
+import type { User } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
+import AvatarUpload from "../../admin/AvatarUpload";
 import {
   updateProfileSchema,
   type UpdateProfileFormData,
 } from "../../helpers/update-profile-schema";
-import type { User } from "@/lib/auth";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { authClient } from "@/lib/auth-client";
-import { updateSiteSettings } from "@/actions/site-settings";
-
-import { useRouter } from "next/navigation";
-import AvatarUpload from "../../admin/AvatarUpload";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
-
-import { Spinner } from "@/components/ui/spinner";
 
 interface ProfileDetailsFormProps {
   user: User;
   initialTitle: string;
   initialBio: string;
+  initialOnlineVisibilityEnabled: boolean;
 }
 
 export function ProfileDetailsForm({
   user,
   initialTitle,
   initialBio,
+  initialOnlineVisibilityEnabled,
 }: ProfileDetailsFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -122,6 +123,9 @@ export function ProfileDetailsForm({
 
       {/* Input change nickname */}
       <div className="w-auto space-y-4 md:w-72">
+        <OnlineVisibilityToggle
+          initialEnabled={initialOnlineVisibilityEnabled}
+        />
         <div className="flex flex-col gap-2">
           <label>Nickname:</label>
           <input
@@ -160,6 +164,7 @@ export function ProfileDetailsForm({
             control={control}
             render={({ field }) => (
               <AutoResizeTextarea
+                autocorrect="off"
                 value={field.value}
                 onChange={field.onChange}
                 placeholder={initialBio || "Enter bio"}

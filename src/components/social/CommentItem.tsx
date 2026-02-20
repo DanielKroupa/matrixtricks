@@ -188,7 +188,9 @@ export const CommentItem = ({
         <div className="flex items-start justify-between">
           <div>
             <UserInfoBubble userId={comment.userId}>
-              <span className="text-sm font-semibold">{displayName}</span>
+              <span className="cursor-pointer text-sm font-semibold">
+                {displayName}
+              </span>
             </UserInfoBubble>
             {user?.isVipActive && <Badge className="ml-2" />}
             <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
