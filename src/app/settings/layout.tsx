@@ -4,6 +4,11 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Settings | Matrix Tricks",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
 };
 
 export default async function Layout({

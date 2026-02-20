@@ -1,6 +1,16 @@
 import { Navbar } from "../components/pageLayout/Navbar";
 import AdminSidebar from "./AdminSidebar";
 import { Copyright } from "../components/pageLayout/Copyright";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Admin | Matrix Tricks",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
+};
 
 export default async function Layout({
   children,

@@ -155,6 +155,7 @@ export default function NavbarClient({
                 alt="user avatar"
                 width={32}
                 height={32}
+                style={{ height: "auto" }}
                 className="h-8 w-8 rounded-full object-cover"
               />
               <p className="font-medium text-black dark:text-white">
@@ -225,6 +226,7 @@ export default function NavbarClient({
               src="/icons/mail.svg"
               alt="mail"
               width={28}
+              style={{ height: "auto" }}
               height={24}
               className="invert-50 dark:invert-0"
             />
@@ -260,6 +262,7 @@ export default function NavbarClient({
           <Image
             src="/icons/theme-switch.png"
             alt="theme-switch"
+            style={{ height: "auto" }}
             width={24}
             height={24}
             className="object-contain invert-75 dark:invert-0"
@@ -275,6 +278,7 @@ export default function NavbarClient({
             <Image
               src="/icons/sign-in-icon.svg"
               alt="sign-in"
+              style={{ height: "auto" }}
               width={20}
               height={20}
               className="invert-75 dark:invert-0"
@@ -305,6 +309,7 @@ export default function NavbarClient({
                   src={avatarSrc}
                   alt="user avatar"
                   width={36}
+                  style={{ height: "auto" }}
                   height={36}
                   className="h-9 w-9 rounded-full object-cover"
                 />
@@ -384,6 +389,7 @@ export default function NavbarClient({
                     >
                       <Image
                         src="/icons/theme-switch.png"
+                        style={{ height: "auto" }}
                         alt="theme-switch"
                         width={20}
                         height={20}
@@ -397,6 +403,7 @@ export default function NavbarClient({
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
                         width={24}
+                        style={{ height: "auto" }}
                         height={24}
                         className="object-contain"
                       />
@@ -426,6 +433,7 @@ export default function NavbarClient({
                       src="/icons/sign-in-icon.svg"
                       alt="sign-in"
                       width={20}
+                      style={{ height: "auto" }}
                       height={20}
                       className="invert-75 dark:invert-0"
                     />
@@ -444,6 +452,7 @@ export default function NavbarClient({
                         src="/icons/theme-switch.png"
                         alt="theme-switch"
                         width={20}
+                        style={{ height: "auto" }}
                         height={20}
                         className="object-contain invert-75 dark:invert-0"
                       />
@@ -455,6 +464,7 @@ export default function NavbarClient({
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
                         width={24}
+                        style={{ height: "auto" }}
                         height={24}
                         className="object-contain"
                       />

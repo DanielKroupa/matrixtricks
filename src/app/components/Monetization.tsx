@@ -22,19 +22,20 @@ const items = [
 
 export function Monetization() {
   return (
-    <div className="md:mx-auto my-4 lg:w-3xl">
-      <div className="flex items-center overflow-x-auto whitespace-nowrap scroll-smooth md:touch-pan-x w-auto md:overflow-x-hidden justify-between gap-4 rounded-lg dark:bg-neutral-700 bg-neutral-300 border-2 dark:border-none border-neutral-400 md:px-8 px-0 py-1">
+    <div className="my-4 md:mx-auto lg:w-3xl">
+      <div className="flex w-auto items-center justify-between gap-4 overflow-x-auto scroll-smooth rounded-lg border-2 border-neutral-400 bg-neutral-300 px-0 py-1 whitespace-nowrap md:touch-pan-x md:overflow-x-hidden md:px-8 dark:border-none dark:bg-neutral-700">
         {items.map(({ text, src, width, height }) => (
           <Tooltip key={text} text={text} position="top">
             <Link
               href="."
-              className="flex h-fit items-center justify-center rounded-md dark:bg-neutral-500 bg-neutral-400 px-4 py-1.5"
+              className="flex h-fit items-center justify-center rounded-md bg-neutral-400 px-4 py-1.5 dark:bg-neutral-500"
             >
               <Image
                 src={src}
                 alt={text}
                 width={width}
                 height={height}
+                style={{ height: "auto" }}
                 className="md:object-contain"
               />
             </Link>

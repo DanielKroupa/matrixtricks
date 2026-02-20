@@ -9,6 +9,11 @@ import { unauthorized, forbidden } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "New Post | Matrix Tricks",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+  },
 };
 
 export default async function Layout({

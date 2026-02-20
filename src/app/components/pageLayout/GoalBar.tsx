@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function GoalBar() {
   return (
-    <div className="bg-linear-to-r w-full from-yellow-300 to-orange-400 rounded-full px-4 flex justify-between items-center md:py-1 py-3 xl:w-155.25 text-red-900 font-semibold">
+    <div className="flex w-full items-center justify-between rounded-full bg-linear-to-r from-yellow-300 to-orange-400 px-4 py-3 font-semibold text-red-900 md:py-1 xl:w-155.25">
       <div>
         <p className="font-bold">0 CZK</p>
       </div>
@@ -14,6 +14,7 @@ export function GoalBar() {
           className="relative object-contain select-none"
           draggable="false"
           height={130}
+          style={{ height: "auto" }}
         />
       </div>
       <div className="font-bold">500 CZK</div>
