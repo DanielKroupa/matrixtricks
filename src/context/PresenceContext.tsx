@@ -51,6 +51,17 @@ export function PresenceProvider({
     visibilityRef.current = initialVisibilityEnabled;
   }, [initialVisibilityEnabled]);
 
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
+    setPresenceStatuses((prev) => ({
+      ...prev,
+      [userId]: Boolean(visibilityEnabled && isSocketConnected),
+    }));
+  }, [isSocketConnected, userId, visibilityEnabled]);
+
   const requestStatuses = useCallback(async (userIds: string[]) => {
     if (userIds.length === 0) {
       return;

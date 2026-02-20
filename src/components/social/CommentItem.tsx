@@ -173,8 +173,8 @@ export const CommentItem = ({
         )}
         {comment.userId ? (
           <span
-            title={isAuthorOnline ? "Online" : "Offline"}
-            className={`absolute right-0 bottom-0 z-10 flex size-3 rounded-full border-2 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "bg-amber-600"}`}
+            title={isAuthorOnline ? "Online" : ""}
+            className={`absolute right-0 bottom-0 z-10 flex size-4 rounded-full border-4 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"}`}
           />
         ) : null}
       </div>

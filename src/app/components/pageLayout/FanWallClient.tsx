@@ -1,11 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { io, Socket } from "socket.io-client";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 import Badge from "../ui/Badge";
 import { usePresenceStatuses } from "@/context/PresenceContext";
+import { useFanwallActions } from "./fanwall/hooks/useFanwallActions";
+import { useFanwallPagination } from "./fanwall/hooks/useFanwallPagination";
+import { useFanwallSocket } from "./fanwall/hooks/useFanwallSocket";
+import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
+import type {
+  ApiResponse,
+  FanWallClientProps,
+  FanwallError,
+  FanwallMessage,
+  FanwallUser,
+} from "./fanwall/types";
 
 import { BsPinFill } from "react-icons/bs";
 import { BsFillPinAngleFill } from "react-icons/bs";
@@ -13,49 +23,6 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoTrash } from "react-icons/io5";
 import { FaPen } from "react-icons/fa6";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
-
-type FanwallUser = {
-  id: string;
-  name: string | null;
-  username: string | null;
-  image: string | null;
-  role: string | null;
-  isVipActive?: boolean;
-};
-
-type FanwallMessage = {
-  id: string;
-  body: string;
-  title: string | null;
-  nickname: string | null;
-  contact: string | null;
-  isPinned: boolean;
-  createdAt: string;
-  updatedAt: string;
-  userId: string | null;
-  user: FanwallUser | null;
-};
-
-type FanWallClientProps = {
-  initialMessages: FanwallMessage[];
-  sessionUser: FanwallUser | null;
-  isAdmin: boolean;
-};
-
-type FanwallError = string | null;
-
-const DEFAULT_AVATAR = "/uploads/avatars/alien.png";
-const PAGE_SIZE = 20;
-
-function getAuthorName(message: FanwallMessage) {
-  return (
-    message.user?.name || message.user?.username || message.nickname || "Guest"
-  );
-}
-
-function getAvatarSrc(message: FanwallMessage) {
-  return message.user?.image || DEFAULT_AVATAR;
-}
 
 function formatTime(iso: string) {
   const date = new Date(iso);
@@ -150,14 +117,16 @@ function PinnedMessageCard({
             width={65}
             height={65}
           />
-          {message.userId ? (
+
+          {message.userId || isAuthorOnline ? (
             <span
-              title={isAuthorOnline ? "Online" : "Offline"}
-              className={`absolute right-0 bottom-0 z-10 flex size-3 rounded-full border-2 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "bg-amber-600"}`}
+              title={isAuthorOnline ? "Online" : ""}
+              className={`absolute right-0 bottom-0 z-10 flex size-4 rounded-full border-4 border-neutral-300 shadow-md dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"} `}
             />
           ) : null}
           {message.user?.isVipActive && <Badge className="-mt-2 ml-8" />}
         </div>
+
         <div className="flex flex-col space-y-1">
           {message.title && <h5 className="font-medium">{message.title}</h5>}
           <p className="flex items-center gap-2">
@@ -179,7 +148,7 @@ function PinnedMessageCard({
           {isAdmin && (
             <>
               <button
-                className="fanwall-menu-button absolute top-2 right-2 rounded-full bg-neutral-300 p-1 opacity-100 transition-opacity hover:bg-neutral-400 md:opacity-0 md:group-hover:opacity-100 dark:bg-neutral-500 dark:hover:bg-neutral-400"
+                className="fanwall-menu-button absolute top-2 right-2 cursor-pointer rounded-full bg-neutral-300 p-1 opacity-100 transition-opacity hover:bg-neutral-400 md:opacity-0 md:group-hover:opacity-100 dark:bg-neutral-500 dark:hover:bg-neutral-400"
                 onClick={onToggleMenu}
               >
                 <BsThreeDotsVertical />
@@ -255,15 +224,15 @@ function FanwallMessageItem({
         <Image
           src={avatarSrc}
           alt="profile-avatar"
-          className="h-16 w-16 rounded-full object-cover md:h-20 md:w-20"
+          className="h-16 w-16 rounded-full object-cover"
           width={65}
           loading="lazy"
           height={65}
         />
         {message.userId ? (
           <span
-            title={isAuthorOnline ? "Online" : "Offline"}
-            className={`absolute right-0 bottom-0 z-10 flex size-3 rounded-full border-2 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "bg-amber-600"}`}
+            title={isAuthorOnline ? "Online" : ""}
+            className={`absolute right-0 bottom-0 z-10 flex size-4 rounded-full border-4 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"}`}
           />
         ) : null}
       </div>
@@ -294,7 +263,7 @@ function FanwallMessageItem({
               <div className="flex gap-2">
                 <button
                   type="button"
-                  className="text-dark cursor-pointer rounded-md bg-neutral-600 px-2 py-1 text-sm dark:text-white"
+                  className="text-dark cursor-pointer rounded-md bg-cyan-600 px-2 py-1 text-sm text-white"
                   onClick={() => onSaveEdit(message)}
                   disabled={loading}
                 >
@@ -475,15 +444,52 @@ export default function FanWallClient({
   isAdmin,
 }: FanWallClientProps) {
   const [messages, setMessages] = useState<FanwallMessage[]>(initialMessages);
-  const [nickname, setNickname] = useState("");
-  const [contact, setContact] = useState("");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [error, setError] = useState<FanwallError>(null);
-  const [loading, setLoading] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingBody, setEditingBody] = useState("");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  const refreshMessages = useCallback(async () => {
+    try {
+      const response = await fetch("/api/fanwall/messages?limit=50", {
+        cache: "no-store",
+      });
+      const data = (await response.json()) as ApiResponse<FanwallMessage>;
+
+      if (response.ok) {
+        setMessages(data.messages ?? []);
+      }
+    } catch {
+      // ignore background refresh failures
+    }
+  }, []);
+
+  useFanwallSocket({ refreshMessages, setMessages });
+
+  const {
+    nickname,
+    contact,
+    title,
+    body,
+    error,
+    loading,
+    editingId,
+    editingBody,
+    setNickname,
+    setContact,
+    setTitle,
+    setBody,
+    setEditingBody,
+    submitMessage,
+    startEditing,
+    stopEditing,
+    saveEdit,
+    deleteMessage,
+    togglePin,
+  } = useFanwallActions({
+    sessionUser,
+    isAdmin,
+    refreshMessages,
+    setMessages,
+  });
+
   const messageAuthorIds = useMemo(
     () =>
       messages
@@ -507,144 +513,11 @@ export default function FanWallClient({
       );
   }, [messages]);
 
-  // Scrolling / pagination state
-  const [isAtBottom, setIsAtBottom] = useState(true);
-  const [loadingOlder, setLoadingOlder] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const socketUrl =
-      process.env.NEXT_PUBLIC_FANWALL_SOCKET_URL || "http://localhost:3001";
-
-    const socket: Socket = io(socketUrl, {
-      transports: ["websocket"],
-    });
-
-    socket.on("fanwall:created", (message: FanwallMessage) => {
-      setMessages((prev) => {
-        const exists = prev.some((item) => item.id === message.id);
-        if (exists) return prev;
-        return [...prev, message];
-      });
-    });
-
-    socket.on("fanwall:updated", (message: FanwallMessage) => {
-      setMessages((prev) =>
-        prev.map((item) => (item.id === message.id ? message : item)),
-      );
-    });
-
-    socket.on("fanwall:deleted", ({ id }: { id: string }) => {
-      setMessages((prev) => prev.filter((item) => item.id !== id));
-    });
-
-    socket.on("fanwall:refresh", () => void refreshMessages());
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  // Scroll helpers
-  const scrollToBottom = useCallback(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    el.scrollTop = el.scrollHeight;
-  }, []);
-
-  // On mount, ensure we scroll to bottom
-  useEffect(() => {
-    scrollToBottom();
-  }, [scrollToBottom]);
-
-  // When new messages arrive, if user is at bottom, keep at bottom
-  const prevMessagesLen = useRef(messages.length);
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const prev = prevMessagesLen.current;
-    if (messages.length > prev && isAtBottom) {
-      // Wait for DOM update
-      requestAnimationFrame(() => scrollToBottom());
-    }
-    prevMessagesLen.current = messages.length;
-  }, [messages.length, isAtBottom, scrollToBottom]);
-
-  // Load older messages (pagination) using 'before' cursor
-  async function loadOlder() {
-    if (loadingOlder || !hasMore) return;
-    const el = containerRef.current;
-    if (!el) return;
-    setLoadingOlder(true);
-
-    // Find oldest non-pinned message timestamp
-    const nonPinned = otherMessages;
-    if (nonPinned.length === 0) {
-      setHasMore(false);
-      setLoadingOlder(false);
-      return;
-    }
-
-    const oldest = nonPinned[0];
-    const before = new Date(oldest.createdAt).toISOString();
-
-    try {
-      const prevScrollHeight = el.scrollHeight;
-      const res = await fetch(
-        `/api/fanwall/messages?before=${encodeURIComponent(
-          before,
-        )}&limit=${PAGE_SIZE}`,
-        { cache: "no-store" },
-      );
-      const data = await res.json();
-      if (!res.ok) {
-        setLoadingOlder(false);
-        return;
-      }
-
-      const fetched: FanwallMessage[] = data.messages ?? [];
-
-      // Filter out pinned and duplicates
-      const toPrepend = fetched.filter(
-        (m) => !m.isPinned && !messages.some((ex) => ex.id === m.id),
-      );
-
-      if (toPrepend.length === 0) {
-        setHasMore(false);
-        setLoadingOlder(false);
-        return;
-      }
-
-      setMessages((prev) => {
-        const combined = [...toPrepend, ...prev];
-        return combined;
-      });
-
-      // restore scroll position so view doesn't jump
-      requestAnimationFrame(() => {
-        const nowHeight = el.scrollHeight;
-        el.scrollTop = nowHeight - prevScrollHeight;
-      });
-
-      if (fetched.length < PAGE_SIZE) setHasMore(false);
-    } catch (err) {
-      // ignore
-    } finally {
-      setLoadingOlder(false);
-    }
-  }
-
-  // Scroll event handler
-  function onScroll(e: React.UIEvent<HTMLDivElement>) {
-    const el = e.currentTarget;
-    const nearTop = el.scrollTop < 120;
-    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 60;
-
-    setIsAtBottom(nearBottom);
-    if (nearTop) loadOlder();
-  }
+  const { containerRef, loadingOlder, onScroll } = useFanwallPagination({
+    messages,
+    otherMessages,
+    setMessages,
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -662,200 +535,6 @@ export default function FanWallClient({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  async function refreshMessages() {
-    try {
-      const response = await fetch("/api/fanwall/messages?limit=50", {
-        cache: "no-store",
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessages(data.messages ?? []);
-      }
-    } catch {
-      // ignore background refresh failures
-    }
-  }
-
-  async function submitMessage(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-
-    const trimmedBody = body.trim();
-    const trimmedTitle = title.trim();
-    const trimmedNickname = nickname.trim();
-    const trimmedContact = contact.trim();
-
-    if (!sessionUser && (!trimmedNickname || !trimmedContact)) {
-      setError("Nickname and contact are required for anonymous posts.");
-      return;
-    }
-
-    if (!trimmedBody) {
-      setError("Message is required.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/fanwall/messages", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          body: trimmedBody,
-          title: isAdmin ? trimmedTitle : undefined,
-          nickname: sessionUser ? undefined : trimmedNickname,
-          contact: sessionUser ? undefined : trimmedContact,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        const message =
-          typeof data.error === "string"
-            ? data.error
-            : "Failed to post message.";
-        setError(message);
-        return;
-      }
-
-      setBody("");
-      setTitle("");
-      if (!sessionUser) {
-        setNickname("");
-        setContact("");
-      }
-
-      if (data.message) {
-        setMessages((prev) => {
-          const exists = prev.some((item) => item.id === data.message.id);
-          if (exists) return prev;
-          return [...prev, data.message];
-        });
-      }
-    } catch {
-      setError("Failed to post message.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function startEditing(message: FanwallMessage) {
-    setEditingId(message.id);
-    setEditingBody(message.body);
-  }
-
-  function stopEditing() {
-    setEditingId(null);
-    setEditingBody("");
-  }
-
-  async function saveEdit(message: FanwallMessage) {
-    const trimmedBody = editingBody.trim();
-
-    if (!trimmedBody) {
-      setError("Message is required.");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`/api/fanwall/messages/${message.id}`, {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ body: trimmedBody }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        const message =
-          typeof data.error === "string"
-            ? data.error
-            : "Failed to update message.";
-        setError(message);
-        return;
-      }
-
-      if (data.message) {
-        setMessages((prev) =>
-          prev.map((item) => (item.id === message.id ? data.message : item)),
-        );
-      }
-
-      stopEditing();
-    } catch {
-      setError("Failed to update message.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function deleteMessage(message: FanwallMessage) {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`/api/fanwall/messages/${message.id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        const message =
-          typeof data.error === "string"
-            ? data.error
-            : "Failed to delete message.";
-        setError(message);
-        return;
-      }
-
-      setMessages((prev) => prev.filter((item) => item.id !== message.id));
-    } catch {
-      setError("Failed to delete message.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function togglePin(message: FanwallMessage) {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`/api/fanwall/messages/${message.id}`, {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ isPinned: !message.isPinned }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        const message =
-          typeof data.error === "string" ? data.error : "Failed to update pin.";
-        setError(message);
-        return;
-      }
-
-      if (data.message) {
-        setMessages((prev) =>
-          prev.map((item) => (item.id === message.id ? data.message : item)),
-        );
-      }
-
-      await refreshMessages();
-    } catch {
-      setError("Failed to update pin.");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const sessionDisplayName =
     sessionUser?.name || sessionUser?.username || "Username";
