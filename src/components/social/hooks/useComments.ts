@@ -18,6 +18,7 @@ export const useComments = (
   const [comments, setComments] = useState<CommentViewModel[]>(initialComments);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const sessionUser = session?.user ?? session?.data?.user ?? null;
 
   const addComment = async (
     postId: string,
@@ -35,7 +36,15 @@ export const useComments = (
       if (result.comment) {
         const newComment = {
           ...result.comment,
-          user: session?.user || null,
+          user: sessionUser
+            ? {
+                id: sessionUser.id,
+                name: sessionUser.name ?? null,
+                image: sessionUser.image ?? null,
+                username: sessionUser.username ?? null,
+                role: sessionUser.role ?? null,
+              }
+            : null,
           likes: [],
           _count: { likes: 0 },
         };
@@ -76,7 +85,6 @@ export const useComments = (
   };
 
   const toggleLike = async (commentId: string) => {
-    const sessionUser = session?.user ?? session?.data?.user;
     const currentUserId = sessionUser?.id;
     if (!currentUserId) {
       setError("You must be signed in to like comments");

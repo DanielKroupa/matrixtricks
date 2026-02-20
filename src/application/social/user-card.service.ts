@@ -29,7 +29,8 @@ export const userCardService = {
 
     return {
       ...data,
-      registeredAt: safeDateToIso(data.registeredAt) ?? new Date().toISOString(),
+      registeredAt:
+        safeDateToIso(data.registeredAt) ?? new Date().toISOString(),
       lastCommentAt: safeDateToIso(data.lastCommentAt),
     };
   },
