@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IconType } from "react-icons";
 import { MdAdminPanelSettings, MdDataset } from "react-icons/md";
-import { IoMdSettings } from "react-icons/io";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
+import { RiMoneyDollarCircleFill, RiUserSettingsFill } from "react-icons/ri";
 import { IoBrush } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 
@@ -20,8 +19,8 @@ const menuItems: MenuItem[] = [
   {
     id: "profile",
     href: "/admin",
-    label: "User profile settings",
-    Icon: IoMdSettings,
+    label: "Profile settings",
+    Icon: RiUserSettingsFill,
   },
   {
     id: "posts",
@@ -51,7 +50,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-175 w-16 space-y-1.5 rounded-bl-md bg-neutral-200 p-1.5 md:w-1/6 dark:bg-neutral-700">
+    <div className="min-h-175 w-16 space-y-1.5 rounded-bl-md bg-neutral-200 p-1.5 md:w-1/4 lg:w-1/6 dark:bg-neutral-700">
       {menuItems.slice(0, 6).map((item) => {
         const isActive =
           item.href === "/admin"

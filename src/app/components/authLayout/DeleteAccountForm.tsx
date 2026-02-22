@@ -164,7 +164,7 @@ export default function DeleteAccountForm({
                     type="password"
                     value={currentPassword}
                     onChange={(event) => setCurrentPassword(event.target.value)}
-                    autoComplete="current-password"
+                    autoComplete="off"
                     className="w-full rounded bg-neutral-300 px-2 py-2 ring-neutral-400 outline-none focus:ring-2 dark:bg-neutral-700 dark:ring-neutral-600"
                     disabled={loading}
                   />
