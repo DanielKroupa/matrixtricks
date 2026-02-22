@@ -22,7 +22,7 @@ export function useFanwallSocket({
       process.env.NEXT_PUBLIC_FANWALL_SOCKET_URL || "http://localhost:3001";
 
     const socket: Socket = io(socketUrl, {
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
 
     socket.on("fanwall:created", (message: FanwallMessage) => {

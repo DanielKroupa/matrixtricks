@@ -1,6 +1,7 @@
 import cron from "node-cron";
 import prisma from "./prisma";
 import { accountDeletionService } from "@/application/account/account-deletion.service";
+import { chatService } from "@/application/chat/chat.service";
 
 export function startScheduler() {
   // Run every hour
@@ -28,6 +29,14 @@ export function startScheduler() {
         await accountDeletionService.deleteExpiredAccounts();
       if (deletedUsersCount > 0) {
         console.log(`Deleted ${deletedUsersCount} expired pending account(s)`);
+      }
+
+      const deletedChatMessagesCount =
+        await chatService.cleanupExpiredMessages();
+      if (deletedChatMessagesCount > 0) {
+        console.log(
+          `Deleted ${deletedChatMessagesCount} expired chat message(s)`,
+        );
       }
     } catch (error) {
       console.error("Error in scheduler:", error);

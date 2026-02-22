@@ -8,6 +8,7 @@ import { LoginModal } from "./components/authLayout/LoginModal";
 import { ThemeProvider } from "next-themes";
 import DevBreakpointBadgeClient from "./components/ui/DevBreakpointBadgeClient";
 import { getServerSession } from "@/lib/get-session";
+import UserChatWidget from "./components/chat/UserChatWidget";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -82,6 +83,7 @@ export default async function RootLayout({
           >
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
+              <UserChatWidget userId={userId} userRole={session?.user?.role} />
             </ThemeProvider>
           </PresenceProvider>
           <DevBreakpointBadgeClient />

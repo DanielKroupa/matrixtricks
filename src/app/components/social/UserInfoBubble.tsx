@@ -2,6 +2,7 @@
 
 import { User as UserIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   type ReactNode,
   useCallback,
@@ -11,7 +12,6 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Tooltip } from "@/app/components/ui/Tooltip";
 import {
   BlockUserDialog,
   type BlockScopes,
@@ -110,6 +110,7 @@ export function UserInfoBubble({
   userId?: string | null;
   children: ReactNode;
 }) {
+  const router = useRouter();
   const triggerRef = useRef<HTMLSpanElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -522,6 +523,17 @@ export function UserInfoBubble({
     }
   };
 
+  const handleOpenChat = () => {
+    if (data?.viewerIsAdmin && !data.isSelf) {
+      router.push(`/admin/chat?userId=${encodeURIComponent(data.id)}`);
+      setIsOpen(false);
+      return;
+    }
+
+    window.dispatchEvent(new Event("matrix:open-chat-widget"));
+    setIsOpen(false);
+  };
+
   if (!userId) {
     return <>{children}</>;
   }
@@ -609,23 +621,21 @@ export function UserInfoBubble({
                 </div>
 
                 <div className="flex items-center justify-center gap-2 border-t border-neutral-300 pt-3 dark:border-neutral-600">
-                  <Tooltip text="Coming Soon" position="top">
-                    <button
-                      type="button"
-                      disabled
-                      className="flex w-full cursor-not-allowed gap-2 rounded-md border border-neutral-400 px-3 py-2 text-xs font-medium text-neutral-500 opacity-80 dark:border-neutral-500 dark:text-neutral-300"
-                    >
-                      <Image
-                        src="/icons/mail.svg"
-                        alt="mail"
-                        width={24}
-                        style={{ height: "auto" }}
-                        height={20}
-                        className="invert-50 dark:invert-0"
-                      />
-                      Message
-                    </button>
-                  </Tooltip>
+                  <button
+                    type="button"
+                    onClick={handleOpenChat}
+                    className="flex w-fit cursor-pointer gap-2 rounded-md border border-neutral-400 px-3 py-2 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-300 dark:border-neutral-500 dark:text-neutral-100 dark:hover:bg-neutral-600"
+                  >
+                    <Image
+                      src="/icons/mail.svg"
+                      alt="mail"
+                      width={24}
+                      style={{ height: "auto" }}
+                      height={20}
+                      className="invert-50 dark:invert-0"
+                    />
+                    Message
+                  </button>
 
                   {data.viewerIsAdmin && !data.isSelf ? (
                     data.isBlocked ? (

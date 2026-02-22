@@ -96,6 +96,15 @@ export default function NavbarClient({
 
   const router = useRouter();
 
+  const openChatWidget = () => {
+    if (user?.role === "admin") {
+      router.push("/admin/chat");
+      return;
+    }
+
+    window.dispatchEvent(new Event("matrix:open-chat-widget"));
+  };
+
   const handleSignOut = async () => {
     setSigningOut(true);
     try {
@@ -223,7 +232,11 @@ export default function NavbarClient({
         )}
 
         {isLoggedIn && (
-          <button className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white">
+          <button
+            type="button"
+            onClick={openChatWidget}
+            className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
+          >
             <Image
               src="/icons/mail.svg"
               alt="mail"

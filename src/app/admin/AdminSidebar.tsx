@@ -7,6 +7,7 @@ import { MdAdminPanelSettings, MdDataset } from "react-icons/md";
 import { RiMoneyDollarCircleFill, RiUserSettingsFill } from "react-icons/ri";
 import { IoBrush } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
+import { BsChatSquareTextFill } from "react-icons/bs";
 
 type MenuItem = {
   id: string;
@@ -34,6 +35,12 @@ const menuItems: MenuItem[] = [
     label: "Moderation",
     Icon: MdAdminPanelSettings,
   },
+  {
+    id: "chat",
+    href: "/admin/chat",
+    label: "Chat inbox",
+    Icon: BsChatSquareTextFill,
+  },
 
   { id: "rubrics", href: "/admin/rubrics", label: "Rubrics", Icon: MdDataset },
   {
@@ -51,7 +58,7 @@ export default function AdminSidebar() {
 
   return (
     <div className="min-h-175 w-16 space-y-1.5 rounded-bl-md bg-neutral-200 p-1.5 md:w-1/4 lg:w-1/6 dark:bg-neutral-700">
-      {menuItems.slice(0, 6).map((item) => {
+      {menuItems.slice(0, 7).map((item) => {
         const isActive =
           item.href === "/admin"
             ? pathname === "/admin"
@@ -70,10 +77,10 @@ export default function AdminSidebar() {
       })}
       <hr className="m-2 rounded-full border-2 text-neutral-300 md:m-4 dark:text-neutral-600" />
       <Link
-        href={menuItems[6].href}
+        href={menuItems[7].href}
         className={
           "flex cursor-pointer items-center justify-center gap-2 rounded bg-neutral-300 px-3 py-2.5 font-medium transition md:justify-start " +
-          (pathname?.startsWith(menuItems[6].href)
+          (pathname?.startsWith(menuItems[7].href)
             ? "bg-cyan-800 text-white dark:bg-cyan-900"
             : " bg-cyan-800 text-neutral-800 hover:bg-neutral-400 dark:bg-neutral-600 dark:text-white/90")
         }
@@ -81,7 +88,7 @@ export default function AdminSidebar() {
         <FaShoppingCart size={20} />
         <label htmlFor="" className="hidden cursor-pointer md:block">
           {" "}
-          {menuItems[6].label}
+          {menuItems[7].label}
         </label>
       </Link>
     </div>

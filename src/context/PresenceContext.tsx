@@ -106,7 +106,7 @@ export function PresenceProvider({
       process.env.NEXT_PUBLIC_FANWALL_SOCKET_URL || "http://localhost:3001";
 
     const socket = io(socketUrl, {
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
 
     socketRef.current = socket;

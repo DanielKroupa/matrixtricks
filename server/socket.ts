@@ -13,6 +13,14 @@ type PresenceSocketState = {
 const presenceSockets = new Map<string, PresenceSocketState>();
 const lastComputedOnline = new Map<string, boolean>();
 
+function isAllowedBroadcastEvent(eventName: string) {
+  return (
+    eventName.startsWith("fanwall:") ||
+    eventName.startsWith("chat:") ||
+    eventName.startsWith("presence:")
+  );
+}
+
 const server = http.createServer();
 
 const io = new Server(server, {
@@ -58,6 +66,12 @@ server.on("request", (req, res) => {
       }
 
       if (payload.event) {
+        if (!isAllowedBroadcastEvent(payload.event)) {
+          res.writeHead(400, { "content-type": "text/plain" });
+          res.end("unsupported event");
+          return;
+        }
+
         io.emit(payload.event, payload.payload ?? null);
       }
 

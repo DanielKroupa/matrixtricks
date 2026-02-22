@@ -590,7 +590,7 @@ export default function FanWallClient({
 
   return (
     <div className="mx-auto my-3 w-full px-1 md:block md:px-0">
-      <p className="rounded-t-lg bg-cyan-700 py-2 text-center text-lg text-white md:px-4">
+      <p className="rounded-t-lg bg-linear-to-r from-cyan-700 via-cyan-600/85 to-cyan-700 py-2 text-center text-lg text-white md:px-4">
         FanWall
       </p>
 

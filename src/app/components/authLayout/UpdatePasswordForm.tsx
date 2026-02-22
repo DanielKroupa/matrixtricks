@@ -101,7 +101,7 @@ export default function UpdatePasswordForm({
       {/* Input change password */}
       <div className="flex w-full gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-fit dark:border-neutral-700">
         <div className="w-full">
-          <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-700">
+          <h3 className="p-1y bg-neutral-300 text-center text-lg dark:bg-neutral-700">
             Change sign in password:
           </h3>
 
