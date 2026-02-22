@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { io, type Socket } from "socket.io-client";
-import { MessageCircle, X } from "lucide-react";
+import { X } from "lucide-react";
 
 type ChatMessage = {
   id: string;
@@ -206,7 +206,7 @@ export default function UserChatWidget({
         <div className="flex h-115 w-85 flex-col rounded-xl border-2 border-neutral-300 bg-neutral-100 shadow-xl dark:border-neutral-600 dark:bg-neutral-800">
           <div className="flex items-center justify-between border-b border-neutral-300 px-4 py-3 dark:border-neutral-600">
             <div>
-              <p className="text-sm font-semibold">Admin chat</p>
+              <p className="text-sm font-semibold">Admin</p>
               <p className="text-xs text-neutral-500 dark:text-neutral-300">
                 {statusLabel}
               </p>
@@ -232,7 +232,7 @@ export default function UserChatWidget({
                 return (
                   <div
                     key={message.id}
-                    className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${mine ? "ml-auto bg-cyan-700 text-white" : "mr-auto bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"}`}
+                    className={`w-fit max-w-[85%] rounded-lg px-3 py-2 text-sm ${mine ? "ml-auto bg-cyan-700 text-white" : "mr-auto bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"}`}
                   >
                     <p>{message.body}</p>
                     <p
@@ -274,20 +274,6 @@ export default function UserChatWidget({
           </div>
         </div>
       )}
-
-      <button
-        type="button"
-        onClick={toggleOpen}
-        className="relative flex cursor-pointer items-center gap-2 rounded-full border-2 border-neutral-300 bg-cyan-800 px-4 py-3 text-white shadow-lg hover:bg-cyan-700 dark:border-neutral-600 dark:bg-cyan-900"
-      >
-        <MessageCircle size={18} />
-        <span className="text-sm font-medium">Chat</span>
-        {unreadCount > 0 && (
-          <span className="absolute -top-2 -right-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-red-600 px-1 text-xs font-semibold">
-            {unreadCount > 9 ? "9+" : unreadCount}
-          </span>
-        )}
-      </button>
     </div>
   );
 }

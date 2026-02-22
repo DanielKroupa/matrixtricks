@@ -235,6 +235,7 @@ export default function NavbarClient({
           <button
             type="button"
             onClick={openChatWidget}
+            title="Support"
             className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
             <Image
@@ -248,7 +249,10 @@ export default function NavbarClient({
           </button>
         )}
 
-        <button className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white">
+        <button
+          title="Language switch"
+          className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
+        >
           <Image
             src="/icons/lang-cs.png"
             alt="lang-switch"
@@ -260,13 +264,13 @@ export default function NavbarClient({
         </button>
 
         {user?.role === "admin" && (
-          <Link
-            href="/new-post"
+          <button
+            onClick={() => router.push("/new-post")}
             className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
             <PlusIcon size={20} />
             New post
-          </Link>
+          </button>
         )}
 
         <button
@@ -380,8 +384,8 @@ export default function NavbarClient({
                   )}
 
                   {user?.role === "admin" && (
-                    <Link
-                      href="/new-post"
+                    <button
+                      onClick={() => router.push("/new-post")}
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
                     >
                       <PlusIcon
@@ -389,10 +393,30 @@ export default function NavbarClient({
                         className="text-neutral-600 dark:text-neutral-300"
                       />
                       New post
-                    </Link>
+                    </button>
+                  )}
+
+                  {isLoggedIn && (
+                    <button
+                      type="button"
+                      onClick={openChatWidget}
+                      title="Support"
+                      className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
+                    >
+                      <Image
+                        src="/icons/mail.svg"
+                        alt="mail"
+                        width={20}
+                        height={16}
+                        style={{ height: "auto" }}
+                        className="size-5 invert-50 dark:invert-0"
+                      />
+                      Message support
+                    </button>
                   )}
 
                   <hr className="my-2 rounded-full border text-neutral-400 dark:text-neutral-600" />
+
                   <div className="flex gap-8">
                     <button
                       type="button"
@@ -411,10 +435,10 @@ export default function NavbarClient({
                         height={20}
                         className="object-contain invert-75 dark:invert-0"
                       />
-                      Switch Theme
+                      Theme
                     </button>
 
-                    <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80">
+                    <button className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80">
                       <Image
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
