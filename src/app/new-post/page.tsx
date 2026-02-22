@@ -293,7 +293,7 @@ export default function NewPostPage() {
                 aria-checked={vipOnly}
               />
 
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-gray-400 bg-neutral-300 transition-colors peer-checked:border-cyan-700 peer-checked:bg-cyan-700 dark:border-gray-600 dark:bg-neutral-800">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-gray-400 bg-neutral-300 transition-colors peer-checked:border-cyan-600 peer-checked:bg-cyan-700 dark:border-gray-600 dark:bg-neutral-800">
                 {vipOnly && <FaCheck size={14} className="text-white" />}
               </span>
 

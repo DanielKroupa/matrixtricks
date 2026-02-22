@@ -13,7 +13,7 @@ export function TextPost({ title, body, className }: TextPostProps) {
     <div
       className={cn(
         "dark:bg-neutral-700 rounded-md bg-neutral-300 py-2 px-4",
-        className
+        className,
       )}
     >
       <h3 className="text-xl py-4 px-2">{title}</h3>
