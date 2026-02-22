@@ -99,10 +99,7 @@ export default function UpdatePasswordForm({
   }
 
   return (
-    <form
-      className="ml-0 w-full self-end md:ml-10"
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form className="" onSubmit={handleSubmit(onSubmit)}>
       {/* Input change password */}
       <div className="flex w-full gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-fit dark:border-neutral-600">
         <div className="w-full">

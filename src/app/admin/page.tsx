@@ -40,7 +40,7 @@ export default async function Page() {
           initialOnlineVisibilityEnabled={onlineVisibility.enabled}
         />
       </div>
-      <div className="">
+      <div className="ml-0 w-full self-end md:ml-10">
         <UpdatePasswordForm canChangePassword={canChangePassword} />
       </div>
     </div>
