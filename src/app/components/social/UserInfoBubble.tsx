@@ -650,12 +650,13 @@ export function UserInfoBubble({
                   ) : null}
                 </div>
 
-                {data.isBlocked ? (
-                  <p className="text-[11px] text-red-600 dark:text-red-300">
+                {data.viewerIsAdmin && data.isBlocked ? (
+                  <p className="text-center text-[11px] text-red-600 dark:text-red-300">
                     Blocked{" "}
                     {data.blockedUntil
                       ? `until ${formatDateTime(data.blockedUntil)}`
                       : "permanently"}
+                    {/* {data.blockedReason ? ` — ${data.blockedReason}` : null} */}
                   </p>
                 ) : null}
               </div>
