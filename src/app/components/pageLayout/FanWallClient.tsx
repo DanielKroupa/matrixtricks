@@ -456,9 +456,7 @@ function FanwallForm({
 
       {(error || writeBlockMessage || isWriteCheckLoading) && (
         <p className="mt-2 text-sm text-red-500" role="alert">
-          {isWriteCheckLoading
-            ? "Checking write access..."
-            : (writeBlockMessage ?? error)}
+          {isWriteCheckLoading && (writeBlockMessage ?? error)}
         </p>
       )}
 

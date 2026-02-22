@@ -18,7 +18,7 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen text-black dark:bg-neutral-800 dark:text-white">
+    <div className="min-h-screen text-black dark:text-white">
       <Navbar />
       <div className="mx-auto my-3 w-full px-1 md:block md:px-0">
         <h2 className="bg-cyan-800 py-2 text-center text-lg font-medium text-white dark:bg-cyan-900">

@@ -74,9 +74,9 @@ export default function UpdatePasswordForm({
   if (!canChangePassword) {
     return (
       <section className="ml-0 w-full self-end md:ml-10">
-        <div className="flex w-fit gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-600">
+        <div className="flex w-fit gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-700">
           <div className="w-full">
-            <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-600">
+            <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-700">
               Change sign in password:
             </h3>
             <div className="space-y-3 p-4 px-6">
@@ -99,9 +99,9 @@ export default function UpdatePasswordForm({
   return (
     <form className="" onSubmit={handleSubmit(onSubmit)}>
       {/* Input change password */}
-      <div className="flex w-full gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-fit dark:border-neutral-600">
+      <div className="flex w-full gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-fit dark:border-neutral-700">
         <div className="w-full">
-          <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-600">
+          <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-700">
             Change sign in password:
           </h3>
 

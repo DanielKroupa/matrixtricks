@@ -205,9 +205,7 @@ export const CommentSection = ({
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           {(error || writeBlockMessage || isWriteCheckLoading) && (
             <p className="text-sm text-red-500">
-              {isWriteCheckLoading
-                ? "Checking write access..."
-                : (writeBlockMessage ?? error)}
+              {isWriteCheckLoading && (writeBlockMessage ?? error)}
             </p>
           )}
 

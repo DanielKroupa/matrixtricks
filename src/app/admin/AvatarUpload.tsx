@@ -171,7 +171,7 @@ export default function AvatarUpload({
   const previewSource = localPreview ?? userImage ?? null;
 
   return (
-    <div className="my-6 flex flex-col items-center justify-center gap-2 md:flex-row md:justify-start">
+    <div className="my-6 flex flex-col items-center justify-center gap-2 rounded-md border-2 border-neutral-300 p-4 md:flex-row md:justify-start dark:border-neutral-700">
       <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-neutral-300 dark:bg-neutral-700">
         {previewSource ? (
           <Image
