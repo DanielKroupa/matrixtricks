@@ -5,9 +5,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 import Badge from "../ui/Badge";
 import { usePresenceStatuses } from "@/context/PresenceContext";
-import { useFanwallActions } from "./fanwall/hooks/useFanwallActions";
-import { useFanwallPagination } from "./fanwall/hooks/useFanwallPagination";
-import { useFanwallSocket } from "./fanwall/hooks/useFanwallSocket";
+import { useFanwallActions } from "../../hooks/useFanwallActions";
+import { useFanwallPagination } from "../../hooks/useFanwallPagination";
+import { useFanwallSocket } from "../../hooks/useFanwallSocket";
 import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
 import { UserInfoBubble } from "@/app/components/social/UserInfoBubble";
 import type {

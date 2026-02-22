@@ -767,10 +767,6 @@ export type UserWriteBlockUncheckedUpdateManyWithoutRevokedByUserNestedInput = {
   deleteMany?: Prisma.UserWriteBlockScalarWhereInput | Prisma.UserWriteBlockScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type UserWriteBlockCreateNestedOneWithoutAuditEventsInput = {
   create?: Prisma.XOR<Prisma.UserWriteBlockCreateWithoutAuditEventsInput, Prisma.UserWriteBlockUncheckedCreateWithoutAuditEventsInput>
   connectOrCreate?: Prisma.UserWriteBlockCreateOrConnectWithoutAuditEventsInput

@@ -1,5 +1,6 @@
 import cron from "node-cron";
 import prisma from "./prisma";
+import { accountDeletionService } from "@/application/account/account-deletion.service";
 
 export function startScheduler() {
   // Run every hour
@@ -22,6 +23,12 @@ export function startScheduler() {
         });
         console.log(`Published post: ${post.title}`);
       }
+
+      const deletedUsersCount =
+        await accountDeletionService.deleteExpiredAccounts();
+      if (deletedUsersCount > 0) {
+        console.log(`Deleted ${deletedUsersCount} expired pending account(s)`);
+      }
     } catch (error) {
       console.error("Error in scheduler:", error);
     }
@@ -29,3 +36,5 @@ export function startScheduler() {
 
   console.log("Scheduler started");
 }
+
+startScheduler();

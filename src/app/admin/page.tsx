@@ -5,7 +5,7 @@ import { getCurrentUserOnlineVisibility } from "@/app/helpers/online-visibility"
 import { canUserChangePassword } from "@/app/helpers/auth-capabilities";
 import { getServerSession } from "@/lib/get-session";
 import { ProfileDetailsForm } from "../components/adminPage/profile-details-form";
-import UpdatePasswordForm from "../components/adminPage/update-password-form";
+import UpdatePasswordForm from "../components/authLayout/UpdatePasswordForm";
 
 export const metadata: Metadata = {
   title: "Admin settings | Matrix Tricks",

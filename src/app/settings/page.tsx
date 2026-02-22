@@ -4,9 +4,11 @@ import { vipPriceService } from "@/application/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
 import { getCurrentUserOnlineVisibility } from "@/app/helpers/online-visibility";
 import { OnlineVisibilityToggle } from "@/app/components/social/OnlineVisibilityToggle";
+import { canUserChangePassword } from "@/app/helpers/auth-capabilities";
 
 import { unauthorized } from "next/navigation";
-import UpdatePasswordForm from "../components/adminPage/update-password-form";
+import UpdatePasswordForm from "../components/authLayout/UpdatePasswordForm";
+import DeleteAccountForm from "../components/authLayout/DeleteAccountForm";
 
 export default async function Page() {
   const session = await getServerSession();
@@ -14,6 +16,9 @@ export default async function Page() {
   const vipStatus = await entitlementService.getUserVipStatus(user?.id);
   const effectivePrices = await vipPriceService.listEffectivePrices();
   const onlineVisibility = await getCurrentUserOnlineVisibility();
+  const canChangePassword = user?.id
+    ? await canUserChangePassword(user.id)
+    : false;
   const configuredCurrencies = effectivePrices.map((price) => price.currency);
   const vipExpiresText = vipStatus.expiresAt
     ? vipStatus.expiresAt.toLocaleDateString("cs-CZ")
@@ -23,30 +28,38 @@ export default async function Page() {
     unauthorized();
   }
   return (
-    <div className="block justify-evenly gap-2 md:flex">
-      <form className="mb-4 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-lg dark:border-neutral-700">
-        <h3 className="bg-neutral-300 p-2 text-center font-medium dark:bg-neutral-700">
-          User info
-        </h3>
-        <div className="space-y-4 p-4">
-          <span className="text-xl">{user?.name} </span>
-          <div className="flex items-center gap-4 py-2">
-            <OnlineVisibilityToggle initialEnabled={onlineVisibility.enabled} />
+    <>
+      <div className="block justify-evenly gap-2 md:flex">
+        <form className="mb-4 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-lg dark:border-neutral-700">
+          <h3 className="bg-neutral-300 p-2 text-center font-medium dark:bg-neutral-700">
+            User info
+          </h3>
+          <div className="space-y-4 p-4">
+            <span className="text-xl">{user?.name} </span>
+            <div className="flex items-center gap-4 py-2">
+              <OnlineVisibilityToggle
+                initialEnabled={onlineVisibility.enabled}
+              />
+            </div>
+            <div className="flex">
+              <p className="">
+                VIP:{" "}
+                <span>{vipStatus.isVipActive ? "Active" : "Inactive"}</span>
+              </p>
+              <VipCheckoutCard
+                isVipActive={vipStatus.isVipActive}
+                vipExpiresText={vipExpiresText}
+                currencies={configuredCurrencies}
+                isAdmin={user?.role === "ADMIN"}
+              />
+            </div>
           </div>
-          <div className="flex">
-            <p className="">
-              VIP: <span>{vipStatus.isVipActive ? "Active" : "Inactive"}</span>
-            </p>
-            <VipCheckoutCard
-              isVipActive={vipStatus.isVipActive}
-              vipExpiresText={vipExpiresText}
-              currencies={configuredCurrencies}
-              isAdmin={user?.role === "ADMIN"}
-            />
-          </div>
+        </form>
+        <div className="ml-0 w-full self-end md:ml-10">
+          <UpdatePasswordForm canChangePassword={canChangePassword} />
         </div>
-      </form>
-      <UpdatePasswordForm canChangePassword={true} />
-    </div>
+      </div>
+      <DeleteAccountForm canChangePassword={canChangePassword} />
+    </>
   );
 }

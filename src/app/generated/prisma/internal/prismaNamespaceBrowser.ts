@@ -100,6 +100,8 @@ export const UserScalarFieldEnum = {
   image: 'image',
   role: 'role',
   onlineVisibility: 'onlineVisibility',
+  pendingDeletionAt: 'pendingDeletionAt',
+  deleteAfterAt: 'deleteAfterAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   username: 'username',

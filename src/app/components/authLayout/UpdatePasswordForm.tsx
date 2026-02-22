@@ -22,7 +22,6 @@ export default function UpdatePasswordForm({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
 
   const form = useForm<UpdatePasswordData>({
     resolver: zodResolver(updatePasswordSchema),
@@ -64,7 +63,6 @@ export default function UpdatePasswordForm({
       } else {
         setSuccess(true);
         form.reset();
-        setStatus("Password updated successfully.");
       }
     } catch (err: any) {
       setError(err?.message || "An unexpected error occurred");
@@ -165,7 +163,7 @@ export default function UpdatePasswordForm({
             )}
             <button
               type="submit"
-              className={`mr-2 flex w-full items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md md:w-fit dark:bg-cyan-900 ${
+              className={`mx-auto mr-2 flex w-full items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md md:w-fit dark:bg-cyan-900 ${
                 loading
                   ? "cursor-not-allowed opacity-50"
                   : "cursor-pointer opacity-100"

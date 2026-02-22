@@ -5,13 +5,13 @@ import {
   getApiError,
   removeMessageById,
   upsertMessage,
-} from "../message-state";
+} from "../components/pageLayout/fanwall/message-state";
 import type {
   ApiResponse,
   FanwallError,
   FanwallMessage,
   FanwallUser,
-} from "../types";
+} from "../components/pageLayout/fanwall/types";
 
 type UseFanwallActionsParams = {
   sessionUser: FanwallUser | null;

@@ -2,8 +2,11 @@
 
 import { useEffect } from "react";
 import { io, type Socket } from "socket.io-client";
-import { removeMessageById, upsertMessage } from "../message-state";
-import type { FanwallMessage } from "../types";
+import {
+  removeMessageById,
+  upsertMessage,
+} from "../components/pageLayout/fanwall/message-state";
+import type { FanwallMessage } from "../components/pageLayout/fanwall/types";
 
 type UseFanwallSocketParams = {
   refreshMessages: () => Promise<void>;

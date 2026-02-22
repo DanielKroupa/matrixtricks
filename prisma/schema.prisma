@@ -46,6 +46,8 @@ model User {
   image               String?
   role                String?
   onlineVisibility    Boolean               @default(true)
+  pendingDeletionAt   DateTime?
+  deleteAfterAt       DateTime?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
   sessions            Session[]
@@ -74,6 +76,7 @@ model User {
 
   @@unique([email])
   @@unique([username])
+  @@index([deleteAfterAt])
   @@map("user")
 }
 
