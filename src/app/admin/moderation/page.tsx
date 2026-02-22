@@ -6,7 +6,6 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 import Image from "next/image";
-import { FaUserAlt } from "react-icons/fa";
 
 export const metadata: Metadata = {
   title: "Admin settings | Moderation",

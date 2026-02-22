@@ -19,7 +19,9 @@ export default async function Home({ searchParams }: HomeProps) {
       ? await searchParams
       : searchParams;
 
-  const accountDeletionParam = resolvedSearchParams?.accountDeletion;
+  const accountDeletionParam = (
+    resolvedSearchParams as { accountDeletion?: string | string[] } | undefined
+  )?.accountDeletion;
   const accountDeletionStatus = Array.isArray(accountDeletionParam)
     ? accountDeletionParam[0]
     : accountDeletionParam;
