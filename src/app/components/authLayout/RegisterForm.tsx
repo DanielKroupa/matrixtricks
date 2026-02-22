@@ -11,8 +11,8 @@ import {
   RegisterFormData,
   registerSchema,
 } from "@/app/helpers/register-schema";
-import { Spinner } from "@/components/ui/spinner";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import { Spinner } from "@/app/components/ui/spinner";
+import PrimaryButton from "@/app/components/ui/form/PrimaryButton";
 
 export default function RegisterForm() {
   const [loading, setLoading] = useState(false);

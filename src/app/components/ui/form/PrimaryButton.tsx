@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import SubmitLabel from "@/components/ui/SubmitLabel";
+import SubmitLabel from "@/app/components/ui/form/SubmitLabel";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
@@ -25,7 +25,7 @@ export default function PrimaryButton({
       disabled={isDisabled}
       className={`w-full rounded-lg bg-cyan-800 py-2.5 font-semibold text-white shadow-md transition-colors hover:bg-cyan-900 ${
         isDisabled
-          ? "opacity-50 cursor-not-allowed bg-cyan-900"
+          ? "cursor-not-allowed bg-cyan-900 opacity-50"
           : "cursor-pointer"
       } ${className}`}
       {...rest}

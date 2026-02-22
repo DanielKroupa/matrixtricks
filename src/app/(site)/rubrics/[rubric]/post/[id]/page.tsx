@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getPostDetails } from "@/actions/social";
-import { PostModalRoute } from "@/components/social/PostModalRoute";
-import { VipPaywall } from "@/components/social/VipPaywall";
+import { PostModalRoute } from "@/app/components/social/PostModalRoute";
+import { VipPaywall } from "@/app/components/social/VipPaywall";
 
 function toDescription(content: string | null | undefined, maxLength = 160) {
   if (!content) {

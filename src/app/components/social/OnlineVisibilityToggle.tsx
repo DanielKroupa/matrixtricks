@@ -47,7 +47,7 @@ export function OnlineVisibilityToggle({
         <span
           className={`flex size-3 rounded-full p-1 ${
             isSelfOnline
-              ? "bg-green-500 shadow-md shadow-green-600/60"
+              ? "bg-green-500 shadow-md dark:shadow-green-600/60"
               : "bg-amber-600"
           }`}
         ></span>

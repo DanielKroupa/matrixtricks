@@ -21,6 +21,7 @@ export const updatePasswordSchema = z
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: "New passwords do not match",
+    path: ["confirmNewPassword"],
   });
 
 export type UpdatePasswordData = z.infer<typeof updatePasswordSchema>;

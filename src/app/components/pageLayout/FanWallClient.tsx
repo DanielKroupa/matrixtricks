@@ -9,7 +9,7 @@ import { useFanwallActions } from "./fanwall/hooks/useFanwallActions";
 import { useFanwallPagination } from "./fanwall/hooks/useFanwallPagination";
 import { useFanwallSocket } from "./fanwall/hooks/useFanwallSocket";
 import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
-import { UserInfoBubble } from "@/components/social/UserInfoBubble";
+import { UserInfoBubble } from "@/app/components/social/UserInfoBubble";
 import type {
   ApiResponse,
   FanWallClientProps,

@@ -7,7 +7,7 @@ import {
   UpdatePasswordData,
 } from "../../helpers/update-password-schema";
 
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/app/components/ui/spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
@@ -20,8 +20,9 @@ export default function UpdatePasswordForm({
   canChangePassword,
 }: UpdatePasswordFormProps) {
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   const form = useForm<UpdatePasswordData>({
     resolver: zodResolver(updatePasswordSchema),
@@ -47,7 +48,7 @@ export default function UpdatePasswordForm({
       return;
     }
 
-    setSuccess(null);
+    setSuccess(false);
     setError(null);
     setLoading(true);
 
@@ -61,11 +62,12 @@ export default function UpdatePasswordForm({
       if (error) {
         setError(error.message || "Failed to update password");
       } else {
-        setSuccess("Password updated successfully");
+        setSuccess(true);
         form.reset();
+        setStatus("Password updated successfully.");
       }
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+      setError(err?.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -102,12 +104,14 @@ export default function UpdatePasswordForm({
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* Input change password */}
-      <div className="flex w-fit gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-600">
+      <div className="flex w-full gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-fit dark:border-neutral-600">
         <div className="w-full">
           <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-600">
             Change sign in password:
           </h3>
+
           <div className="space-y-4 p-4 px-6">
+            {/* Current Password Input */}
             <div className="flex flex-col justify-center gap-1">
               <label>Current password</label>
               <input
@@ -122,6 +126,8 @@ export default function UpdatePasswordForm({
                 </p>
               )}
             </div>
+
+            {/* New Password Input */}
             <div className="flex flex-col gap-1">
               <label>New password</label>
               <input
@@ -136,6 +142,8 @@ export default function UpdatePasswordForm({
                 </p>
               )}
             </div>
+
+            {/* Confirm New Password Input */}
             <div className="flex flex-col gap-1">
               <label>Confirm new password</label>
               <input
@@ -155,12 +163,16 @@ export default function UpdatePasswordForm({
             )}
             {success && (
               <p className="mt-1 text-sm font-medium text-green-500">
-                {success}
+                Password updated successfully.
               </p>
             )}
             <button
               type="submit"
-              className={`mr-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md md:w-fit dark:bg-cyan-900 ${loading ? "cursor-not-allowed opacity-50" : "cursor-pointer opacity-100"}`}
+              className={`mr-2 flex w-full items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md md:w-fit dark:bg-cyan-900 ${
+                loading
+                  ? "cursor-not-allowed opacity-50"
+                  : "cursor-pointer opacity-100"
+              } `}
               disabled={loading}
             >
               {loading ? (

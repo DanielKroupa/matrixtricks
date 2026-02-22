@@ -34,7 +34,7 @@ export const useComments = (
         return null;
       }
       if (result.comment) {
-        const newComment = {
+        const newComment: CommentViewModel = {
           ...result.comment,
           user: sessionUser
             ? {
@@ -44,7 +44,7 @@ export const useComments = (
                 username: sessionUser.username ?? null,
                 role: sessionUser.role ?? null,
               }
-            : null,
+            : undefined,
           likes: [],
           _count: { likes: 0 },
         };

@@ -30,6 +30,7 @@ Add these variables to your environment configuration:
 
 ```bash
 BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
@@ -40,6 +41,8 @@ FACEBOOK_CLIENT_SECRET=
 APPLE_CLIENT_ID=
 APPLE_CLIENT_SECRET=
 ```
+
+Keep `NEXT_PUBLIC_APP_URL` and `BETTER_AUTH_URL` aligned to the same origin.
 
 For production, set `BETTER_AUTH_URL` to your HTTPS domain.
 

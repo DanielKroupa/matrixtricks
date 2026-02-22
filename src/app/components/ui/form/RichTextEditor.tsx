@@ -6,8 +6,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import { Extension } from "@tiptap/core";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/app/components/ui/form/button";
+import { Separator } from "@/app/components/ui/separator";
 
 import { FaAlignLeft } from "react-icons/fa";
 import { FaAlignCenter } from "react-icons/fa6";

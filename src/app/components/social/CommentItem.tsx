@@ -6,7 +6,7 @@ import Image from "next/image";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
-import type { CommentViewModel } from "./hooks/useComments";
+import type { CommentViewModel } from "../../hooks/useComments";
 import Badge from "@/app/components/ui/Badge";
 import { usePresenceStatuses } from "@/context/PresenceContext";
 import { UserInfoBubble } from "./UserInfoBubble";

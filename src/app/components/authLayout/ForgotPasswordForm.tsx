@@ -5,12 +5,17 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import type { ForgotPasswordFormData } from "@/app/helpers/forgot-password-schema";
-import { forgotPasswordSchema } from "@/app/helpers/forgot-password-schema";
+import {
+  forgotPasswordSchema,
+  ForgotPasswordFormData,
+} from "../../helpers/forgot-password-schema";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/context/AuthContext";
 import { authClient } from "@/lib/auth-client";
+
+import { Spinner } from "@/app/components/ui/spinner";
 
 export default function ForgotPasswordForm() {
   const [success, setSuccess] = useState(false);
@@ -69,7 +74,7 @@ export default function ForgotPasswordForm() {
       {/* Reset Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {success && (
-          <p className="text-green-600 bg-green-100 p-3 rounded-lg border-2 border-green-300">
+          <p className="rounded-lg border-2 border-green-300 bg-green-100 p-3 text-green-600">
             Password reset link has been sent to your email. Please check your
             inbox or spam folder
           </p>
@@ -80,7 +85,7 @@ export default function ForgotPasswordForm() {
             type="email"
             {...register("email")}
             placeholder="Enter your email address"
-            className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md ${
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.email ? "border border-red-500" : ""
             }`}
             required
@@ -95,16 +100,22 @@ export default function ForgotPasswordForm() {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full rounded-lg bg-cyan-800 py-2 font-semibold text-white transition-colors hover:bg-cyan-900 
-            ${loading ? "opacity-50 cursor-not-allowed bg-cyan-900" : "cursor-pointer"}`}
+          className={`w-full rounded-lg bg-cyan-800 py-2 font-semibold text-white transition-colors hover:bg-cyan-900 ${loading ? "cursor-not-allowed bg-cyan-900 opacity-50" : "cursor-pointer"}`}
         >
-          {loading ? "Sending..." : "Send Reset Link"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <Spinner />
+              Sending...
+            </span>
+          ) : (
+            "Send Reset Link"
+          )}
         </button>
       </form>
 
       {/* Info Box */}
-      <div className="rounded-lg p-4 bg-neutral-300/50 dark:bg-neutral-600/20">
-        <p className="text-sm dark:text-neutral-300 text-neutral-600 ">
+      <div className="rounded-lg bg-neutral-300/50 p-4 dark:bg-neutral-600/20">
+        <p className="text-sm text-neutral-600 dark:text-neutral-300">
           We'll send you an email with instructions to reset your password.
         </p>
       </div>
@@ -113,7 +124,7 @@ export default function ForgotPasswordForm() {
       <div className="space-y-2 border-t border-gray-200 pt-4 dark:border-gray-700">
         <Link
           href="/sign-in"
-          className="block text-center mx-auto text-sm dark:text-cyan-500 dark:hover:text-cyan-700 text-cyan-700 hover:text-cyan-800 cursor-pointer "
+          className="mx-auto block cursor-pointer text-center text-sm text-cyan-700 hover:text-cyan-800 dark:text-cyan-500 dark:hover:text-cyan-700"
         >
           Back to Sign In
         </Link>
@@ -122,7 +133,7 @@ export default function ForgotPasswordForm() {
           className="block w-full text-center text-sm text-gray-600 dark:text-gray-400"
         >
           Don't have an account?{" "}
-          <span className="font-semibold text-cyan-600 transition-colors hover:text-cyan-700 cursor-pointer ">
+          <span className="cursor-pointer font-semibold text-cyan-600 transition-colors hover:text-cyan-700">
             Sign up
           </span>
         </Link>

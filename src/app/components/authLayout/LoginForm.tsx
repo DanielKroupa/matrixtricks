@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@/lib/auth-client";
 
 import { useAuth } from "@/context/AuthContext";
-import PrimaryButton from "@/components/ui/PrimaryButton";
+import PrimaryButton from "@/app/components/ui/form/PrimaryButton";
 
 type Provider = "google" | "facebook" | "apple";
 

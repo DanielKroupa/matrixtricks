@@ -1,6 +1,6 @@
 import { getRubricPostsPage } from "@/actions/social";
 import { getEffectivePostPreference } from "@/app/helpers/post-preferences";
-import { VideoFeed } from "@/components/social/VideoFeed";
+import { VideoFeed } from "@/app/components/social/VideoFeed";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

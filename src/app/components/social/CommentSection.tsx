@@ -3,8 +3,8 @@ import { JSX, ReactNode, useEffect, useMemo, useState } from "react";
 import { CommentItem } from "./CommentItem";
 import { Send, Smile } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useComments } from "./hooks/useComments";
-import type { CommentViewModel } from "./hooks/useComments";
+import { useComments } from "../../hooks/useComments";
+import type { CommentViewModel } from "../../hooks/useComments";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 

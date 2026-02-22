@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/app/components/ui/spinner";
 
 type Props = {
   loading?: boolean;

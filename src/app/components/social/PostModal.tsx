@@ -8,7 +8,7 @@ import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import { authClient } from "@/lib/auth-client";
 import { CommentSection } from "./CommentSection";
-import { usePostInteractions } from "./hooks/usePostInteractions";
+import { usePostInteractions } from "../../hooks/usePostInteractions";
 import { SocialShareModal } from "./SocialShareModal";
 import { UserInfoBubble } from "./UserInfoBubble";
 

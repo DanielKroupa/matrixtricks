@@ -343,7 +343,7 @@ export default function NavbarClient({
                     Profile
                   </Link>
 
-                  {user?.role !== "admin" && (
+                  {user?.role === "admin" && (
                     <Link
                       href="/admin"
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
@@ -355,15 +355,16 @@ export default function NavbarClient({
                       Admin settings
                     </Link>
                   )}
-
-                  <Link
-                    href="/settings"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex w-full items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
-                  >
-                    <IoSettings className="text-neutral-600 dark:text-neutral-300" />
-                    Settings
-                  </Link>
+                  {user?.role !== "admin" && (
+                    <Link
+                      href="/settings"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex w-full items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
+                    >
+                      <IoSettings className="text-neutral-600 dark:text-neutral-300" />
+                      Settings
+                    </Link>
+                  )}
 
                   {user?.role === "admin" && (
                     <Link

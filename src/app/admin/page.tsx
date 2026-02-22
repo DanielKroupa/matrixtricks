@@ -27,7 +27,7 @@ export default async function Page() {
   const canChangePassword = await canUserChangePassword(user.id);
 
   return (
-    <div className="block md:flex">
+    <div className="block w-full justify-evenly md:flex">
       <div className="w-full">
         <h3 className="text-lg font-medium">Admin profile settings</h3>
         <p className="mt-3 text-base font-thin text-neutral-400 dark:text-white">
@@ -40,7 +40,9 @@ export default async function Page() {
           initialOnlineVisibilityEnabled={onlineVisibility.enabled}
         />
       </div>
-      <UpdatePasswordForm canChangePassword={canChangePassword} />
+      <div className="">
+        <UpdatePasswordForm canChangePassword={canChangePassword} />
+      </div>
     </div>
   );
 }
