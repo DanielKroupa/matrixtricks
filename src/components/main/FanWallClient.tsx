@@ -598,7 +598,7 @@ export default function FanWallClient({
     setOpenMenuId((prev) => (prev === id ? null : id));
 
   return (
-    <div className="mx-auto my-3 w-full px-1 md:block md:px-0">
+    <div className="mx-auto my-0 w-full px-1 md:block md:px-0">
       <p className="rounded-t-lg bg-linear-to-r from-cyan-700 via-cyan-700/85 to-cyan-700 py-2 text-center text-lg text-white md:px-4">
         FanWall
       </p>

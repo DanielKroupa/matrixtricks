@@ -11,6 +11,7 @@ type VideoFeedProps = {
   initialHasMore: boolean;
   postsPerPage: number;
   sortBy: PostSortOption;
+  cardAspectClassName?: string;
 };
 
 export const VideoFeed = ({
@@ -19,6 +20,7 @@ export const VideoFeed = ({
   initialHasMore,
   postsPerPage,
   sortBy,
+  cardAspectClassName = "aspect-video",
 }: VideoFeedProps) => {
   const [posts, setPosts] = useState(initialPosts);
   const [page, setPage] = useState(1);
@@ -53,12 +55,14 @@ export const VideoFeed = ({
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-3 gap-6 p-1 lg:grid-cols-4 xl:grid-cols-6">
-        {posts.map((post) => (
-          <VideoCard key={post.id} post={post} />
-        ))}
-      </div>
+    <div className="my-1 grid grid-cols-3 gap-3 p-1 md:gap-6 lg:grid-cols-4 xl:grid-cols-6">
+      {posts.map((post) => (
+        <VideoCard
+          key={post.id}
+          post={post}
+          aspectClassName={cardAspectClassName}
+        />
+      ))}
 
       {hasMore && (
         <div className="mt-5 mb-3 flex justify-center">

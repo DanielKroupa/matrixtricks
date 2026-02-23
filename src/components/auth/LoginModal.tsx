@@ -19,7 +19,7 @@ export function LoginModal() {
         aria-label="Close modal overlay"
         className="absolute inset-0"
       />
-      <div className="relative w-full max-w-md rounded-lg bg-white shadow-2xl dark:bg-neutral-800">
+      <div className="relative w-full max-w-md rounded-lg bg-white shadow-xl dark:bg-neutral-800">
         {/* Close Button */}
         <button
           type="button"

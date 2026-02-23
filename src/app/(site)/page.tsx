@@ -42,13 +42,14 @@ export default async function Home({ searchParams }: HomeProps) {
           it by signing in again within 14 days.
         </div>
       )}
-      <div className="flex items-center justify-between p-6 pb-0"></div>
+
       <VideoFeed
         rubric="VIDEOS"
         initialPosts={result.posts}
         initialHasMore={result.hasMore}
         postsPerPage={preference.postsPerPage}
         sortBy={preference.sortBy}
+        cardAspectClassName="aspect-[6/19]"
       />
     </div>
   );

@@ -14,7 +14,6 @@ export function VipPaywall({
   closeHref?: string;
 }) {
   const media = post?.media?.[0];
-  const fallbackCloseHref = closeHref || `/rubrics/${rubric}`;
 
   return (
     <div className="mx-auto w-full px-1 py-2 md:px-0">
@@ -22,7 +21,7 @@ export function VipPaywall({
         <div className="border-b border-neutral-400 px-4 py-3 dark:border-neutral-600">
           <h1 className="text-lg font-semibold">{post?.title}</h1>
           <p className="font-golden mt-1 flex items-center gap-2 text-base">
-            <FaLock size={16} className="text-[#F4BF4F]" />
+            <FaLock size={16} className="font-bold text-[#F4BF4F]" />
             This content is available only for VIP members.
           </p>
         </div>
@@ -58,12 +57,6 @@ export function VipPaywall({
               className="bg-golden hover:bg-golden/90 rounded-md px-4 py-2 text-sm font-medium text-white text-shadow-lg"
             >
               Activate VIP
-            </Link>
-            <Link
-              href={fallbackCloseHref}
-              className="rounded-md border border-neutral-500 px-4 py-2 text-sm font-medium"
-            >
-              Back to rubric
             </Link>
           </div>
         </div>

@@ -9,6 +9,7 @@ import { FaLock } from "react-icons/fa6";
 interface VideoCardProps {
   // biome-ignore lint/suspicious/noExplicitAny: Post DTO differs across feed endpoints and is gradually being unified.
   post: any;
+  aspectClassName?: string;
 }
 
 export const VideoCard = ({ post }: VideoCardProps) => {
@@ -25,59 +26,66 @@ export const VideoCard = ({ post }: VideoCardProps) => {
   return (
     <Link
       href={postHref}
-      className="group relative aspect-video cursor-pointer overflow-hidden rounded-lg bg-black"
+      className={`group relative aspect-3/4 cursor-pointer overflow-hidden rounded-lg bg-black`}
     >
-      {post.isPinned && (
-        <div className="absolute top-2 left-2 z-10 rounded-full bg-black/50 p-1 text-white">
-          <Pin size={14} className="rotate-45 fill-white" />
-        </div>
-      )}
-      {thumbnailUrl ? (
-        videoMedia.type === "video" ? (
-          <video
-            src={thumbnailUrl}
-            className={`h-full w-full object-cover ${isLocked ? "blur-sm" : ""}`}
-            muted
-            playsInline
-            preload="metadata"
-          />
+      <div className="relative h-full w-full overflow-hidden bg-black">
+        {post.isPinned && (
+          <div className="absolute top-2 left-2 z-10 rounded-full bg-black/50 p-1 text-white">
+            <Pin size={14} className="rotate-45 fill-white" />
+          </div>
+        )}
+        {thumbnailUrl ? (
+          videoMedia.type === "video" ? (
+            <video
+              src={thumbnailUrl}
+              className={`h-full w-full object-cover ${isLocked ? "blur-sm" : ""}`}
+              muted
+              playsInline
+              preload="metadata"
+            />
+          ) : (
+            <Image
+              src={thumbnailUrl}
+              alt={post.title}
+              fill
+              className={`object-cover ${isLocked ? "blur-sm" : ""}`}
+            />
+          )
         ) : (
-          <Image
-            src={thumbnailUrl}
-            alt={post.title}
-            fill
-            className={`object-cover ${isLocked ? "blur-sm" : ""}`}
-          />
-        )
-      ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gray-800">
-          <Play className="h-12 w-12 text-white" />
-        </div>
-      )}
-
-      {isLocked && (
-        <div className="absolute inset-0 z-10 flex items-start justify-center bg-black/35">
-          <div className="font-golden flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-sm font-semibold">
-            <FaLock className="h-3 w-3 fill-yellow-400/80" />
-            VIP
+          <div className="flex h-full w-full items-center justify-center bg-gray-800">
+            <Play className="h-12 w-12 text-white" />
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="absolute inset-0 flex flex-col justify-end bg-black/40 p-4 text-white opacity-0 transition-opacity group-hover:opacity-100">
-        <h3 className="mb-2 truncate text-sm font-bold">{post.title}</h3>
-        <div className="flex items-center justify-between gap-4 text-sm">
-          <div className="flex items-center gap-1">
-            <Heart size={16} />
-            <span>{post._count?.likes || 0}</span>
+        {isLocked && (
+          <div className="absolute inset-0 z-10 flex items-start justify-center bg-black/35">
+            <div className="font-golden flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-sm font-semibold">
+              <FaLock className="h-3 w-3 fill-yellow-400/80" />
+              VIP
+            </div>
           </div>
-          {/* <div className="flex items-center gap-1">
+        )}
+
+        <div className="absolute inset-0 flex flex-col justify-end bg-black/40 p-4 text-white opacity-0 transition-opacity group-hover:opacity-100">
+          <h3 className="mb-2 truncate text-sm font-bold">{post.title}</h3>
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <div className="flex items-center gap-1">
+              <Heart size={16} />
+              <span>{post._count?.likes || 0}</span>
+            </div>
+            {/* <div className="flex items-center gap-1">
             <MessageCircle size={16} />
             <span>{post._count?.comments || 0}</span>
           </div> */}
-          <div className="flex items-center gap-1">
-            <Image src="/icons/share.svg" alt="Share" width={16} height={16} />
-            <span>{post.shareCount || 0}</span>
+            <div className="flex items-center gap-1">
+              <Image
+                src="/icons/share.svg"
+                alt="Share"
+                width={16}
+                height={16}
+              />
+              <span>{post.shareCount || 0}</span>
+            </div>
           </div>
         </div>
       </div>
