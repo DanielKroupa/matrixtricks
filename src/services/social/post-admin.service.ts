@@ -1,5 +1,5 @@
 import type { RubricType } from "@/generated/prisma/client";
-import { entitlementService } from "@/application/billing/entitlement.service";
+import { entitlementService } from "@/services/billing/entitlement.service";
 import { postAdminRepository } from "@/infrastructure/social/post-admin.repository";
 
 export const postAdminService = {

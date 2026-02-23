@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { userCardService } from "@/application/social/user-card.service";
+import { userCardService } from "@/services/social/user-card.service";
 import { getServerSession } from "@/lib/get-session";
 import { cookies } from "next/headers";
 

@@ -11,7 +11,7 @@ import type {
   FanwallError,
   FanwallMessage,
   FanwallUser,
-} from "@/components/main/fanwall/types";
+} from "@/types/fanwall";
 
 type UseFanwallActionsParams = {
   sessionUser: FanwallUser | null;

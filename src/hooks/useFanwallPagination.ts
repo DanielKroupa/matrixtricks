@@ -2,10 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PAGE_SIZE } from "@/components/main/fanwall/message-state";
-import type {
-  ApiResponse,
-  FanwallMessage,
-} from "@/components/main/fanwall/types";
+import type { ApiResponse, FanwallMessage } from "@/types/fanwall";
 
 type UseFanwallPaginationParams = {
   messages: FanwallMessage[];

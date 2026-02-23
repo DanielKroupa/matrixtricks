@@ -6,7 +6,7 @@ import {
   removeMessageById,
   upsertMessage,
 } from "@/components/main/fanwall/message-state";
-import type { FanwallMessage } from "@/components/main/fanwall/types";
+import type { FanwallMessage } from "@/types/fanwall";
 
 type UseFanwallSocketParams = {
   refreshMessages: () => Promise<void>;

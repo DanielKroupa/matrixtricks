@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { auth } from "./auth";
 import { cache } from "react";
-import { accountDeletionService } from "@/application/account/account-deletion.service";
+import { accountDeletionService } from "@/services/account/account-deletion.service";
 
 export const getServerSession = cache(async () => {
   const session = await auth.api.getSession({ headers: await headers() });

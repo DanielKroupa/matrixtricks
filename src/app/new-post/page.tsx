@@ -6,9 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostFormData } from "@/lib/helpers/post-schema";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
-import PrimaryButton from "@/app/components/ui/form/PrimaryButton";
-import { Spinner } from "@/app/components/ui/spinner";
-import { RichTextEditor } from "@/app/components/ui/form/RichTextEditor";
+import PrimaryButton from "@/components/ui/form/PrimaryButton";
+import { Spinner } from "@/components/ui/spinner";
+import { RichTextEditor } from "@/components/ui/form/RichTextEditor";
 
 const rubrics = [
   { value: "TEXTS", label: "Texts" },

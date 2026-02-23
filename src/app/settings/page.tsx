@@ -1,6 +1,6 @@
 import { getServerSession } from "@/lib/get-session";
-import { entitlementService } from "@/application/billing/entitlement.service";
-import { vipPriceService } from "@/application/billing/vip-price.service";
+import { entitlementService } from "@/services/billing/entitlement.service";
+import { vipPriceService } from "@/services/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
 import { getCurrentUserOnlineVisibility } from "@/lib/helpers/online-visibility";
 import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";

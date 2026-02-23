@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
-import { chatService } from "@/application/chat/chat.service";
+import { chatService } from "@/services/chat/chat.service";
 
 export async function GET() {
   const session = await getServerSession();

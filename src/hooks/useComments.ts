@@ -7,7 +7,7 @@ import {
   toggleCommentLike,
   updateComment,
 } from "@/actions/social";
-import type { CommentDTO } from "@/domain/social/types";
+import type { CommentDTO } from "@/types/social";
 
 export type CommentViewModel = CommentDTO;
 

@@ -1,8 +1,8 @@
 import { chatRepository } from "@/infrastructure/chat/chat.repository";
+import { ChatAdminReplyEmailTemplate } from "@/lib/chat-email-template";
 import { broadcastChatEvent } from "@/lib/chat-realtime";
 import { FROM_EMAIL, resend } from "@/lib/resend";
-import { ChatAdminReplyEmailTemplate } from "@/lib/chat-email-template";
-import type { ChatThreadStatus } from "@/domain/chat/types";
+import type { ChatThreadStatus } from "@/types/chat";
 
 const USER_RATE_LIMIT_MAX_MESSAGES = 5;
 const USER_RATE_LIMIT_WINDOW_MS = 10_000;

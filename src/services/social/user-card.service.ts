@@ -1,8 +1,5 @@
-import type {
-  FanToggleResult,
-  UserCardData,
-} from "@/domain/social/user-card.types";
 import { userCardRepository } from "@/infrastructure/social/user-card.repository";
+import type { FanToggleResult, UserCardData } from "@/types/user-card";
 
 type CardInput = {
   targetUserId: string;

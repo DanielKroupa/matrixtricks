@@ -1,7 +1,7 @@
 import { stripe } from "@/infrastructure/billing/stripe.client";
 import { entitlementRepository } from "@/infrastructure/billing/entitlement.repository";
 import Stripe from "stripe";
-import { vipPriceService } from "@/application/billing/vip-price.service";
+import { vipPriceService } from "@/services/billing/vip-price.service";
 import { stripeBillingRepository } from "@/infrastructure/billing/stripe-billing.repository";
 
 type PrismaSubscriptionStatus =

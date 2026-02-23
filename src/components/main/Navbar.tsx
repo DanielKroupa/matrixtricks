@@ -1,7 +1,7 @@
 import NavbarClient from "./NavbarClient";
 import { getServerSession } from "@/lib/get-session";
 import type { User } from "@/lib/auth";
-import { entitlementService } from "@/application/billing/entitlement.service";
+import { entitlementService } from "@/services/billing/entitlement.service";
 
 export async function Navbar() {
   const session = await getServerSession();

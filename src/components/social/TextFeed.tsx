@@ -1,11 +1,10 @@
 "use client";
 
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
 import { useEffect, useState, useTransition } from "react";
-import { TextCard } from "./TextCard";
 import { getRubricPostsPage } from "@/actions/social";
-
+import type { PostSortOption, RubricParam } from "@/types/social";
 import { Spinner } from "../ui/spinner";
+import { TextCard } from "./TextCard";
 
 type TextFeedProps = {
   rubric: RubricParam;

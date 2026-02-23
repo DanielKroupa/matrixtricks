@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState, useTransition } from "react";
 import { getRubricPostsPage } from "@/actions/social";
+import type { PostSortOption, RubricParam } from "@/types/social";
 import { VideoCard } from "./VideoCard";
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
 
 type VideoFeedProps = {
   rubric: RubricParam;

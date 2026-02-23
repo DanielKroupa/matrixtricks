@@ -3,7 +3,7 @@ import type {
   BlockWriteScopes,
   IdentityContext,
   WriteActionScope,
-} from "@/domain/moderation/types";
+} from "@/types/moderation";
 
 export const userBlockService = {
   async recordIdentity(

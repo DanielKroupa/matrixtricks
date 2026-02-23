@@ -5,7 +5,7 @@ import {
   getEffectivePostPreference,
   savePostPreference,
 } from "@/lib/helpers/post-preferences";
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
+import type { PostSortOption, RubricParam } from "@/types/social";
 
 export async function getPostPreferenceAction(rubric: RubricParam) {
   return getEffectivePostPreference(rubric);

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { stripeBillingService } from "@/application/billing/stripe-billing.service";
+import { stripeBillingService } from "@/services/billing/stripe-billing.service";
 
 export async function handleBillingWebhook(request: NextRequest) {
   try {

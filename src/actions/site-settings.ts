@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { siteSettingsService } from "@/application/social/site-settings.service";
+import { siteSettingsService } from "@/services/social/site-settings.service";
 import {
   siteBioSchema,
   siteTitleSchema,

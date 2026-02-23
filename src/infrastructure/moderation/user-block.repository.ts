@@ -4,7 +4,7 @@ import type {
   BlockWriteScopes,
   IdentityContext,
   WriteActionScope,
-} from "@/domain/moderation/types";
+} from "@/types/moderation";
 
 function toScopeFilter(action: WriteActionScope) {
   switch (action) {

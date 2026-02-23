@@ -1,4 +1,4 @@
-import { fanwallService } from "@/application/social/fanwall.service";
+import { fanwallService } from "@/services/social/fanwall.service";
 import FanWallClient from "@/components/main/FanWallClient";
 import { getServerSession } from "@/lib/get-session";
 

@@ -1,8 +1,8 @@
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
 import {
   type DbSortOption,
   postPreferenceRepository,
 } from "@/infrastructure/social/post-preference.repository";
+import type { PostSortOption, RubricParam } from "@/types/social";
 
 function toDbSortOption(sortBy: PostSortOption): DbSortOption {
   switch (sortBy) {

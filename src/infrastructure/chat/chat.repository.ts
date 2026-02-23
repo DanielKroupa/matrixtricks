@@ -4,7 +4,7 @@ import type {
   ChatThreadListItem,
   ChatThreadStatus,
   ChatThreadWithParticipants,
-} from "@/domain/chat/types";
+} from "@/types/chat";
 
 const DEFAULT_THREAD_TAKE = 30;
 

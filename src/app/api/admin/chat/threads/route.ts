@@ -4,7 +4,7 @@ import {
   adminOpenThreadSchema,
   adminThreadListSchema,
 } from "@/lib/helpers/chat-schema";
-import { chatService } from "@/application/chat/chat.service";
+import { chatService } from "@/services/chat/chat.service";
 import {
   serializeChatMessage,
   serializeChatThread,

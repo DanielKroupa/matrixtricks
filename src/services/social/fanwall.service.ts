@@ -1,4 +1,4 @@
-import { entitlementService } from "@/application/billing/entitlement.service";
+import { entitlementService } from "@/services/billing/entitlement.service";
 import { fanwallRepository } from "@/infrastructure/social/fanwall.repository";
 
 function safeToIso(value: Date | string | null | undefined) {

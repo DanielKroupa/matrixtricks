@@ -52,7 +52,7 @@ export type PostDTO = {
   authorId?: string;
   media: MediaDTO[];
   author?: AuthorDTO;
-  likes?: Array<{ id: string; userId: string; postId: string }>; // minimal for liked flag
+  likes?: Array<{ id: string; userId: string; postId: string }>;
   _count: PostCountsDTO;
 };
 

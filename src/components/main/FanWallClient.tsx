@@ -16,7 +16,7 @@ import type {
   FanwallError,
   FanwallMessage,
   FanwallUser,
-} from "./fanwall/types";
+} from "../../types/fanwall";
 
 import { BsPinFill } from "react-icons/bs";
 import { BsFillPinAngleFill } from "react-icons/bs";

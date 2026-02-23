@@ -4,7 +4,7 @@ import { deleteAccountSchema } from "@/lib/helpers/authSchema/delete-account-sch
 import {
   accountDeletionService,
   AccountDeletionValidationError,
-} from "@/application/account/account-deletion.service";
+} from "@/services/account/account-deletion.service";
 
 export async function POST(request: NextRequest) {
   try {

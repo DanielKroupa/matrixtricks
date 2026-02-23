@@ -1,4 +1,4 @@
-import type { FanwallMessage } from "./types";
+import type { FanwallMessage } from "../../../types/fanwall";
 
 export const PAGE_SIZE = 20;
 export const DEFAULT_AVATAR = "/uploads/avatars/alien.png";

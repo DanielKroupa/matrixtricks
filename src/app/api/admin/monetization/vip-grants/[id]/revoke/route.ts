@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
-import { adminVipService } from "@/application/billing/admin-vip.service";
+import { adminVipService } from "@/services/billing/admin-vip.service";
 
 export async function PATCH(
   _request: Request,

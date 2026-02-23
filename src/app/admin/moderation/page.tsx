@@ -1,7 +1,7 @@
 import { getServerSession } from "@/lib/get-session";
 import { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
-import { userBlockService } from "@/application/moderation/user-block.service";
+import { userBlockService } from "@/services/moderation/user-block.service";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 

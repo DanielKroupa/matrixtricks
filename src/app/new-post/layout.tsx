@@ -1,8 +1,9 @@
+import { Banner } from "@/components/main/Banner";
+import { Footer } from "@/components/main/Footer";
+import { Navbar } from "@/components/main/Navbar";
+import { Title } from "@/components/main/Title";
 import { getServerSession } from "@/lib/get-session";
-import { Banner } from "../components/Banner";
-import { Footer } from "../components/pageLayout/Footer";
-import { Navbar } from "../components/pageLayout/Navbar";
-import { Title } from "../components/Title";
+
 import { Metadata } from "next";
 
 import { unauthorized, forbidden } from "next/navigation";

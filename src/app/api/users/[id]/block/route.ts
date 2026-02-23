@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createUserBlockSchema } from "@/lib/helpers/user-block-schema";
-import { userBlockService } from "@/application/moderation/user-block.service";
+import { userBlockService } from "@/services/moderation/user-block.service";
 import { getServerSession } from "@/lib/get-session";
 
 export async function POST(

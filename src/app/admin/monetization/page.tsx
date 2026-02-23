@@ -2,7 +2,7 @@ import { getServerSession } from "@/lib/get-session";
 import { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
 import { MonetizationClient } from "./MonetizationClient";
-import { vipPriceService } from "@/application/billing/vip-price.service";
+import { vipPriceService } from "@/services/billing/vip-price.service";
 
 export const metadata: Metadata = {
   title: "Admin settings | Monetization",

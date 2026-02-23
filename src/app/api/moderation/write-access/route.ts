@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
+import { userBlockService } from "@/services/moderation/user-block.service";
 import { getServerSession } from "@/lib/get-session";
 import {
   resolveIdentityDeviceId,
   resolveIpAddressFromRequest,
 } from "@/lib/request-identity";
-import { userBlockService } from "@/application/moderation/user-block.service";
-import type { WriteActionScope } from "@/domain/moderation/types";
+import type { WriteActionScope } from "@/types/moderation";
 
 const allowedActions: WriteActionScope[] = [
   "COMMENT_CREATE",

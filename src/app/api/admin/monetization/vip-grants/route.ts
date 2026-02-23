@@ -4,7 +4,7 @@ import {
   createManualVipGrantSchema,
   listVipGrantsQuerySchema,
 } from "@/lib/helpers/admin-monetization-schema";
-import { adminVipService } from "@/application/billing/admin-vip.service";
+import { adminVipService } from "@/services/billing/admin-vip.service";
 
 function ensureAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
   return Boolean(session?.user && session.user.role === "admin");

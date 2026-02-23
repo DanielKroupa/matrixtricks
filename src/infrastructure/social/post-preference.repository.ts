@@ -1,5 +1,5 @@
-import type { RubricParam } from "@/domain/social/types";
 import prisma from "@/lib/prisma";
+import type { RubricParam } from "@/types/social";
 
 export type DbSortOption =
   | "NEWEST"

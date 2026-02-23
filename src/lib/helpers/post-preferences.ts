@@ -1,11 +1,11 @@
 import { cookies } from "next/headers";
-import { postPreferenceService } from "@/application/social/post-preference.service";
+import { postPreferenceService } from "@/services/social/post-preference.service";
+import { getServerSession } from "@/lib/get-session";
 import type {
   PostPreference,
   PostSortOption,
   RubricParam,
-} from "@/domain/social/types";
-import { getServerSession } from "@/lib/get-session";
+} from "@/types/social";
 import { postPreferenceSchema } from "./post-preference-schema";
 
 const PREFERENCE_COOKIE_KEY = "matrix_post_preferences";

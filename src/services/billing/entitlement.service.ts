@@ -1,5 +1,5 @@
-import type { VipAccessInput, VipStatus } from "@/domain/billing/types";
 import { entitlementRepository } from "@/infrastructure/billing/entitlement.repository";
+import type { VipAccessInput, VipStatus } from "@/types/billing";
 
 function resolveAccess(input: VipAccessInput) {
   if (!input.vipOnly) {

@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
+import type { PostSortOption, RubricParam } from "@/types/social";
 
 const emptyUserId = "00000000-0000-0000-0000-000000000000";
 

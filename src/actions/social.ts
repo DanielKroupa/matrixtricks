@@ -1,20 +1,20 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import type { z } from "zod";
+import { entitlementService } from "@/services/billing/entitlement.service";
+import { userBlockService } from "@/services/moderation/user-block.service";
+import { postService } from "@/services/social/post.service";
 import { getServerSession } from "@/lib/get-session";
 import {
   CreateCommentSchema,
   UpdateCommentSchema,
 } from "@/lib/helpers/social-schema";
-import type { z } from "zod";
-import { revalidatePath } from "next/cache";
-import { postService } from "@/application/social/post.service";
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
-import { entitlementService } from "@/application/billing/entitlement.service";
-import { userBlockService } from "@/application/moderation/user-block.service";
 import {
   resolveIdentityDeviceId,
   resolveIpAddressFromServerHeaders,
 } from "@/lib/request-identity";
+import type { PostSortOption, RubricParam } from "@/types/social";
 
 export async function getRubricPostsPage(
   rubric: RubricParam,

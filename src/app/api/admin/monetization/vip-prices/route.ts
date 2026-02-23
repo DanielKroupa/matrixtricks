@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
-import { vipPriceService } from "@/application/billing/vip-price.service";
+import { vipPriceService } from "@/services/billing/vip-price.service";
 import { updateVipPricesSchema } from "@/lib/helpers/admin-monetization-schema";
 
 function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {

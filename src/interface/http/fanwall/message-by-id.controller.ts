@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { userBlockService } from "@/application/moderation/user-block.service";
-import { fanwallService } from "@/application/social/fanwall.service";
+import { userBlockService } from "@/services/moderation/user-block.service";
+import { fanwallService } from "@/services/social/fanwall.service";
 import { fanwallUpdateSchema } from "@/interface/schemas/social/fanwall.schema";
 import { broadcastFanwallEvent } from "@/lib/fanwall-realtime";
 import { getServerSession } from "@/lib/get-session";

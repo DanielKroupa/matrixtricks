@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import prisma from "./prisma";
-import { accountDeletionService } from "@/application/account/account-deletion.service";
-import { chatService } from "@/application/chat/chat.service";
+import { accountDeletionService } from "@/services/account/account-deletion.service";
+import { chatService } from "@/services/chat/chat.service";
 
 export function startScheduler() {
   // Run every hour

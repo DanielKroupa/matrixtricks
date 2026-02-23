@@ -11,7 +11,7 @@ import {
   allowedPostsPerPage,
   postPreferenceSchema,
 } from "@/lib/helpers/post-preference-schema";
-import type { PostSortOption, RubricParam } from "@/domain/social/types";
+import type { PostSortOption, RubricParam } from "@/types/social";
 
 const filterOptions: Array<{ value: PostSortOption; label: string }> = [
   { value: "newest", label: "Newest" },
