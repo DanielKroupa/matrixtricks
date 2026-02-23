@@ -172,23 +172,23 @@ export default function AvatarUpload({
 
   return (
     <div className="my-6 flex w-full flex-col items-center justify-center gap-2 rounded-md border-2 border-neutral-300 p-4 md:w-fit md:min-w-md md:flex-row md:justify-start dark:border-neutral-700">
-      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-neutral-300 dark:bg-neutral-700">
+      <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-neutral-300 dark:bg-neutral-700">
         {previewSource ? (
           <Image
             src={previewSource}
             alt="avatar preview"
-            className="h-28 w-28 rounded-full object-cover"
-            width={112}
-            height={112}
+            className="h-24 w-24 rounded-full object-cover"
+            width={100}
+            height={100}
             unoptimized
           />
         ) : (
           <Image
             src={fallbackAvatar}
             alt="default avatar"
-            className="h-28 w-28 rounded-full object-cover"
-            width={112}
-            height={112}
+            className="h-24 w-24 rounded-full object-cover"
+            width={100}
+            height={100}
             unoptimized
           />
         )}

@@ -155,6 +155,7 @@ export default function NavbarClient({
                 setMobileMenuOpen(false);
               }}
               aria-haspopup="menu"
+              title="Profile options"
               aria-expanded={profileMenuOpen}
               aria-controls="profile-menu"
               className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-2 py-1 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
