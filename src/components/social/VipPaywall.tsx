@@ -13,15 +13,18 @@ export function VipPaywall({
   const media = post?.media?.[0];
 
   return (
-    <div className="mx-auto w-full px-1 py-2 md:px-0">
+    <div className="mx-auto my-2 w-full px-1 py-2 md:px-0">
       <div className="overflow-hidden rounded-xl border border-neutral-400 bg-neutral-200 shadow dark:border-neutral-600 dark:bg-neutral-700">
         <div className="border-b border-neutral-400 px-4 py-3 dark:border-neutral-600">
           <h1 className="text-lg font-semibold">{post?.title}</h1>
-          <p className="font-golden mt-1 flex items-center gap-2 text-base">
+          <div className="mt-2 flex items-center gap-2">
             <FaLock size={16} className="font-medium text-[#F4BF4F]" />
-            This content is available only for{" "}
-            <span className="font-bold text-[#F4BF4F]">VIP</span> members.
-          </p>
+            <p className="font-golden mt-1 items-center gap-2 text-base">
+              This content is available only for
+              <span className="font-semibold text-[#F4BF4F]"> VIP</span>{" "}
+              members.
+            </p>
+          </div>
         </div>
 
         {media?.type === "video" ? (
@@ -52,7 +55,7 @@ export function VipPaywall({
           <div className="flex items-center justify-center gap-3">
             <Link
               href="/settings"
-              className="bg-golden hover:bg-golden/90 rounded-md px-4 py-2 text-sm font-medium text-white text-shadow-lg"
+              className="bg-golden rounded-md px-4 py-2 text-sm font-medium text-white transition text-shadow-lg hover:brightness-90"
             >
               Activate VIP
             </Link>
