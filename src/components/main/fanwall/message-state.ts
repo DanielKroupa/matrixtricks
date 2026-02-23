@@ -33,6 +33,24 @@ export function getApiError(data: unknown, fallback: string): string {
     return (data as { error: string }).error;
   }
 
+  if (
+    data &&
+    typeof data === "object" &&
+    "error" in data &&
+    (data as { error?: unknown }).error &&
+    typeof (data as { error?: unknown }).error === "object"
+  ) {
+    const errorObject = (data as { error: Record<string, unknown> }).error;
+    for (const value of Object.values(errorObject)) {
+      if (Array.isArray(value) && value.length > 0) {
+        const first = value[0];
+        if (typeof first === "string" && first.length > 0) {
+          return first;
+        }
+      }
+    }
+  }
+
   return fallback;
 }
 

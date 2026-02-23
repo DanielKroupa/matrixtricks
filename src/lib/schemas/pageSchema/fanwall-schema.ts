@@ -3,7 +3,7 @@ import { z } from "zod";
 export const fanwallCreateSchema = z.object({
   body: z
     .string()
-    .nonempty("Message is required")
+    .trim()
     .min(1, "Message is required")
     .max(1000, "Message must be at most 1000 characters"),
   title: z
@@ -26,6 +26,7 @@ export const fanwallCreateSchema = z.object({
 export const fanwallUpdateSchema = z.object({
   body: z
     .string()
+    .trim()
     .min(1, "Message is required")
     .max(1000, "Message must be at most 1000 characters")
     .optional(),

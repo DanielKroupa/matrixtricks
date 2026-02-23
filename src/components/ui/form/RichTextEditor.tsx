@@ -8,8 +8,8 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { FaAlignLeft, FaBold, FaItalic } from "react-icons/fa";
 import { FaAlignCenter, FaAlignRight, FaUnderline } from "react-icons/fa6";
-import { Button } from "@/app/components/ui/form/button";
-import { Separator } from "@/app/components/ui/separator";
+import { Button } from "@/components/ui/form/button";
+import { Separator } from "@/components/ui/separator";
 
 interface RichTextEditorProps {
   value: string;

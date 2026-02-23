@@ -136,7 +136,9 @@ export default function NewPostPage() {
                 Media
               </label>
             </div>
-            {errors.type && <p className="text-red-500">{errors.type.message}</p>}
+            {errors.type && (
+              <p className="text-red-500">{errors.type.message}</p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -150,7 +152,9 @@ export default function NewPostPage() {
               className="mt-2 w-full rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
               placeholder="Enter title"
             />
-            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+            {errors.title && (
+              <p className="text-red-500">{errors.title.message}</p>
+            )}
           </div>
 
           <div className="mb-4 max-w-64">
@@ -172,12 +176,16 @@ export default function NewPostPage() {
                 </option>
               ))}
             </select>
-            {errors.rubric && <p className="text-red-500">{errors.rubric.message}</p>}
+            {errors.rubric && (
+              <p className="text-red-500">{errors.rubric.message}</p>
+            )}
           </div>
 
           {postType === "text" && (
             <div className="mb-4">
-              <span className="mb-2 block text-black dark:text-white">Content</span>
+              <span className="mb-2 block text-black dark:text-white">
+                Content
+              </span>
               <RichTextEditor
                 value={watch("content") || ""}
                 onChange={(value) => setValue("content", value)}
@@ -272,7 +280,9 @@ export default function NewPostPage() {
           )}
 
           <div className="mb-4">
-            <p className="mb-2 block text-black dark:text-white">Schedule (optional)</p>
+            <p className="mb-2 block text-black dark:text-white">
+              Schedule (optional)
+            </p>
             <input
               type="datetime-local"
               {...register("scheduledAt")}
@@ -299,7 +309,8 @@ export default function NewPostPage() {
               </span>
 
               <p className="text-base text-neutral-700 dark:text-neutral-300">
-                Show this content only for <span className="font-golden font-semibold">VIP</span> users.
+                Show this content only for{" "}
+                <span className="font-golden font-semibold">VIP</span> users.
               </p>
             </label>
           </div>
