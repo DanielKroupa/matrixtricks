@@ -5,10 +5,7 @@ import { FaLock } from "react-icons/fa";
 
 export function VipPaywall({
   post,
-  rubric,
-  closeHref,
 }: {
-  // biome-ignore lint/suspicious/noExplicitAny: Post DTO differs across sources and is normalized progressively.
   post: any;
   rubric: string;
   closeHref?: string;
@@ -21,8 +18,9 @@ export function VipPaywall({
         <div className="border-b border-neutral-400 px-4 py-3 dark:border-neutral-600">
           <h1 className="text-lg font-semibold">{post?.title}</h1>
           <p className="font-golden mt-1 flex items-center gap-2 text-base">
-            <FaLock size={16} className="font-bold text-[#F4BF4F]" />
-            This content is available only for VIP members.
+            <FaLock size={16} className="font-medium text-[#F4BF4F]" />
+            This content is available only for{" "}
+            <span className="font-bold text-[#F4BF4F]">VIP</span> members.
           </p>
         </div>
 
