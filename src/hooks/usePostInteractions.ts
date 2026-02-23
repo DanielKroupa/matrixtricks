@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import {
   getPostDetails,
-  togglePostLike,
   incrementShareCount,
+  togglePostLike,
 } from "@/actions/social";
 
+// biome-ignore lint/suspicious/noExplicitAny: Initial post DTO is polymorphic across feed endpoints.
 export const usePostInteractions = (initialPost: any) => {
+  // biome-ignore lint/suspicious/noExplicitAny: Full post shape depends on route-mode payload enrichment.
   const [fullPost, setFullPost] = useState<any>(null);
   const [liked, setLiked] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(

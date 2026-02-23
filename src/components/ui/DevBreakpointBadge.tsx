@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const getBreakpointFromWidth = (w: number) => {
   if (w >= 1536) return "2xl";
@@ -27,8 +27,7 @@ export default function DevBreakpointBadge() {
 
   return (
     <div
-      role="status"
-      aria-label={`Current breakpoint: ${bp}`}
+      aria-live="polite"
       className="fixed bottom-4 left-16 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-black/80 font-mono text-sm text-white shadow-lg dark:bg-white/25"
     >
       <span aria-hidden>{bp}</span>

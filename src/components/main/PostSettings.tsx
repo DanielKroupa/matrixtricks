@@ -10,7 +10,7 @@ import {
 import {
   allowedPostsPerPage,
   postPreferenceSchema,
-} from "@/lib/helpers/post-preference-schema";
+} from "@/lib/schemas/postsChema/post-preference-schema";
 import type { PostSortOption, RubricParam } from "@/types/social";
 
 const filterOptions: Array<{ value: PostSortOption; label: string }> = [
@@ -99,7 +99,7 @@ export function PostSettings() {
     });
   }
 
-  const selectedFilterLabel =
+  const _selectedFilterLabel =
     filterOptions.find((option) => option.value === sortBy)?.label || "Newest";
 
   return (

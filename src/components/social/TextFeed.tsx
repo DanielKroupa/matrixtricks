@@ -8,6 +8,7 @@ import { TextCard } from "./TextCard";
 
 type TextFeedProps = {
   rubric: RubricParam;
+  // biome-ignore lint/suspicious/noExplicitAny: Feed item DTO is currently polymorphic across rubrics.
   initialPosts: any[];
   initialHasMore: boolean;
   postsPerPage: number;
@@ -30,7 +31,7 @@ export const TextFeed = ({
     setPosts(initialPosts);
     setPage(1);
     setHasMore(initialHasMore);
-  }, [initialPosts, initialHasMore, postsPerPage, sortBy, rubric]);
+  }, [initialPosts, initialHasMore]);
 
   function handleLoadMore() {
     if (!hasMore || isPending) {

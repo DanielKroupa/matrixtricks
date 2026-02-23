@@ -1,8 +1,8 @@
-import { randomUUID } from "crypto";
-import { NextResponse } from "next/server";
-import { userCardService } from "@/services/social/user-card.service";
-import { getServerSession } from "@/lib/get-session";
+import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import { getServerSession } from "@/lib/get-session";
+import { userCardService } from "@/services/social/user-card.service";
 
 const FAN_DEVICE_COOKIE = "matrix_fan_device_id";
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;

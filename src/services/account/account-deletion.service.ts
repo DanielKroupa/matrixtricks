@@ -1,6 +1,6 @@
 import { verifyPassword } from "better-auth/crypto";
-import { stripe } from "@/infrastructure/billing/stripe.client";
 import { accountDeletionRepository } from "@/infrastructure/account/account-deletion.repository";
+import { stripe } from "@/infrastructure/billing/stripe.client";
 
 const FOURTEEN_DAYS_IN_MS = 14 * 24 * 60 * 60 * 1000;
 const SOCIAL_DELETE_CONFIRMATION_TEXT = "SMAZAT";

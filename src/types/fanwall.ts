@@ -33,3 +33,16 @@ export type ApiResponse<T> = {
   messages?: T[];
   error?: string;
 };
+
+export type UseFanwallActionsParams = {
+  sessionUser: FanwallUser | null;
+  isAdmin: boolean;
+  refreshMessages: () => Promise<void>;
+  setMessages: React.Dispatch<React.SetStateAction<FanwallMessage[]>>;
+};
+
+export type UseFanwallPaginationParams = {
+  messages: FanwallMessage[];
+  otherMessages: FanwallMessage[];
+  setMessages: React.Dispatch<React.SetStateAction<FanwallMessage[]>>;
+};

@@ -13,6 +13,7 @@ export type CommentViewModel = CommentDTO;
 
 export const useComments = (
   initialComments: CommentViewModel[],
+  // biome-ignore lint/suspicious/noExplicitAny: Session payload is framework-provided and narrowed at use sites.
   session: any,
 ) => {
   const [comments, setComments] = useState<CommentViewModel[]>(initialComments);
@@ -52,7 +53,7 @@ export const useComments = (
         return newComment;
       }
       return null;
-    } catch (err) {
+    } catch (_err) {
       setError("Failed to post comment");
       return null;
     } finally {

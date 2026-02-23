@@ -1,11 +1,34 @@
 export type RubricParam = "VIDEOS" | "TEXTS" | "BASICS" | "TRICKS";
-
 export type PostSortOption =
   | "newest"
   | "oldest"
   | "shareCount"
   | "likeCount"
   | "commentCount";
+export type BlockType = "permanent" | "temporary";
+export type BlockScopes = {
+  commentCreate: boolean;
+  commentUpdate: boolean;
+  commentDelete: boolean;
+  fanwallCreate: boolean;
+  fanwallUpdate: boolean;
+  fanwallDelete: boolean;
+};
+
+export type BlockUserDialogProps = {
+  isOpen: boolean;
+  blockReason: string;
+  onBlockReasonChange: (value: string) => void;
+  blockType: BlockType;
+  onBlockTypeChange: (value: BlockType) => void;
+  blockUntil: string;
+  onBlockUntilChange: (value: string) => void;
+  blockScopes: BlockScopes;
+  onBlockScopeChange: (key: keyof BlockScopes, value: boolean) => void;
+  blockLoading: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+};
 
 export type PostPreference = {
   postsPerPage: number;

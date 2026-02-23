@@ -8,6 +8,7 @@ export function VipPaywall({
   rubric,
   closeHref,
 }: {
+  // biome-ignore lint/suspicious/noExplicitAny: Post DTO differs across sources and is normalized progressively.
   post: any;
   rubric: string;
   closeHref?: string;

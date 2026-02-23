@@ -1,20 +1,15 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { Extension } from "@tiptap/core";
+import { Color } from "@tiptap/extension-color";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
-import { Extension } from "@tiptap/core";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { FaAlignLeft, FaBold, FaItalic } from "react-icons/fa";
+import { FaAlignCenter, FaAlignRight, FaUnderline } from "react-icons/fa6";
 import { Button } from "@/app/components/ui/form/button";
 import { Separator } from "@/app/components/ui/separator";
-
-import { FaAlignLeft } from "react-icons/fa";
-import { FaAlignCenter } from "react-icons/fa6";
-import { FaAlignRight } from "react-icons/fa6";
-import { FaBold } from "react-icons/fa";
-import { FaItalic } from "react-icons/fa";
-import { FaUnderline } from "react-icons/fa6";
 
 interface RichTextEditorProps {
   value: string;
@@ -91,7 +86,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
               this.editor.commands.splitBlock();
               return true;
             }
-          } catch (e) {
+          } catch (_e) {
             // If anything goes wrong, let default Enter behavior run
             return false;
           }

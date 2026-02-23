@@ -1,14 +1,14 @@
 "use client";
-import { Heart, Share2, X } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsFillPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
+import { usePostInteractions } from "@/hooks/usePostInteractions";
 import { authClient } from "@/lib/auth-client";
 import { CommentSection } from "./CommentSection";
-import { usePostInteractions } from "@/hooks/usePostInteractions";
 import { SocialShareModal } from "./SocialShareModal";
 import { UserInfoBubble } from "./UserInfoBubble";
 
@@ -17,6 +17,7 @@ export const PostModal = ({
   onClose,
   mode = "modal",
 }: {
+  // biome-ignore lint/suspicious/noExplicitAny: Post shape varies by rubric and is normalized progressively.
   post: any;
   onClose: () => void;
   mode?: "modal" | "page";
@@ -24,6 +25,7 @@ export const PostModal = ({
   const router = useRouter();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>("");
+  // biome-ignore lint/suspicious/noExplicitAny: Session shape is runtime-provided and narrowed at use sites.
   const [session, setSession] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -140,6 +142,7 @@ export const PostModal = ({
       }
 
       const updatedPost = await response.json();
+      // biome-ignore lint/suspicious/noExplicitAny: State updater merges server response into polymorphic post shape.
       setFullPost((prev: any) => ({ ...prev, ...updatedPost }));
       router.refresh();
     } catch (_error) {
@@ -211,6 +214,7 @@ export const PostModal = ({
       }
 
       const updatedPost = await response.json();
+      // biome-ignore lint/suspicious/noExplicitAny: State updater merges server response into polymorphic post shape.
       setFullPost((prev: any) => ({ ...prev, ...updatedPost }));
       router.refresh();
     } catch {
@@ -319,6 +323,7 @@ export const PostModal = ({
 
           <div className="flex items-center justify-start gap-4 border-y border-neutral-300 px-4 py-3 sm:px-6 dark:border-neutral-700">
             <button
+              type="button"
               onClick={handleLike}
               title="Like"
               className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -331,6 +336,7 @@ export const PostModal = ({
               <span>{likeCount}</span>
             </button>
             <button
+              type="button"
               onClick={handleShare}
               title="Share post"
               className="flex cursor-pointer items-center gap-2 rounded-full bg-neutral-300 px-3 py-1.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-400 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
@@ -382,6 +388,7 @@ export const PostModal = ({
       ></button>
 
       <button
+        type="button"
         onClick={onClose}
         title="Close"
         className="absolute top-4 right-4 z-50 cursor-pointer rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
@@ -419,11 +426,12 @@ export const PostModal = ({
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
               <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-between">
-                <button onClick={handleLike} title="Like">
+                <button type="button" onClick={handleLike} title="Like">
                   <Heart size={16} fill={liked ? "currentColor" : "none"} />
                   <span>{likeCount}</span>
                 </button>
                 <button
+                  type="button"
                   onClick={handleShare}
                   className="flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
                 >
@@ -463,6 +471,7 @@ export const PostModal = ({
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
               <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-center gap-4">
                 <button
+                  type="button"
                   onClick={handleLike}
                   title="Like"
                   className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
@@ -471,6 +480,7 @@ export const PostModal = ({
                   <span>{likeCount}</span>
                 </button>
                 <button
+                  type="button"
                   onClick={handleShare}
                   title="Share"
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
@@ -505,6 +515,7 @@ export const PostModal = ({
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
               <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-between">
                 <button
+                  type="button"
                   onClick={handleLike}
                   className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
                 >
@@ -512,6 +523,7 @@ export const PostModal = ({
                   <span>{likeCount}</span>
                 </button>
                 <button
+                  type="button"
                   onClick={handleShare}
                   title="Share"
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"

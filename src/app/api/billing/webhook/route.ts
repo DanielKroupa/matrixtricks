@@ -1,4 +1,4 @@
-import { type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { handleBillingWebhook } from "@/interface/http/billing/webhook.controller";
 
 export const runtime = "nodejs";

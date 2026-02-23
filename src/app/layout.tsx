@@ -1,14 +1,13 @@
-// biome-ignore assist/source/organizeImports: <explanation>
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
-import { PresenceProvider } from "@/context/PresenceContext";
-import { LoginModal } from "@/components/auth/LoginModal";
 import { ThemeProvider } from "next-themes";
-import DevBreakpointBadgeClient from "@/components/ui/DevBreakpointBadgeClient";
-import { getServerSession } from "@/lib/get-session";
+import { LoginModal } from "@/components/auth/LoginModal";
 import UserChatWidget from "@/components/chat/UserChatWidget";
+import DevBreakpointBadgeClient from "@/components/ui/DevBreakpointBadgeClient";
+import { AuthProvider } from "@/hooks/AuthContext";
+import { PresenceProvider } from "@/hooks/PresenceContext";
+import { getServerSession } from "@/lib/get-session";
+import "./globals.css";
 
 const poppins = Poppins({
   variable: "--font-poppins",

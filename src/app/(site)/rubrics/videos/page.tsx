@@ -1,6 +1,6 @@
 import { getVideoPostsPage } from "@/actions/social";
-import { getEffectivePostPreference } from "@/lib/helpers/post-preferences";
 import { VideoFeed } from "@/components/social/VideoFeed";
+import { getEffectivePostPreference } from "@/lib/post-preferences";
 
 export default async function Home() {
   const preference = await getEffectivePostPreference("VIDEOS");

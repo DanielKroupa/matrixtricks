@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "@/lib/get-session";
-import { chatService } from "@/services/chat/chat.service";
 import {
   serializeChatMessage,
   serializeChatThread,
 } from "@/app/api/chat/serialize";
+import { getServerSession } from "@/lib/get-session";
+import { chatService } from "@/services/chat/chat.service";
 
 export async function GET(
   _request: Request,

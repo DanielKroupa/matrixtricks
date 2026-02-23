@@ -1,7 +1,7 @@
-import { getRubricPostsPage } from "@/actions/social";
-import { getEffectivePostPreference } from "@/lib/helpers/post-preferences";
-import { VideoFeed } from "@/components/social/VideoFeed";
 import type { Metadata } from "next";
+import { getRubricPostsPage } from "@/actions/social";
+import { VideoFeed } from "@/components/social/VideoFeed";
+import { getEffectivePostPreference } from "@/lib/post-preferences";
 
 export const metadata: Metadata = {
   title: "Basics | Matrix Tricks",

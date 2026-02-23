@@ -1,10 +1,10 @@
 "use client";
-import { JSX, ReactNode, useEffect, useMemo, useState } from "react";
-import { CommentItem } from "./CommentItem";
 import { Send, Smile } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useComments } from "@/hooks/useComments";
+import { type JSX, type ReactNode, useEffect, useMemo, useState } from "react";
 import type { CommentViewModel } from "@/hooks/useComments";
+import { useComments } from "@/hooks/useComments";
+import { CommentItem } from "./CommentItem";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
 
@@ -16,6 +16,7 @@ export const CommentSection = ({
 }: {
   postId: string;
   initialComments: CommentViewModel[];
+  // biome-ignore lint/suspicious/noExplicitAny: Session payload is framework-provided and partially typed in this component tree.
   session: any;
   headerRight?: ReactNode;
 }): JSX.Element => {
@@ -121,6 +122,7 @@ export const CommentSection = ({
     };
   }, []);
 
+  // biome-ignore lint/suspicious/noExplicitAny: Third-party emoji picker callback type is not exported in this package setup.
   const onEmojiClick = (emojiObject: any) => {
     setContent((prev) => prev + emojiObject.emoji);
     setShowEmojiPicker(false);
@@ -165,7 +167,7 @@ export const CommentSection = ({
         setContent("");
         setNickname("");
       }
-    } catch (e) {
+    } catch (_e) {
       setError("Failed to post comment");
     } finally {
     }

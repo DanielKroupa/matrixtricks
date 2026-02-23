@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
+import { mkdir, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { type NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
-import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/get-session";
+import prisma from "@/lib/prisma";
 // import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"; // For R2
 
 export async function POST(request: NextRequest) {

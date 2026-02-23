@@ -1,12 +1,10 @@
+import type { Metadata } from "next";
+import { forbidden, unauthorized } from "next/navigation";
 import { Banner } from "@/components/main/Banner";
 import { Footer } from "@/components/main/Footer";
 import { Navbar } from "@/components/main/Navbar";
 import { Title } from "@/components/main/Title";
 import { getServerSession } from "@/lib/get-session";
-
-import { Metadata } from "next";
-
-import { unauthorized, forbidden } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "New Post | Matrix Tricks",

@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "tsx src/lib/scheduler.ts & next dev",
-    "dev:socket": "tsx server/socket.ts",
-    "dev:all": "concurrently \"next dev\" \"tsx server/socket.ts\"",
+    "dev:socket": "tsx src/server/socket/socket.ts",
+    "dev:all": "concurrently \"next dev\" \"tsx src/server/socket/socket.ts\"",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",

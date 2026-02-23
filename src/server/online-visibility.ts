@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/get-session";
-import { onlineVisibilitySchema } from "./online-visibility-schema";
+import prisma from "@/lib/prisma";
+import { onlineVisibilitySchema } from "@/lib/schemas/userSchema/online-visibility-schema";
 
 export async function getCurrentUserOnlineVisibility() {
   const session = await getServerSession();

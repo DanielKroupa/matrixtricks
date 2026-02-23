@@ -1,6 +1,6 @@
-import { fanwallService } from "@/services/social/fanwall.service";
 import FanWallClient from "@/components/main/FanWallClient";
 import { getServerSession } from "@/lib/get-session";
+import { fanwallService } from "@/services/social/fanwall.service";
 
 export async function FanWall() {
   const session = await getServerSession();

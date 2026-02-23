@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getMainBio } from "@/lib/helpers/main-title";
+import { getMainBio } from "@/lib/main-title";
 
 export async function Bio() {
   const bio = await getMainBio();

@@ -103,7 +103,7 @@ export const entitlementRepository = {
       data: {
         stripeEventId: params.stripeEventId,
         type: params.type,
-        payload: params.payload as any,
+        payload: params.payload as object,
       },
     });
   },

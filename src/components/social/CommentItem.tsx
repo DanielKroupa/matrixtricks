@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Heart, User as UserIcon } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
-import type { CommentViewModel } from "@/hooks/useComments";
 import Badge from "@/components/ui/Badge";
-import { usePresenceStatuses } from "@/context/PresenceContext";
+import { usePresenceStatuses } from "@/hooks/PresenceContext";
+import type { CommentViewModel } from "@/hooks/useComments";
 import { UserInfoBubble } from "./UserInfoBubble";
 
 function renderCommentBody(content: string, className?: string) {
@@ -38,6 +38,7 @@ export const CommentItem = ({
   deleteBlockMessage,
 }: {
   comment: CommentViewModel;
+  // biome-ignore lint/suspicious/noExplicitAny: Session payload is framework-provided and partially typed in this component tree.
   session: any;
   onCommentUpdated: (commentId: string, content: string) => Promise<boolean>;
   onCommentDeleted: (commentId: string) => Promise<boolean>;
@@ -229,6 +230,7 @@ export const CommentItem = ({
           {(canEdit || canDelete) && (
             <div className="relative">
               <button
+                type="button"
                 title="Comment actions"
                 className="comment-menu-button cursor-pointer rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-gray-200"
                 onClick={() => setIsMenuOpen((open) => !open)}
@@ -240,6 +242,7 @@ export const CommentItem = ({
                 <div className="comment-menu absolute top-7 right-0 z-10 w-32 rounded-md bg-white shadow-lg dark:bg-neutral-700">
                   {canEdit && !isEditing && (
                     <button
+                      type="button"
                       className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600"
                       onClick={handleStartEdit}
                       disabled={isSaving || isEditBlocked}
@@ -255,6 +258,7 @@ export const CommentItem = ({
                   )}
                   {canDelete && (
                     <button
+                      type="button"
                       className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-200/50 dark:text-red-300 dark:hover:bg-neutral-600"
                       onClick={handleDelete}
                       disabled={isSaving || isDeleteBlocked}
@@ -318,6 +322,7 @@ export const CommentItem = ({
         )}
 
         <button
+          type="button"
           onClick={handleLike}
           className={`mt-2 flex cursor-pointer items-center gap-1 rounded-md p-1 text-xs transition-colors hover:bg-gray-50 dark:hover:bg-neutral-600 ${likedByCurrentUser ? "text-red-500" : "text-gray-500 dark:text-gray-400"}`}
         >

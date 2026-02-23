@@ -1,22 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-
-import {
-  loginSchema,
-  LoginFormData,
-} from "@/lib/helpers/authSchema/login-schema";
-
-import Image from "next/image";
-import { FaApple, FaCheck, FaEye, FaEyeSlash } from "react-icons/fa6";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { authClient } from "@/lib/auth-client";
-
-import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaApple, FaCheck, FaEye, FaEyeSlash } from "react-icons/fa6";
 import PrimaryButton from "@/components/ui/form/PrimaryButton";
+import { useAuth } from "@/hooks/AuthContext";
+import { authClient } from "@/lib/auth-client";
+import {
+  type LoginFormData,
+  loginSchema,
+} from "@/lib/schemas/authSchema/login-schema";
 
 type Provider = "google" | "facebook" | "apple";
 
@@ -108,8 +104,10 @@ export default function LoginForm() {
         closeModal();
         window.location.assign("/");
       }
-    } catch (err: any) {
-      setServerError(err?.message || "Something went wrong");
+    } catch (err: unknown) {
+      setServerError(
+        err instanceof Error ? err.message : "Something went wrong",
+      );
     } finally {
       setLoading(false);
     }
@@ -131,7 +129,6 @@ export default function LoginForm() {
           <input
             type="text"
             {...register("login")}
-            autoFocus
             placeholder="Email or username"
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.login ? "border border-red-500" : ""
@@ -294,6 +291,7 @@ export default function LoginForm() {
       {/* Footer Links */}
       <div className="space-y-2 border-t border-neutral-300 pt-4 dark:border-neutral-600">
         <button
+          type="button"
           onClick={() => switchForm("register")}
           className="block w-full text-center text-sm text-neutral-500"
         >

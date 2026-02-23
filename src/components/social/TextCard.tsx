@@ -2,6 +2,7 @@ import { Heart } from "lucide-react";
 import Image from "next/image";
 
 interface TextCardProps {
+  // biome-ignore lint/suspicious/noExplicitAny: Post DTO differs between endpoints and is gradually being unified.
   post: any;
 }
 

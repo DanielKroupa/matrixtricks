@@ -1,16 +1,5 @@
 import prisma from "@/lib/prisma";
-
-type GetUserCardInput = {
-  targetUserId: string;
-  viewerUserId?: string | null;
-  deviceId: string;
-};
-
-type ToggleFanInput = {
-  targetUserId: string;
-  viewerUserId?: string | null;
-  deviceId: string;
-};
+import type { GetUserCardInput, ToggleFanInput } from "@/types/user-card";
 
 export const userCardRepository = {
   async getUserCardData({
@@ -66,7 +55,7 @@ export const userCardRepository = {
     ] = await Promise.all([
       prisma.comment.count({ where: { userId: targetUserId } }),
       hasPostShareModel
-        ? prismaWithOptionalModels.postShare!.count({
+        ? prismaWithOptionalModels.postShare?.count({
             where: { userId: targetUserId },
           })
         : Promise.resolve(0),
@@ -77,7 +66,7 @@ export const userCardRepository = {
         select: { createdAt: true },
       }),
       hasUserFanModel
-        ? prismaWithOptionalModels.userFan!.findUnique({
+        ? prismaWithOptionalModels.userFan?.findUnique({
             where: {
               targetUserId_deviceId: {
                 targetUserId,
@@ -90,7 +79,7 @@ export const userCardRepository = {
           })
         : Promise.resolve(null),
       isAdminProfile && hasUserFanModel
-        ? prismaWithOptionalModels.userFan!.count({
+        ? prismaWithOptionalModels.userFan?.count({
             where: {
               targetUserId,
               isActive: true,

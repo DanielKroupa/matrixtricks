@@ -12,40 +12,14 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import {
-  BlockUserDialog,
-  type BlockScopes,
-  type BlockType,
-} from "./BlockUserDialog";
+import type { BlockType } from "@/types/social";
 
-type UserCardResponse = {
-  id: string;
-  nickname: string;
-  avatarUrl: string | null;
-  commentsGiven: number;
-  sharesGiven: number;
-  likesGiven: number;
-  registeredAt: string;
-  lastCommentAt: string | null;
-  isAdminProfile: boolean;
-  fansCount: number | null;
-  isFan: boolean;
-  isSelf: boolean;
-  viewerIsAdmin: boolean;
-  isBlocked: boolean;
-  blockedUntil: string | null;
-  blockedReason: string | null;
-};
-
-type FanToggleResponse = {
-  fansCount: number;
-  isFan: boolean;
-};
-
-type BubblePosition = {
-  top: number;
-  left: number;
-};
+import type {
+  BubblePosition,
+  FanToggleResponse,
+  UserCardResponse,
+} from "@/types/user-card";
+import { type BlockScopes, BlockUserDialog } from "./BlockUserDialog";
 
 const CARD_WIDTH = 320;
 const VIEWPORT_PADDING = 8;
@@ -89,7 +63,7 @@ function getCanHover() {
   return hasHover && !hasCoarsePointer;
 }
 
-function getFallbackPosition(trigger: HTMLSpanElement): BubblePosition {
+function getFallbackPosition(trigger: HTMLElement): BubblePosition {
   const triggerRect = trigger.getBoundingClientRect();
   const desiredLeft = triggerRect.left + triggerRect.width / 2 - CARD_WIDTH / 2;
   const clampedLeft = Math.min(
@@ -111,7 +85,7 @@ export function UserInfoBubble({
   children: ReactNode;
 }) {
   const router = useRouter();
-  const triggerRef = useRef<HTMLSpanElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -332,7 +306,7 @@ export function UserInfoBubble({
     if (isOpen) {
       updatePosition();
     }
-  }, [isOpen, loading, data, error, updatePosition]);
+  }, [isOpen, updatePosition]);
 
   useEffect(() => {
     return () => {
@@ -541,6 +515,7 @@ export function UserInfoBubble({
   const card =
     mounted && isOpen && position
       ? createPortal(
+          /* biome-ignore lint/a11y/noStaticElementInteractions: Hover handlers are required for non-click card persistence behavior. */
           <div
             ref={cardRef}
             onMouseEnter={canHover ? clearCloseTimeout : undefined}
@@ -678,15 +653,16 @@ export function UserInfoBubble({
 
   return (
     <>
-      <span
+      <button
+        type="button"
         ref={triggerRef}
         onMouseEnter={canHover ? openBubble : undefined}
         onMouseLeave={canHover ? closeWithDelay : undefined}
         onClick={!canHover ? openBubbleImmediately : undefined}
-        className="inline-flex"
+        className="inline-flex bg-transparent p-0 text-inherit"
       >
         {children}
-      </span>
+      </button>
       {card}
       {mounted ? (
         <BlockUserDialog

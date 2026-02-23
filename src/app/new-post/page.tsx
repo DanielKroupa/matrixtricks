@@ -1,21 +1,25 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { postSchema, PostFormData } from "@/lib/helpers/post-schema";
-import { MdOutlineFileUpload } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
+import { MdOutlineFileUpload } from "react-icons/md";
 import PrimaryButton from "@/components/ui/form/PrimaryButton";
-import { Spinner } from "@/components/ui/spinner";
 import { RichTextEditor } from "@/components/ui/form/RichTextEditor";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  postSchema,
+  type PostFormData,
+} from "@/lib/schemas/postsChema/post-schema";
 
 const rubrics = [
   { value: "TEXTS", label: "Texts" },
   { value: "BASICS", label: "Basics" },
   { value: "VIDEOS", label: "Videos" },
   { value: "TRICKS", label: "Tricks" },
-];
+] as const;
 
 export default function NewPostPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,9 +55,11 @@ export default function NewPostPage() {
       formData.append("content", data.content || "");
       formData.append("type", data.type);
       formData.append("rubric", data.rubric);
+
       if (data.scheduledAt) {
         formData.append("scheduledAt", data.scheduledAt);
       }
+
       formData.append("vipOnly", String(vipOnly));
 
       const response = await fetch("/api/posts", {
@@ -68,7 +74,6 @@ export default function NewPostPage() {
 
       const post = await response.json();
 
-      // Upload media if any
       if (mediaFiles.length > 0) {
         for (const file of mediaFiles) {
           const mediaFormData = new FormData();
@@ -83,7 +88,6 @@ export default function NewPostPage() {
       }
 
       alert("Post created successfully!");
-      // Reset form
       reset();
       setMediaFiles([]);
       setVipOnly(false);
@@ -106,7 +110,6 @@ export default function NewPostPage() {
           onSubmit={handleSubmit(onSubmit)}
           className="bg-neutral-200 px-2 py-6 md:px-12 md:py-18 lg:px-36 lg:py-12 xl:px-64 dark:bg-neutral-700"
         >
-          {/* Type Selection */}
           <div className="mb-4">
             <p className="mb-2 block text-black dark:text-white">
               Choose a type:
@@ -119,7 +122,7 @@ export default function NewPostPage() {
                   {...register("type")}
                   className="peer sr-only"
                 />
-                <span className="mr-2 h-4 w-4 rounded-full border-2 border-white peer-checked:border-cyan-700 peer-checked:bg-cyan-700"></span>
+                <span className="mr-2 h-4 w-4 rounded-full border-2 border-white peer-checked:border-cyan-700 peer-checked:bg-cyan-700" />
                 Text
               </label>
               <label className="hover flex cursor-pointer items-center rounded-md bg-neutral-300 px-4 py-2 transition-colors peer-checked:bg-neutral-400 hover:bg-neutral-400 dark:bg-neutral-600 dark:peer-checked:bg-cyan-800 dark:hover:bg-neutral-500">
@@ -129,45 +132,35 @@ export default function NewPostPage() {
                   {...register("type")}
                   className="peer sr-only"
                 />
-                <span className="mr-2 h-4 w-4 rounded-full border-2 border-white peer-checked:border-cyan-700 peer-checked:bg-cyan-700"></span>
+                <span className="mr-2 h-4 w-4 rounded-full border-2 border-white peer-checked:border-cyan-700 peer-checked:bg-cyan-700" />
                 Media
               </label>
             </div>
-            {errors.type && (
-              <p className="text-red-500">{errors.type.message}</p>
-            )}
+            {errors.type && <p className="text-red-500">{errors.type.message}</p>}
           </div>
 
-          {/* Title */}
           <div className="mb-4">
             <label className="block text-black dark:text-white" htmlFor="title">
-              <p>
-                <span className="text-red-600">*</span>
-                Title
-              </p>
-              <input
-                type="text"
-                id="title"
-                {...register("title")}
-                className="mt-2 w-full rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
-                placeholder="Enter title"
-              />
-              {errors.title && (
-                <p className="text-red-500">{errors.title.message}</p>
-              )}
+              <span className="text-red-600">*</span> Title
             </label>
+            <input
+              type="text"
+              id="title"
+              {...register("title")}
+              className="mt-2 w-full rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
+              placeholder="Enter title"
+            />
+            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
           </div>
 
-          {/* Rubric */}
           <div className="mb-4 max-w-64">
             <p className="block text-black dark:text-white">
-              <span className="text-red-600">*</span>
-              Rubric
+              <span className="text-red-600">*</span> Rubric
             </p>
             <select
               required
               {...register("rubric")}
-              defaultValue={"default"}
+              defaultValue="default"
               className="mt-2 w-full cursor-pointer rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
             >
               <option value="default" disabled hidden>
@@ -179,17 +172,12 @@ export default function NewPostPage() {
                 </option>
               ))}
             </select>
-            {errors.rubric && (
-              <p className="text-red-500">{errors.rubric.message}</p>
-            )}
+            {errors.rubric && <p className="text-red-500">{errors.rubric.message}</p>}
           </div>
 
-          {/* Content */}
           {postType === "text" && (
             <div className="mb-4">
-              <span className="mb-2 block text-black dark:text-white">
-                Content
-              </span>
+              <span className="mb-2 block text-black dark:text-white">Content</span>
               <RichTextEditor
                 value={watch("content") || ""}
                 onChange={(value) => setValue("content", value)}
@@ -197,7 +185,6 @@ export default function NewPostPage() {
             </div>
           )}
 
-          {/* Media Upload */}
           {(postType === "text" || postType === "media") && (
             <div className="mb-4">
               <p className="mb-2 block text-black dark:text-white">Media</p>
@@ -211,8 +198,8 @@ export default function NewPostPage() {
                       ? ".jpg, .jpeg, .png, .webp"
                       : "image/*,video/*"
                   }
-                  onChange={(e) =>
-                    setMediaFiles(Array.from(e.target.files || []))
+                  onChange={(event) =>
+                    setMediaFiles(Array.from(event.target.files || []))
                   }
                   className="hidden"
                 />
@@ -224,54 +211,68 @@ export default function NewPostPage() {
                   Upload Media
                 </label>
               </div>
-              <div className="flex flex-wrap gap-4">
-                {mediaFiles.map((file, index) => (
-                  <div
-                    key={index}
-                    className="flex h-fit w-fit flex-col items-start gap-2 rounded bg-neutral-300 p-1 dark:bg-neutral-600"
-                  >
-                    {file.type.startsWith("image/") ? (
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={file.name}
-                        className="max-h-1/2 max-w-1/2 rounded object-cover"
-                      />
-                    ) : (
-                      <video
-                        src={URL.createObjectURL(file)}
-                        className="max-h-1/2 max-w-1/2 rounded object-cover"
-                        controls
-                      />
-                    )}
-                    <div className="">
-                      <p className="mt-1 text-sm text-black dark:text-white">
-                        {file.name}
-                      </p>
-                      <p className="text-xs text-black dark:text-white">
-                        Size: {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setMediaFiles(mediaFiles.filter((_, i) => i !== index))
-                      }
-                      className="mt-1 cursor-pointer rounded-md bg-red-500 px-2 py-1 text-sm text-white hover:bg-red-700"
+              <div className="flex flex-wrap gap-4">
+                {mediaFiles.map((file) => {
+                  const fileKey = `${file.name}-${file.lastModified}-${file.size}-${file.type}`;
+
+                  return (
+                    <div
+                      key={fileKey}
+                      className="flex h-fit w-fit flex-col items-start gap-2 rounded bg-neutral-300 p-1 dark:bg-neutral-600"
                     >
-                      Remove
-                    </button>
-                  </div>
-                ))}
+                      {file.type.startsWith("image/") ? (
+                        <Image
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          width={320}
+                          height={320}
+                          unoptimized
+                          className="max-h-1/2 max-w-1/2 rounded object-cover"
+                        />
+                      ) : (
+                        <video
+                          src={URL.createObjectURL(file)}
+                          className="max-h-1/2 max-w-1/2 rounded object-cover"
+                          controls
+                        >
+                          <track kind="captions" srcLang="en" label="English" />
+                        </video>
+                      )}
+
+                      <div>
+                        <p className="mt-1 text-sm text-black dark:text-white">
+                          {file.name}
+                        </p>
+                        <p className="text-xs text-black dark:text-white">
+                          Size: {(file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setMediaFiles((prev) =>
+                            prev.filter(
+                              (entry) =>
+                                `${entry.name}-${entry.lastModified}-${entry.size}-${entry.type}` !==
+                                fileKey,
+                            ),
+                          )
+                        }
+                        className="mt-1 cursor-pointer rounded-md bg-red-500 px-2 py-1 text-sm text-white hover:bg-red-700"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
 
-          {/* Scheduling */}
           <div className="mb-4">
-            <p className="mb-2 block text-black dark:text-white">
-              Schedule (optional)
-            </p>
+            <p className="mb-2 block text-black dark:text-white">Schedule (optional)</p>
             <input
               type="datetime-local"
               {...register("scheduledAt")}
@@ -288,7 +289,7 @@ export default function NewPostPage() {
                 id="vip-only"
                 type="checkbox"
                 checked={vipOnly}
-                onChange={(e) => setVipOnly(e.target.checked)}
+                onChange={(event) => setVipOnly(event.target.checked)}
                 className="peer sr-only"
                 aria-checked={vipOnly}
               />
@@ -298,8 +299,7 @@ export default function NewPostPage() {
               </span>
 
               <p className="text-base text-neutral-700 dark:text-neutral-300">
-                Show this content only for{" "}
-                <span className="font-golden font-semibold">VIP</span> users.
+                Show this content only for <span className="font-golden font-semibold">VIP</span> users.
               </p>
             </label>
           </div>

@@ -3,44 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
-
-type ChatStatus = "OPEN" | "ARCHIVED" | "BLOCKED";
-
-type ThreadItem = {
-  thread: {
-    id: string;
-    status: ChatStatus;
-    unreadForUser: number;
-    unreadForAdmin: number;
-    updatedAt: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      username: string | null;
-      image: string | null;
-    };
-  };
-  lastMessage: {
-    body: string;
-    createdAt: string;
-  } | null;
-};
-
-type ThreadDetail = {
-  thread: ThreadItem["thread"];
-  messages: Array<{
-    id: string;
-    body: string;
-    createdAt: string;
-    senderUserId: string;
-    senderUser: {
-      id: string;
-      name: string;
-      role: string | null;
-    };
-  }>;
-};
+import type { ChatStatus, ThreadDetail, ThreadItem } from "@/types/chat";
 
 const statusOptions: ChatStatus[] = ["OPEN", "ARCHIVED", "BLOCKED"];
 

@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { postAdminService } from "@/services/social/post-admin.service";
 import { createPostSchema } from "@/interface/schemas/social/post-admin.schema";
 import { getServerSession } from "@/lib/get-session";
+import { postAdminService } from "@/services/social/post-admin.service";
 
 export async function handlePostsPost(request: NextRequest) {
   try {

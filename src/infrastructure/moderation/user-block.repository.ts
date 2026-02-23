@@ -7,22 +7,15 @@ import type {
 } from "@/types/moderation";
 
 function toScopeFilter(action: WriteActionScope) {
-  switch (action) {
-    case "COMMENT_CREATE":
-      return { scopeCommentCreate: true };
-    case "COMMENT_UPDATE":
-      return { scopeCommentUpdate: true };
-    case "COMMENT_DELETE":
-      return { scopeCommentDelete: true };
-    case "FANWALL_CREATE":
-      return { scopeFanwallCreate: true };
-    case "FANWALL_UPDATE":
-      return { scopeFanwallUpdate: true };
-    case "FANWALL_DELETE":
-      return { scopeFanwallDelete: true };
-    default:
-      return { scopeCommentCreate: true };
-  }
+  const scopeMap: Record<WriteActionScope, Record<string, boolean>> = {
+    COMMENT_CREATE: { scopeCommentCreate: true },
+    COMMENT_UPDATE: { scopeCommentUpdate: true },
+    COMMENT_DELETE: { scopeCommentDelete: true },
+    FANWALL_CREATE: { scopeFanwallCreate: true },
+    FANWALL_UPDATE: { scopeFanwallUpdate: true },
+    FANWALL_DELETE: { scopeFanwallDelete: true },
+  };
+  return scopeMap[action] ?? { scopeCommentCreate: true };
 }
 
 export const userBlockRepository = {

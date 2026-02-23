@@ -9,11 +9,11 @@ import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityTogg
 import { Spinner } from "@/components/ui/spinner";
 import type { User } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
-import AvatarUpload from "../../app/admin/AvatarUpload";
 import {
-  updateProfileSchema,
   type UpdateProfileFormData,
-} from "@/lib/helpers/update-profile-schema";
+  updateProfileSchema,
+} from "@/lib/schemas/userSchema/update-profile-schema";
+import AvatarUpload from "../../app/admin/AvatarUpload";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 
 interface ProfileDetailsFormProps {
@@ -127,8 +127,9 @@ export function ProfileDetailsForm({
           initialEnabled={initialOnlineVisibilityEnabled}
         />
         <div className="flex flex-col gap-2">
-          <label>Nickname:</label>
+          <label htmlFor="profile-nickname">Nickname:</label>
           <input
+            id="profile-nickname"
             type="text"
             autoComplete="off"
             placeholder={user.name || "Enter nickname"}
@@ -142,8 +143,9 @@ export function ProfileDetailsForm({
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <label>Edit main title:</label>
+          <label htmlFor="profile-title">Edit main title:</label>
           <input
+            id="profile-title"
             type="text"
             autoComplete="off"
             placeholder={initialTitle || "Enter main title"}
@@ -158,12 +160,13 @@ export function ProfileDetailsForm({
         </div>
         {/* Input change bio information */}
         <div className="flex flex-col gap-2">
-          <label>Change bio information:</label>
+          <label htmlFor="profile-bio">Change bio information:</label>
           <Controller
             name="bio"
             control={control}
             render={({ field }) => (
               <AutoResizeTextarea
+                name="profile-bio"
                 autocorrect="off"
                 value={field.value}
                 onChange={field.onChange}

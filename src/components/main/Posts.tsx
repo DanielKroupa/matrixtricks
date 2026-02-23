@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface Post {
   id: string;
@@ -58,7 +58,9 @@ export function Posts() {
                     className="h-auto w-full"
                   />
                 ) : (
-                  <video src={media.url} controls className="w-full" />
+                  <video src={media.url} controls className="w-full">
+                    <track kind="captions" srcLang="en" label="English" />
+                  </video>
                 )}
               </div>
             ))}

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { checkoutSchema } from "@/interface/schemas/billing/checkout.schema";
 import { getServerSession } from "@/lib/get-session";
 import { stripeBillingService } from "@/services/billing/stripe-billing.service";
-import { checkoutSchema } from "@/interface/schemas/billing/checkout.schema";
 
 export async function handleBillingCheckout(request: NextRequest) {
   try {

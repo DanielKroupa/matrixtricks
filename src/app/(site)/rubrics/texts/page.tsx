@@ -1,7 +1,7 @@
-import { getRubricPostsPage } from "@/actions/social";
-import { getEffectivePostPreference } from "@/lib/helpers/post-preferences";
-import { TextFeed } from "@/components/social/TextFeed";
 import type { Metadata } from "next";
+import { getRubricPostsPage } from "@/actions/social";
+import { TextFeed } from "@/components/social/TextFeed";
+import { getEffectivePostPreference } from "@/lib/post-preferences";
 
 export const metadata: Metadata = {
   title: "Texts | Matrix Tricks",

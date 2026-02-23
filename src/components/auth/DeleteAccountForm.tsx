@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
+import { authClient } from "@/lib/auth-client";
 
 type DeleteAccountFormProps = {
   canChangePassword: boolean;
@@ -77,8 +77,12 @@ export default function DeleteAccountForm({
       } catch {}
 
       window.location.assign("/?accountDeletion=success");
-    } catch (submitError: any) {
-      setError(submitError?.message || "Failed to schedule account deletion");
+    } catch (submitError: unknown) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Failed to schedule account deletion",
+      );
     } finally {
       setLoading(false);
     }
@@ -97,14 +101,13 @@ export default function DeleteAccountForm({
       </div>
 
       {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) {
-              closeModal();
-            }
-          }}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <button
+            type="button"
+            onClick={closeModal}
+            aria-label="Close delete account modal"
+            className="absolute inset-0"
+          />
           <div className="w-full max-w-md rounded-lg bg-neutral-100 p-6 shadow-2xl dark:bg-neutral-800">
             <h3 className="text-lg font-semibold">Delete account</h3>
 

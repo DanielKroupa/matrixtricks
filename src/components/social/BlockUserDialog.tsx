@@ -1,17 +1,7 @@
 "use client";
 
 import { createPortal } from "react-dom";
-
-export type BlockType = "permanent" | "temporary";
-
-export type BlockScopes = {
-  commentCreate: boolean;
-  commentUpdate: boolean;
-  commentDelete: boolean;
-  fanwallCreate: boolean;
-  fanwallUpdate: boolean;
-  fanwallDelete: boolean;
-};
+import type { BlockScopes, BlockUserDialogProps } from "@/types/social";
 
 const scopeOptions: Array<[keyof BlockScopes, string]> = [
   ["commentCreate", "Comment create"],
@@ -21,21 +11,6 @@ const scopeOptions: Array<[keyof BlockScopes, string]> = [
   ["fanwallUpdate", "Fanwall edit"],
   ["fanwallDelete", "Fanwall delete"],
 ];
-
-type BlockUserDialogProps = {
-  isOpen: boolean;
-  blockReason: string;
-  onBlockReasonChange: (value: string) => void;
-  blockType: BlockType;
-  onBlockTypeChange: (value: BlockType) => void;
-  blockUntil: string;
-  onBlockUntilChange: (value: string) => void;
-  blockScopes: BlockScopes;
-  onBlockScopeChange: (key: keyof BlockScopes, value: boolean) => void;
-  blockLoading: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-};
 
 export function BlockUserDialog({
   isOpen,
@@ -139,3 +114,4 @@ export function BlockUserDialog({
     document.body,
   );
 }
+export type { BlockScopes };

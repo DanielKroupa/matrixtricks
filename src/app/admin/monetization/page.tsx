@@ -1,8 +1,8 @@
-import { getServerSession } from "@/lib/get-session";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
-import { MonetizationClient } from "./MonetizationClient";
+import { getServerSession } from "@/lib/get-session";
 import { vipPriceService } from "@/services/billing/vip-price.service";
+import { MonetizationClient } from "./MonetizationClient";
 
 export const metadata: Metadata = {
   title: "Admin settings | Monetization",

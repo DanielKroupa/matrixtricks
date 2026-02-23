@@ -1,10 +1,10 @@
+import Link from "next/link";
 import {
   FaFacebookF,
   FaInstagram,
   FaTiktok,
   FaXTwitter,
 } from "react-icons/fa6";
-import Link from "next/link";
 
 import { Tooltip } from "../ui/Tooltip";
 import { Copyright } from "./Copyright";
@@ -18,25 +18,25 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="flex flex-col items-center bg:text-dark w-full bg-neutral-300 dark:bg-neutral-700">
-      <p className="text-base text-center pt-4">Follow me on</p>
+    <footer className="bg:text-dark flex w-full flex-col items-center bg-neutral-300 dark:bg-neutral-700">
+      <p className="pt-4 text-center text-base">Follow me on</p>
 
-      <div className="flex justify-center gap-6 py-4 text-black w-full">
-        {socialLinks.map(({ label, href, icon: Icon }, i) => (
-          <Tooltip key={i} text={label}>
+      <div className="flex w-full justify-center gap-6 py-4 text-black">
+        {socialLinks.map(({ label, href, icon: Icon }) => (
+          <Tooltip key={label} text={label}>
             <a
               href={href}
-              className="rounded-full group dark:focus:border-white focus:border-neutral-800  transition-colors dark:hover:border-white hover:border-neutral-700 flex justify-center items-center border-2 border-neutral-400 p-3"
+              className="group flex items-center justify-center rounded-full border-2 border-neutral-400 p-3 transition-colors hover:border-neutral-700 focus:border-neutral-800 dark:hover:border-white dark:focus:border-white"
             >
               <Icon
                 size={24}
-                className="group-hover:fill-black dark:group-hover:fill-white dark:text-neutral-300 text-neutral-700 transition-colors group-focus:fill-white dark:group-focus:fill-white "
+                className="text-neutral-700 transition-colors group-hover:fill-black group-focus:fill-white dark:text-neutral-300 dark:group-hover:fill-white dark:group-focus:fill-white"
               />
             </a>
           </Tooltip>
         ))}
       </div>
-      <div className="border-b-2 border-b-neutral-500 w-full pb-2 flex justify-center gap-4 flex-row items-center">
+      <div className="flex w-full flex-row items-center justify-center gap-4 border-b-2 border-b-neutral-500 pb-2">
         <Link href="/">GDPR</Link>
         <Link href="/">Privacy Policy</Link>
         <Link href="/">Cookies settings</Link>

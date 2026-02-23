@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { saveOnlineVisibilityPreferenceAction } from "@/actions/online-visibility";
-import { usePresence } from "@/context/PresenceContext";
+import { usePresence } from "@/hooks/PresenceContext";
 
 type OnlineVisibilityToggleProps = {
   initialEnabled: boolean;

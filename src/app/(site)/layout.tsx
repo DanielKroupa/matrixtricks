@@ -1,9 +1,9 @@
 import { Banner } from "@/components/main/Banner";
 import { Bio } from "@/components/main/Bio";
-import { Monetization } from "@/components/main/Monetization";
 import { FanWall } from "@/components/main/FanWall";
 import { Footer } from "@/components/main/Footer";
 import { GoalBar } from "@/components/main/GoalBar";
+import { Monetization } from "@/components/main/Monetization";
 import { Navbar } from "@/components/main/Navbar";
 import { OtherProjects } from "@/components/main/OtherProjects";
 import { PostSettings } from "@/components/main/PostSettings";

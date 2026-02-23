@@ -1,10 +1,10 @@
 "use client";
 
-import { Spinner } from "@/components/ui/spinner";
-import AvatarUpload from "@/app/admin/AvatarUpload";
-import type { User } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AvatarUpload from "@/app/admin/AvatarUpload";
+import { Spinner } from "@/components/ui/spinner";
+import type { User } from "@/lib/auth";
 
 type SettingsAvatarFormProps = {
   user: User;

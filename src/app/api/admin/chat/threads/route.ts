@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "@/lib/get-session";
-import {
-  adminOpenThreadSchema,
-  adminThreadListSchema,
-} from "@/lib/helpers/chat-schema";
-import { chatService } from "@/services/chat/chat.service";
 import {
   serializeChatMessage,
   serializeChatThread,
 } from "@/app/api/chat/serialize";
+import {
+  adminOpenThreadSchema,
+  adminThreadListSchema,
+} from "@/lib/chat-schema";
+import { getServerSession } from "@/lib/get-session";
+import { chatService } from "@/services/chat/chat.service";
 
 export async function GET(request: Request) {
   const session = await getServerSession();

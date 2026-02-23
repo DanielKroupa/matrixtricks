@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { userBlockService } from "@/services/moderation/user-block.service";
-import { fanwallService } from "@/services/social/fanwall.service";
 import { fanwallUpdateSchema } from "@/interface/schemas/social/fanwall.schema";
 import { broadcastFanwallEvent } from "@/lib/fanwall-realtime";
 import { getServerSession } from "@/lib/get-session";
@@ -8,6 +6,8 @@ import {
   resolveIdentityDeviceId,
   resolveIpAddressFromRequest,
 } from "@/lib/request-identity";
+import { userBlockService } from "@/services/moderation/user-block.service";
+import { fanwallService } from "@/services/social/fanwall.service";
 
 export async function handleFanwallMessagePatch(request: Request, id: string) {
   const session = await getServerSession();

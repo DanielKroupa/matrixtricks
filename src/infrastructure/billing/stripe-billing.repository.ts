@@ -1,25 +1,5 @@
 import prisma from "@/lib/prisma";
-
-type UpsertSubscriptionParams = {
-  stripeSubscriptionId: string;
-  userId: string;
-  stripeCustomerRecordId: string;
-  status:
-    | "INCOMPLETE"
-    | "INCOMPLETE_EXPIRED"
-    | "TRIALING"
-    | "ACTIVE"
-    | "PAST_DUE"
-    | "CANCELED"
-    | "UNPAID"
-    | "PAUSED";
-  currentPeriodStart: Date | null;
-  currentPeriodEnd: Date | null;
-  cancelAtPeriodEnd: boolean;
-  endedAt: Date | null;
-  priceId: string | null;
-  currency: string | null;
-};
+import type { UpsertSubscriptionParams } from "@/types/billing";
 
 export const stripeBillingRepository = {
   async findStripeCustomerByUserId(userId: string) {

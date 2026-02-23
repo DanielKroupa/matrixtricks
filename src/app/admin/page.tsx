@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
-import { getSiteSettings } from "@/lib/helpers/main-title";
-import { getCurrentUserOnlineVisibility } from "@/lib/helpers/online-visibility";
-import { canUserChangePassword } from "@/lib/helpers/auth-capabilities";
-import { getServerSession } from "@/lib/get-session";
 import { ProfileDetailsForm } from "@/components/admin/profile-details-form";
 import UpdatePasswordForm from "@/components/auth/UpdatePasswordForm";
+import { canUserChangePassword } from "@/lib/auth-capabilities";
+import { getServerSession } from "@/lib/get-session";
+import { getSiteSettings } from "@/lib/main-title";
+import { getCurrentUserOnlineVisibility } from "@/lib/online-visibility";
 
 export const metadata: Metadata = {
   title: "Admin settings | Matrix Tricks",

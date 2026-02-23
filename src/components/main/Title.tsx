@@ -1,4 +1,4 @@
-import { getMainTitle } from "@/lib/helpers/main-title";
+import { getMainTitle } from "@/lib/main-title";
 
 export async function Title() {
   const title = await getMainTitle();

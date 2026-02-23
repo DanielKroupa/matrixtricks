@@ -1,15 +1,14 @@
+import { unauthorized } from "next/navigation";
+import DeleteAccountForm from "@/components/auth/DeleteAccountForm";
+import SettingsAvatarForm from "@/components/auth/SettingsAvatarForm";
+import UpdatePasswordForm from "@/components/auth/UpdatePasswordForm";
+import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
+import { canUserChangePassword } from "@/lib/auth-capabilities";
 import { getServerSession } from "@/lib/get-session";
+import { getCurrentUserOnlineVisibility } from "@/lib/online-visibility";
 import { entitlementService } from "@/services/billing/entitlement.service";
 import { vipPriceService } from "@/services/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
-import { getCurrentUserOnlineVisibility } from "@/lib/helpers/online-visibility";
-import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
-import { canUserChangePassword } from "@/lib/helpers/auth-capabilities";
-
-import { unauthorized } from "next/navigation";
-import UpdatePasswordForm from "@/components/auth/UpdatePasswordForm";
-import DeleteAccountForm from "@/components/auth/DeleteAccountForm";
-import SettingsAvatarForm from "@/components/auth/SettingsAvatarForm";
 
 export default async function Page() {
   const session = await getServerSession();

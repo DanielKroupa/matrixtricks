@@ -1,11 +1,10 @@
-import { getServerSession } from "@/lib/get-session";
-import { Metadata } from "next";
-import { forbidden, unauthorized } from "next/navigation";
-import { userBlockService } from "@/services/moderation/user-block.service";
-import prisma from "@/lib/prisma";
+import type { Metadata } from "next";
 import { revalidatePath } from "next/cache";
-
 import Image from "next/image";
+import { forbidden, unauthorized } from "next/navigation";
+import { getServerSession } from "@/lib/get-session";
+import prisma from "@/lib/prisma";
+import { userBlockService } from "@/services/moderation/user-block.service";
 
 export const metadata: Metadata = {
   title: "Admin settings | Moderation",
@@ -23,7 +22,7 @@ export default async function Page() {
     forbidden();
   }
 
-  const adminUserId = user!.id;
+  const _adminUserId = user?.id;
 
   async function unblockAction(formData: FormData) {
     "use server";

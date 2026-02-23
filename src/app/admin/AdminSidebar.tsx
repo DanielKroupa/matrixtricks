@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
+import { BsChatSquareTextFill } from "react-icons/bs";
+import { FaShoppingCart } from "react-icons/fa";
+import { IoBrush } from "react-icons/io5";
 import { MdAdminPanelSettings, MdDataset } from "react-icons/md";
 import { RiMoneyDollarCircleFill, RiUserSettingsFill } from "react-icons/ri";
-import { IoBrush } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
-import { BsChatSquareTextFill } from "react-icons/bs";
 
 type MenuItem = {
   id: string;

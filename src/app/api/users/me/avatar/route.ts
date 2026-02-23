@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { mkdir, unlink, writeFile } from "fs/promises";
-import { join } from "path";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { type NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
-import prisma from "@/lib/prisma";
 import { getServerSession } from "@/lib/get-session";
+import prisma from "@/lib/prisma";
 
 const AVATAR_SIZE = 256;
 const TARGET_MAX_BYTES = 80 * 1024;

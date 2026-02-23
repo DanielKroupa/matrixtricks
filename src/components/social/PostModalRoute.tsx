@@ -8,6 +8,7 @@ export const PostModalRoute = ({
   rubric,
   closeHref,
 }: {
+  // biome-ignore lint/suspicious/noExplicitAny: Post shape varies by feed source and is normalized inside PostModal.
   post: any;
   rubric: string;
   closeHref?: string;

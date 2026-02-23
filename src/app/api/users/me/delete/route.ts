@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
-import { deleteAccountSchema } from "@/lib/helpers/authSchema/delete-account-schema";
+import { deleteAccountSchema } from "@/lib/schemas/authSchema/delete-account-schema";
 import {
-  accountDeletionService,
   AccountDeletionValidationError,
+  accountDeletionService,
 } from "@/services/account/account-deletion.service";
 
 export async function POST(request: NextRequest) {

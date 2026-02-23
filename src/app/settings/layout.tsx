@@ -1,6 +1,6 @@
-import { Navbar } from "@/components/main/Navbar";
+import type { Metadata } from "next";
 import { Copyright } from "@/components/main/Copyright";
-import { Metadata } from "next";
+import { Navbar } from "@/components/main/Navbar";
 
 export const metadata: Metadata = {
   title: "Settings | Matrix Tricks",

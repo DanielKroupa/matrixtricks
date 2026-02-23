@@ -1,29 +1,21 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-import {
-  forgotPasswordSchema,
-  ForgotPasswordFormData,
-} from "@/lib/helpers/authSchema/forgot-password-schema";
 
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "@/context/AuthContext";
-import { authClient } from "@/lib/auth-client";
-
 import { Spinner } from "@/components/ui/spinner";
+import { authClient } from "@/lib/auth-client";
+import {
+  type ForgotPasswordFormData,
+  forgotPasswordSchema,
+} from "@/lib/schemas/authSchema/forgot-password-schema";
 
 export default function ForgotPasswordForm() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const { closeModal } = useAuth();
-  const router = useRouter();
 
   const form = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -52,8 +44,8 @@ export default function ForgotPasswordForm() {
         setSuccess(true);
         console.log("Reset link sent successfully");
       }
-    } catch (err: any) {
-      setError(err?.message || "Something went wrong");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }

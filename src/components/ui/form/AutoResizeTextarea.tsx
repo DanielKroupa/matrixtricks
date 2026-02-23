@@ -45,7 +45,7 @@ export default function AutoResizeTextarea({
     if (!el) return;
 
     el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
+    el.style.height = `${el.scrollHeight}px`;
   };
 
   useEffect(() => {
@@ -53,8 +53,8 @@ export default function AutoResizeTextarea({
     if (!el) return;
 
     el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
-  }, [currentValue]);
+    el.style.height = `${el.scrollHeight}px`;
+  }, []);
 
   return (
     <textarea
@@ -66,7 +66,7 @@ export default function AutoResizeTextarea({
       name={name}
       required={required}
       disabled={disabled}
-      autoCorrect="off"
+      autoCorrect={autocorrect ?? "off"}
       className={
         className ||
         "min-h-20 w-full rounded-md bg-neutral-300 px-2 py-2 ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"

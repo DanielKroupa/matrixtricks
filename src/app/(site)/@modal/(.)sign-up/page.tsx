@@ -1,5 +1,5 @@
-import RegisterForm from "@/components/auth/RegisterForm";
 import type { Metadata } from "next";
+import RegisterForm from "@/components/auth/RegisterForm";
 
 export const metadata: Metadata = {
   title: "Sign up | Matrix Tricks",

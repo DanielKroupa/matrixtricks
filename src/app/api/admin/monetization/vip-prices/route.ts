@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { updateVipPricesSchema } from "@/lib/admin-monetization-schema";
 import { getServerSession } from "@/lib/get-session";
 import { vipPriceService } from "@/services/billing/vip-price.service";
-import { updateVipPricesSchema } from "@/lib/helpers/admin-monetization-schema";
 
 function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
   return Boolean(session?.user && session.user.role === "admin");

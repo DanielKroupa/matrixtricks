@@ -1,34 +1,13 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { io, type Socket } from "socket.io-client";
-import { X } from "lucide-react";
-
-type ChatMessage = {
-  id: string;
-  body: string;
-  createdAt: string;
-  senderUserId: string;
-  senderUser: {
-    id: string;
-    name: string;
-    username: string | null;
-    image: string | null;
-    role: string | null;
-  };
-};
-
-type ChatThread = {
-  id: string;
-  status: "OPEN" | "ARCHIVED" | "BLOCKED";
-  unreadForUser: number;
-  unreadForAdmin: number;
-};
-
-type UserChatWidgetProps = {
-  userId: string | null;
-  userRole?: string | null;
-};
+import type {
+  ChatMessage,
+  ChatThread,
+  UserChatWidgetProps,
+} from "@/types/chat";
 
 export default function UserChatWidget({
   userId,
@@ -41,7 +20,7 @@ export default function UserChatWidget({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [body, setBody] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [_unreadCount, setUnreadCount] = useState(0);
 
   const isBlocked = thread?.status === "BLOCKED";
   const canRender = Boolean(userId) && userRole !== "admin";
@@ -125,7 +104,7 @@ export default function UserChatWidget({
     return () => {
       socket.disconnect();
     };
-  }, [canRender, isOpen, loadThread, loadUnread, userId]);
+  }, [canRender, isOpen, loadThread, userId]);
 
   useEffect(() => {
     if (!canRender) {
@@ -144,7 +123,7 @@ export default function UserChatWidget({
     };
   }, [canRender, loadThread]);
 
-  const toggleOpen = async () => {
+  const _toggleOpen = async () => {
     const next = !isOpen;
     setIsOpen(next);
 

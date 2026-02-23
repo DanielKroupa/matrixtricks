@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import SubmitLabel from "@/components/ui/form/SubmitLabel";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {

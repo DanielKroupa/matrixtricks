@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import {
-  updatePasswordSchema,
-  UpdatePasswordData,
-} from "@/lib/helpers/authSchema/update-password-schema";
-
-import { Spinner } from "@/components/ui/spinner";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth-client";
+import {
+  type UpdatePasswordData,
+  updatePasswordSchema,
+} from "@/lib/schemas/authSchema/update-password-schema";
 
 type UpdatePasswordFormProps = {
   canChangePassword: boolean;
@@ -64,8 +63,10 @@ export default function UpdatePasswordForm({
         setSuccess(true);
         form.reset();
       }
-    } catch (err: any) {
-      setError(err?.message || "An unexpected error occurred");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred",
+      );
     } finally {
       setLoading(false);
     }
@@ -108,8 +109,9 @@ export default function UpdatePasswordForm({
           <div className="space-y-4 p-4 px-6">
             {/* Current Password Input */}
             <div className="flex flex-col justify-center gap-1">
-              <label>Current password</label>
+              <label htmlFor="current-password">Current password</label>
               <input
+                id="current-password"
                 type="password"
                 autoComplete="current-password"
                 className="w-full rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600"
@@ -124,8 +126,9 @@ export default function UpdatePasswordForm({
 
             {/* New Password Input */}
             <div className="flex flex-col gap-1">
-              <label>New password</label>
+              <label htmlFor="new-password">New password</label>
               <input
+                id="new-password"
                 type="password"
                 autoComplete="new-password"
                 className="w-full rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
@@ -140,8 +143,9 @@ export default function UpdatePasswordForm({
 
             {/* Confirm New Password Input */}
             <div className="flex flex-col gap-1">
-              <label>Confirm new password</label>
+              <label htmlFor="confirm-new-password">Confirm new password</label>
               <input
+                id="confirm-new-password"
                 type="password"
                 autoComplete="new-password"
                 className="w-full rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"

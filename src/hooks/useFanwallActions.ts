@@ -10,15 +10,8 @@ import type {
   ApiResponse,
   FanwallError,
   FanwallMessage,
-  FanwallUser,
+  UseFanwallActionsParams,
 } from "@/types/fanwall";
-
-type UseFanwallActionsParams = {
-  sessionUser: FanwallUser | null;
-  isAdmin: boolean;
-  refreshMessages: () => Promise<void>;
-  setMessages: React.Dispatch<React.SetStateAction<FanwallMessage[]>>;
-};
 
 export function useFanwallActions({
   sessionUser,

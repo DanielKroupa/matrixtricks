@@ -1,6 +1,6 @@
-import { getServerSession } from "@/lib/get-session";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
+import { getServerSession } from "@/lib/get-session";
 
 export const metadata: Metadata = {
   title: "Admin settings | Rubrics",

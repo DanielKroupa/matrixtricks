@@ -1,17 +1,19 @@
 "use client";
 
+import { Heart, Pin, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Pin, Play } from "lucide-react";
 import { FaLock } from "react-icons/fa6";
 
 // Using exact type would be better, but any for flexibility with Prisma includes
 interface VideoCardProps {
+  // biome-ignore lint/suspicious/noExplicitAny: Post DTO differs across feed endpoints and is gradually being unified.
   post: any;
 }
 
 export const VideoCard = ({ post }: VideoCardProps) => {
   const videoMedia =
+    // biome-ignore lint/suspicious/noExplicitAny: Media item type is polymorphic in current feed payload.
     post.media.find((media: any) => media.type === "video") || post.media[0];
   const thumbnailUrl = videoMedia?.url; // In real app, generate thumbnail. For now use same URL or placeholder if video.
   const rubricSlug =

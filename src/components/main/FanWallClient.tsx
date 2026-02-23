@@ -2,14 +2,19 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
-import Badge from "../ui/Badge";
-import { usePresenceStatuses } from "@/context/PresenceContext";
+import {
+  BsFillPinAngleFill,
+  BsPinFill,
+  BsThreeDotsVertical,
+} from "react-icons/bs";
+import { FaPen } from "react-icons/fa6";
+import { IoTrash } from "react-icons/io5";
+import { PiPaperPlaneRightFill } from "react-icons/pi";
+import { UserInfoBubble } from "@/components/social/UserInfoBubble";
+import { usePresenceStatuses } from "@/hooks/PresenceContext";
 import { useFanwallActions } from "@/hooks/useFanwallActions";
 import { useFanwallPagination } from "@/hooks/useFanwallPagination";
 import { useFanwallSocket } from "@/hooks/useFanwallSocket";
-import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
-import { UserInfoBubble } from "@/components/social/UserInfoBubble";
 import type {
   ApiResponse,
   FanWallClientProps,
@@ -17,13 +22,9 @@ import type {
   FanwallMessage,
   FanwallUser,
 } from "../../types/fanwall";
-
-import { BsPinFill } from "react-icons/bs";
-import { BsFillPinAngleFill } from "react-icons/bs";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { IoTrash } from "react-icons/io5";
-import { FaPen } from "react-icons/fa6";
-import { PiPaperPlaneRightFill } from "react-icons/pi";
+import Badge from "../ui/Badge";
+import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
+import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
 
 function formatTime(iso: string) {
   const date = new Date(iso);
@@ -153,6 +154,7 @@ function PinnedMessageCard({
           {isAdmin && (
             <>
               <button
+                type="button"
                 className="fanwall-menu-button absolute top-2 right-2 cursor-pointer rounded-full bg-neutral-300 p-1 opacity-100 transition-opacity hover:bg-neutral-400 md:opacity-0 md:group-hover:opacity-100 dark:bg-neutral-500 dark:hover:bg-neutral-400"
                 onClick={onToggleMenu}
               >
@@ -161,6 +163,7 @@ function PinnedMessageCard({
               {isMenuOpen && (
                 <div className="fanwall-menu absolute top-8 right-2 z-10 w-32 rounded-md bg-white shadow-lg dark:bg-neutral-600">
                   <button
+                    type="button"
                     className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-500"
                     onClick={() => {
                       onTogglePin(message);
@@ -307,6 +310,7 @@ function FanwallMessageItem({
         {(canEdit || canDelete || isAdmin) && (
           <>
             <button
+              type="button"
               title="Edit post"
               className="fanwall-menu-button absolute top-2 right-2 cursor-pointer rounded-full bg-none p-1 opacity-100 transition-opacity md:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 md:hover:bg-neutral-400 md:dark:bg-neutral-600 md:dark:hover:bg-neutral-400"
               onClick={onToggleMenu}
@@ -317,6 +321,7 @@ function FanwallMessageItem({
               <div className="fanwall-menu absolute top-8 right-2 z-10 w-32 rounded-md bg-white shadow-lg dark:bg-neutral-600">
                 {isAdmin && (
                   <button
+                    type="button"
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
                     title="Pin post"
                     onClick={() => {
@@ -330,6 +335,7 @@ function FanwallMessageItem({
                 )}
                 {canEdit && !isEditing && (
                   <button
+                    type="button"
                     className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
                     disabled={loading || isUpdateBlocked}
                     title={
@@ -348,6 +354,7 @@ function FanwallMessageItem({
                 )}
                 {canDelete && (
                   <button
+                    type="button"
                     title="Delete post"
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-100 dark:text-red-300 dark:hover:bg-neutral-500"
                     disabled={loading || isDeleteBlocked}
@@ -621,7 +628,6 @@ export default function FanWallClient({
           ref={containerRef}
           onScroll={onScroll}
           className="fanwall-scroll overflow-auto px-0 md:px-2"
-          role="list"
         >
           {loadingOlder && (
             <div className="px-4 py-2 text-center text-xs text-neutral-500">

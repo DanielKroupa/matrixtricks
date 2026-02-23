@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getPostDetails } from "@/actions/social";
 import { PostModalRoute } from "@/components/social/PostModalRoute";
 import { VipPaywall } from "@/components/social/VipPaywall";
@@ -52,7 +52,7 @@ export async function generateMetadata({
 
   const canonicalPath = `/rubrics/${rubric}/post/${post.id}`;
   const description = toDescription(post.content);
-  const firstImage = post.media.find((item: typeof post.media[number]) =>
+  const firstImage = post.media.find((item: (typeof post.media)[number]) =>
     item.type.startsWith("image"),
   )?.url;
 

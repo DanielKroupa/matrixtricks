@@ -1,8 +1,8 @@
-import { stripe } from "@/infrastructure/billing/stripe.client";
+import type Stripe from "stripe";
 import { entitlementRepository } from "@/infrastructure/billing/entitlement.repository";
-import Stripe from "stripe";
-import { vipPriceService } from "@/services/billing/vip-price.service";
+import { stripe } from "@/infrastructure/billing/stripe.client";
 import { stripeBillingRepository } from "@/infrastructure/billing/stripe-billing.repository";
+import { vipPriceService } from "@/services/billing/vip-price.service";
 
 type PrismaSubscriptionStatus =
   | "INCOMPLETE"

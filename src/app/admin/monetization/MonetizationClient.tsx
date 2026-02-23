@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type VipGrantRecord = {
   id: string;
@@ -73,7 +73,7 @@ export function MonetizationClient({
     }));
   }, [configuredPriceMap]);
 
-  async function loadGrants() {
+  const loadGrants = useCallback(async () => {
     setLoading(true);
     setError("");
 
@@ -97,9 +97,9 @@ export function MonetizationClient({
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
-  async function loadPrices() {
+  const loadPrices = useCallback(async () => {
     try {
       const response = await fetch("/api/admin/monetization/vip-prices", {
         method: "GET",
@@ -117,12 +117,12 @@ export function MonetizationClient({
     } catch (_error) {
       setError("Failed to load prices");
     }
-  }
+  }, []);
 
   useEffect(() => {
     loadGrants();
     loadPrices();
-  }, []);
+  }, [loadGrants, loadPrices]);
 
   function upsertLocalPrice(
     currency: string,

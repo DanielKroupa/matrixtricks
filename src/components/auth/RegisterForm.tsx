@@ -1,18 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
-import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-  RegisterFormData,
-  registerSchema,
-} from "@/lib/helpers/authSchema/register-schema";
-import { Spinner } from "@/components/ui/spinner";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import PrimaryButton from "@/components/ui/form/PrimaryButton";
+import { useAuth } from "@/hooks/AuthContext";
+import { authClient } from "@/lib/auth-client";
+import {
+  type RegisterFormData,
+  registerSchema,
+} from "@/lib/schemas/authSchema/register-schema";
 
 export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
@@ -56,8 +54,10 @@ export default function RegisterForm() {
         // use full page navigation to ensure session state updates
         window.location.assign("/");
       }
-    } catch (err: any) {
-      setError(err?.message || "An unexpected error occurred");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred",
+      );
     } finally {
       setLoading(false);
     }

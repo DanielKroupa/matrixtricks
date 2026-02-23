@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "@/lib/get-session";
 import {
   createManualVipGrantSchema,
   listVipGrantsQuerySchema,
-} from "@/lib/helpers/admin-monetization-schema";
+} from "@/lib/admin-monetization-schema";
+import { getServerSession } from "@/lib/get-session";
 import { adminVipService } from "@/services/billing/admin-vip.service";
 
 function ensureAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {

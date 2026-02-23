@@ -1,7 +1,7 @@
+import type { Metadata } from "next";
+import { Copyright } from "@/components/main/Copyright";
 import { Navbar } from "@/components/main/Navbar";
 import AdminSidebar from "./AdminSidebar";
-import { Copyright } from "@/components/main/Copyright";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Admin | Matrix Tricks",

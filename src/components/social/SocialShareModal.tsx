@@ -1,6 +1,6 @@
 "use client";
 import { Link, X } from "lucide-react";
-import { FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa6";
+import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa6";
 
 interface SocialShareModalProps {
   isOpen: boolean;
@@ -47,14 +47,17 @@ export const SocialShareModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
+      <button
+        type="button"
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
+        aria-label="Close share modal"
       />
       <div className="relative z-10 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-800">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">{heading}</h3>
           <button
+            type="button"
             onClick={onClose}
             title="Close"
             className="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-neutral-700"
@@ -81,6 +84,7 @@ export const SocialShareModal = ({
             </a>
           ))}
           <button
+            type="button"
             onClick={copyToClipboard}
             className="group flex cursor-pointer flex-col items-center gap-2"
           >

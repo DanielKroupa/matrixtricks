@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "@/lib/get-session";
-import { adminThreadStatusSchema } from "@/lib/helpers/chat-schema";
-import { chatService } from "@/services/chat/chat.service";
 import { serializeChatThread } from "@/app/api/chat/serialize";
+import { adminThreadStatusSchema } from "@/lib/chat-schema";
+import { getServerSession } from "@/lib/get-session";
+import { chatService } from "@/services/chat/chat.service";
 
 export async function PATCH(
   request: Request,

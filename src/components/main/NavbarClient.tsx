@@ -1,22 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import { ChevronDownIcon, MenuIcon, PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-import { IoSettings } from "react-icons/io5";
-import { FaUser } from "react-icons/fa6";
+import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
+import { FaUser } from "react-icons/fa6";
+import { IoSettings } from "react-icons/io5";
 import { RiAdminFill } from "react-icons/ri";
-
+import type { User } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
-import { User } from "@/lib/auth";
 import Badge from "../ui/Badge";
 
 type Props = {
+  // biome-ignore lint/suspicious/noExplicitAny: Session shape comes from auth runtime and is progressively typed.
   initialSession: any;
   user?: User | null;
   isVipActive?: boolean;
@@ -251,6 +250,7 @@ export default function NavbarClient({
         )}
 
         <button
+          type="button"
           title="Language switch"
           className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
         >
@@ -266,6 +266,7 @@ export default function NavbarClient({
 
         {user?.role === "admin" && (
           <button
+            type="button"
             onClick={() => router.push("/new-post")}
             className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
@@ -275,6 +276,7 @@ export default function NavbarClient({
         )}
 
         <button
+          type="button"
           onClick={toggleTheme}
           aria-label="Toggle theme"
           className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
@@ -386,6 +388,7 @@ export default function NavbarClient({
 
                   {user?.role === "admin" && (
                     <button
+                      type="button"
                       onClick={() => router.push("/new-post")}
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
                     >
@@ -439,7 +442,10 @@ export default function NavbarClient({
                       Theme
                     </button>
 
-                    <button className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80">
+                    <button
+                      type="button"
+                      className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
+                    >
                       <Image
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
@@ -500,7 +506,10 @@ export default function NavbarClient({
                       Switch Theme
                     </button>
 
-                    <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80">
+                    <button
+                      type="button"
+                      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
+                    >
                       <Image
                         src="/icons/lang-cs.png"
                         alt="lang-switch"
