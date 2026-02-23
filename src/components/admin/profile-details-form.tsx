@@ -8,7 +8,6 @@ import { updateSiteSettings } from "@/actions/site-settings";
 import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
 import { Spinner } from "@/components/ui/spinner";
 import type { User } from "@/lib/auth";
-import { authClient } from "@/lib/auth-client";
 import {
   type UpdateProfileFormData,
   updateProfileSchema,
@@ -39,7 +38,7 @@ export function ProfileDetailsForm({
   const form = useForm<UpdateProfileFormData>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
-      nickname: user.name ?? "",
+      nickname: user.username ?? user.name ?? "",
       title: initialTitle,
       bio: initialBio,
     },
@@ -49,8 +48,31 @@ export function ProfileDetailsForm({
     register,
     handleSubmit,
     control,
+    setError: setFormError,
+    clearErrors,
     formState: { errors },
   } = form;
+
+  async function ensureNicknameIsAvailable(value: string) {
+    const response = await fetch(
+      `/api/users/username-availability?value=${encodeURIComponent(value)}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      },
+    );
+
+    const payload = (await response.json()) as {
+      available?: boolean;
+      error?: string;
+    };
+
+    if (!response.ok || !payload.available) {
+      return payload.error || "Nickname is already taken";
+    }
+
+    return null;
+  }
 
   async function onSubmit({ nickname, title, bio }: UpdateProfileFormData) {
     setSuccess(null);
@@ -58,12 +80,53 @@ export function ProfileDetailsForm({
     setLoading(true);
 
     try {
-      const { error: updateNameError } = await authClient.updateUser({
-        name: nickname,
+      const normalizedNickname = nickname.trim();
+      const availabilityError =
+        await ensureNicknameIsAvailable(normalizedNickname);
+
+      if (availabilityError) {
+        setFormError("nickname", {
+          type: "manual",
+          message: availabilityError,
+        });
+        return;
+      }
+
+      clearErrors("nickname");
+
+      const nicknameResponse = await fetch("/api/users/me/nickname", {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ nickname: normalizedNickname }),
       });
 
-      if (updateNameError) {
-        setError(updateNameError.message || "Failed to update profile");
+      const nicknamePayload = (await nicknameResponse.json()) as {
+        error?: string | Record<string, string[] | undefined>;
+      };
+
+      if (!nicknameResponse.ok) {
+        if (
+          nicknamePayload.error &&
+          typeof nicknamePayload.error === "object" &&
+          "nickname" in nicknamePayload.error
+        ) {
+          const nicknameErrors = nicknamePayload.error.nickname;
+          if (Array.isArray(nicknameErrors) && nicknameErrors.length > 0) {
+            setFormError("nickname", {
+              type: "manual",
+              message: nicknameErrors[0],
+            });
+            return;
+          }
+        }
+
+        setError(
+          typeof nicknamePayload.error === "string"
+            ? nicknamePayload.error
+            : "Failed to update profile",
+        );
         return;
       }
 
@@ -132,7 +195,7 @@ export function ProfileDetailsForm({
             id="profile-nickname"
             type="text"
             autoComplete="off"
-            placeholder={user.name || "Enter nickname"}
+            placeholder={user.username || user.name || "Enter nickname"}
             className="w-auto rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
             {...register("nickname")}
           />

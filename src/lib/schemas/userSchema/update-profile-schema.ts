@@ -8,7 +8,7 @@ export const updateProfileSchema = z.object({
     .max(30, { message: "Nickname must be at most 30 characters long" })
     .regex(
       /^[a-zA-Z0-9_.]+$/,
-      "Username can only contain letters, numbers, underscores, and dots",
+      "Nickname can only contain letters, numbers, underscores, and dots",
     ),
   title: z
     .string()

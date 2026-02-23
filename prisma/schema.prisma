@@ -80,11 +80,13 @@ model User {
   chatMessages        ChatMessage[]         @relation("chat_message_sender")
   blockedChatThreads  ChatThread[]          @relation("chat_thread_blocked_by_user")
 
-  username        String?
-  displayUsername String?
+  username           String?
+  usernameNormalized String?
+  displayUsername    String?
 
   @@unique([email])
   @@unique([username])
+  @@unique([usernameNormalized])
   @@index([deleteAfterAt])
   @@map("user")
 }

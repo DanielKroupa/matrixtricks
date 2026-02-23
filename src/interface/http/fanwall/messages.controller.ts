@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
-import { fanwallCreateSchema } from "@/lib/schemas/pageSchema/fanwall-schema";
 import { broadcastFanwallEvent } from "@/lib/fanwall-realtime";
 import { getServerSession } from "@/lib/get-session";
 import {
   resolveIdentityDeviceId,
   resolveIpAddressFromRequest,
 } from "@/lib/request-identity";
+import { fanwallCreateSchema } from "@/lib/schemas/pageSchema/fanwall-schema";
+import {
+  RESERVED_NICKNAME_MESSAGE,
+  usernameService,
+} from "@/services/account/username.service";
 import { userBlockService } from "@/services/moderation/user-block.service";
 import { fanwallService } from "@/services/social/fanwall.service";
 
@@ -72,6 +76,20 @@ export async function handleFanwallMessagesPost(request: Request) {
     if (!nickname || !contact) {
       return NextResponse.json(
         { error: "Nickname and contact are required for anonymous posts." },
+        { status: 400 },
+      );
+    }
+
+    const isRegisteredNickname =
+      await usernameService.isRegisteredUsername(nickname);
+
+    if (isRegisteredNickname) {
+      return NextResponse.json(
+        {
+          error: {
+            nickname: [RESERVED_NICKNAME_MESSAGE],
+          },
+        },
         { status: 400 },
       );
     }

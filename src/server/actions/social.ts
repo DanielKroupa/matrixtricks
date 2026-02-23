@@ -8,6 +8,10 @@ import {
   resolveIpAddressFromServerHeaders,
 } from "@/lib/request-identity";
 import { CreateCommentSchema, UpdateCommentSchema } from "@/lib/social-schema";
+import {
+  RESERVED_NICKNAME_MESSAGE,
+  usernameService,
+} from "@/services/account/username.service";
 import { entitlementService } from "@/services/billing/entitlement.service";
 import { userBlockService } from "@/services/moderation/user-block.service";
 import { postService } from "@/services/social/post.service";
@@ -85,6 +89,15 @@ export async function createComment(data: z.infer<typeof CreateCommentSchema>) {
 
   if (!userId && !nickname) {
     return { error: "Nickname required for anonymous users" };
+  }
+
+  if (!userId && nickname) {
+    const isRegisteredNickname =
+      await usernameService.isRegisteredUsername(nickname);
+
+    if (isRegisteredNickname) {
+      return { error: RESERVED_NICKNAME_MESSAGE };
+    }
   }
 
   try {

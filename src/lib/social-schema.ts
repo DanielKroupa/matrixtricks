@@ -8,6 +8,7 @@ export const CreateCommentSchema = z.object({
   postId: z.string().cuid(),
   nickname: z
     .string()
+    .trim()
     .min(2, "Nickname is too short")
     .max(30, "Nickname is too long")
     .optional(),

@@ -29,18 +29,55 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
+    setError: setFormError,
+    clearErrors,
     formState: { errors },
   } = form;
 
   const { closeModal } = useAuth();
 
+  async function ensureNicknameIsAvailable(value: string) {
+    const response = await fetch(
+      `/api/users/username-availability?value=${encodeURIComponent(value)}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      },
+    );
+
+    const payload = (await response.json()) as {
+      available?: boolean;
+      error?: string;
+    };
+
+    if (!response.ok || !payload.available) {
+      return payload.error || "Username is already taken";
+    }
+
+    return null;
+  }
+
   async function onSubmit({ email, password, username }: RegisterFormData) {
     setError(null);
     setLoading(true);
     try {
+      const normalizedUsername = username.trim();
+      const availabilityError =
+        await ensureNicknameIsAvailable(normalizedUsername);
+
+      if (availabilityError) {
+        setFormError("username", {
+          type: "manual",
+          message: availabilityError,
+        });
+        return;
+      }
+
+      clearErrors("username");
+
       const result = await authClient.signUp.email({
         email,
-        name: username,
+        name: normalizedUsername,
 
         password,
         callbackURL: "/",

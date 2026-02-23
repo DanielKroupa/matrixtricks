@@ -13,6 +13,7 @@ export const fanwallCreateSchema = z.object({
     .nullable(),
   nickname: z
     .string()
+    .trim()
     .max(30, "Nickname must be at most 30 characters")
     .optional()
     .nullable(),

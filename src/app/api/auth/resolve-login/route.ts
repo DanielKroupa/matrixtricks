@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { usernameService } from "@/services/account/username.service";
 
 type ResolveLoginBody = {
   login?: string;
@@ -18,16 +18,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ email: rawLogin });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { username: rawLogin },
-      select: { email: true },
-    });
+    const email = await usernameService.resolveLoginEmail(rawLogin);
 
-    if (!user?.email) {
+    if (!email) {
       return NextResponse.json({ email: null });
     }
 
-    return NextResponse.json({ email: user.email });
+    return NextResponse.json({ email });
   } catch {
     return NextResponse.json(
       { error: "Failed to resolve login" },
