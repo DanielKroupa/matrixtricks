@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getPostDetails } from "@/actions/social";
-import { PostModalRoute } from "@/app/components/social/PostModalRoute";
-import { VipPaywall } from "@/app/components/social/VipPaywall";
+import { PostModalRoute } from "@/components/social/PostModalRoute";
+import { VipPaywall } from "@/components/social/VipPaywall";
 
 function toDescription(content: string | null | undefined, maxLength = 160) {
   if (!content) {
@@ -52,7 +52,7 @@ export async function generateMetadata({
 
   const canonicalPath = `/rubrics/${rubric}/post/${post.id}`;
   const description = toDescription(post.content);
-  const firstImage = post.media.find((item) =>
+  const firstImage = post.media.find((item: typeof post.media[number]) =>
     item.type.startsWith("image"),
   )?.url;
 

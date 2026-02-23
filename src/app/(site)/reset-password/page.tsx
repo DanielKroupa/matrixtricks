@@ -10,7 +10,7 @@ import { authClient } from "@/lib/auth-client";
 import {
   ResetPasswordData,
   resetPasswordSchema,
-} from "@/app/helpers/reset-password-schema";
+} from "@/lib/helpers/authSchema/reset-password-schema";
 
 function ResetPasswordContent() {
   const router = useRouter();
@@ -75,7 +75,7 @@ function ResetPasswordContent() {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex shadow items-center justify-center bg-black/60 ">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 shadow">
         <div className="relative w-full max-w-md rounded-lg bg-white shadow-2xl dark:bg-neutral-800">
           <div className="p-8 pt-12">
             <div className="space-y-6">
@@ -95,8 +95,7 @@ function ResetPasswordContent() {
                     autoComplete="new-password"
                     {...register("password")}
                     placeholder="New Password"
-                    className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md 
-              ${errors.password ? "border border-red-500" : ""}`}
+                    className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${errors.password ? "border border-red-500" : ""}`}
                     required
                   />
                 </div>
@@ -106,8 +105,7 @@ function ResetPasswordContent() {
                     autoComplete="new-password"
                     {...register("confirmPassword")}
                     placeholder="Confirm new password"
-                    className={`mt-2 w-full rounded-lg dark:bg-neutral-700 bg-neutral-300 px-4 py-2.5 dark:text-neutral-300 text-neutral-700  placeholder-neutral-500 transition-colors outline-none dark:shadow-md 
-              ${errors.confirmPassword ? "border border-red-500" : ""}`}
+                    className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${errors.confirmPassword ? "border border-red-500" : ""}`}
                     required
                   />
                   {errors.password && (
@@ -133,7 +131,7 @@ function ResetPasswordContent() {
               <div className="space-y-2 border-t border-gray-200 pt-4 dark:border-gray-700">
                 <Link
                   href="/sign-in"
-                  className="block text-center mx-auto text-sm dark:text-cyan-500 dark:hover:text-cyan-700 text-cyan-700 hover:text-cyan-800 cursor-pointer "
+                  className="mx-auto block cursor-pointer text-center text-sm text-cyan-700 hover:text-cyan-800 dark:text-cyan-500 dark:hover:text-cyan-700"
                 >
                   Back to Sign In
                 </Link>

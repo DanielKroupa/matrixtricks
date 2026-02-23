@@ -1,10 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { siteBioSchema } from "@/app/helpers/site-bio-schema";
-import { siteTitleSchema } from "@/app/helpers/site-title-schema";
+import { siteSettingsService } from "@/application/social/site-settings.service";
+import {
+  siteBioSchema,
+  siteTitleSchema,
+} from "@/interface/schemas/social/site-settings.schema";
 import { getServerSession } from "@/lib/get-session";
-import prisma from "@/lib/prisma";
 
 type UpdateSiteSettingsInput = {
   title: string;
@@ -29,14 +31,9 @@ export async function updateSiteSettings(input: UpdateSiteSettingsInput) {
     return { error: bioValidation.error.issues[0]?.message || "Invalid bio" };
   }
 
-  await prisma.siteSetting.upsert({
-    where: { id: "global" },
-    update: { mainTitle: input.title, mainBio: input.bio },
-    create: {
-      id: "global",
-      mainTitle: input.title,
-      mainBio: input.bio,
-    },
+  await siteSettingsService.updateGlobalSettings({
+    title: input.title,
+    bio: input.bio,
   });
 
   revalidatePath("/", "layout");

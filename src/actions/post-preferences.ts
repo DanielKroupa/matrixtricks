@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import {
   getEffectivePostPreference,
   savePostPreference,
-} from "@/app/helpers/post-preferences";
+} from "@/lib/helpers/post-preferences";
 import type { PostSortOption, RubricParam } from "@/domain/social/types";
 
 export async function getPostPreferenceAction(rubric: RubricParam) {

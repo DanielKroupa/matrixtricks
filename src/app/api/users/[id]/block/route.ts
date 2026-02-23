@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createUserBlockSchema } from "@/app/helpers/user-block-schema";
+import { createUserBlockSchema } from "@/lib/helpers/user-block-schema";
 import { userBlockService } from "@/application/moderation/user-block.service";
 import { getServerSession } from "@/lib/get-session";
 

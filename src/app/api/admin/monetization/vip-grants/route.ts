@@ -3,7 +3,7 @@ import { getServerSession } from "@/lib/get-session";
 import {
   createManualVipGrantSchema,
   listVipGrantsQuerySchema,
-} from "@/app/helpers/admin-monetization-schema";
+} from "@/lib/helpers/admin-monetization-schema";
 import { adminVipService } from "@/application/billing/admin-vip.service";
 
 function ensureAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {

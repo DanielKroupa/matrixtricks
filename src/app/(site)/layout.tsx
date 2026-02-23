@@ -1,14 +1,14 @@
-import { Navbar } from "../components/pageLayout/Navbar";
-import { Banner } from "../components/Banner";
-import { PostSettings } from "../components/pageLayout/PostSettings";
-import { GoalBar } from "../components/pageLayout/GoalBar";
-import { Rubrics } from "../components/pageLayout/Rubrics";
-import { Monetization } from "../components/Monetization";
-import { Bio } from "../components/Bio";
-import { Title } from "../components/Title";
-import { Footer } from "../components/pageLayout/Footer";
-import { OtherProjects } from "../components/pageLayout/OtherProjects";
-import { FanWall } from "../components/pageLayout/FanWall";
+import { Banner } from "@/components/main/Banner";
+import { Bio } from "@/components/main/Bio";
+import { Monetization } from "@/components/main/Monetization";
+import { FanWall } from "@/components/main/FanWall";
+import { Footer } from "@/components/main/Footer";
+import { GoalBar } from "@/components/main/GoalBar";
+import { Navbar } from "@/components/main/Navbar";
+import { OtherProjects } from "@/components/main/OtherProjects";
+import { PostSettings } from "@/components/main/PostSettings";
+import { Rubrics } from "@/components/main/Rubrics";
+import { Title } from "@/components/main/Title";
 
 export default function SiteLayout({
   children,

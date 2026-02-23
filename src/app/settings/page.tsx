@@ -2,16 +2,14 @@ import { getServerSession } from "@/lib/get-session";
 import { entitlementService } from "@/application/billing/entitlement.service";
 import { vipPriceService } from "@/application/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
-import { getCurrentUserOnlineVisibility } from "@/app/helpers/online-visibility";
-import { OnlineVisibilityToggle } from "@/app/components/social/OnlineVisibilityToggle";
-import { canUserChangePassword } from "@/app/helpers/auth-capabilities";
+import { getCurrentUserOnlineVisibility } from "@/lib/helpers/online-visibility";
+import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
+import { canUserChangePassword } from "@/lib/helpers/auth-capabilities";
 
 import { unauthorized } from "next/navigation";
-import UpdatePasswordForm from "../components/authLayout/UpdatePasswordForm";
-import DeleteAccountForm from "../components/authLayout/DeleteAccountForm";
-import SettingsAvatarForm from "../components/authLayout/SettingsAvatarForm";
-
-import Image from "next/image";
+import UpdatePasswordForm from "@/components/auth/UpdatePasswordForm";
+import DeleteAccountForm from "@/components/auth/DeleteAccountForm";
+import SettingsAvatarForm from "@/components/auth/SettingsAvatarForm";
 
 export default async function Page() {
   const session = await getServerSession();

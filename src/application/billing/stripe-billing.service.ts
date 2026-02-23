@@ -1,8 +1,8 @@
 import { stripe } from "@/infrastructure/billing/stripe.client";
-import prisma from "@/lib/prisma";
 import { entitlementRepository } from "@/infrastructure/billing/entitlement.repository";
 import Stripe from "stripe";
 import { vipPriceService } from "@/application/billing/vip-price.service";
+import { stripeBillingRepository } from "@/infrastructure/billing/stripe-billing.repository";
 
 type PrismaSubscriptionStatus =
   | "INCOMPLETE"
@@ -73,10 +73,8 @@ export const stripeBillingService = {
       params.currency,
     );
 
-    const existingCustomer = await prisma.stripeCustomer.findUnique({
-      where: { userId: params.userId },
-      select: { stripeCustomerId: true },
-    });
+    const existingCustomer =
+      await stripeBillingRepository.findStripeCustomerByUserId(params.userId);
 
     let stripeCustomerId = existingCustomer?.stripeCustomerId;
 
@@ -90,11 +88,9 @@ export const stripeBillingService = {
 
       stripeCustomerId = customer.id;
 
-      await prisma.stripeCustomer.create({
-        data: {
-          userId: params.userId,
-          stripeCustomerId,
-        },
+      await stripeBillingRepository.createStripeCustomer({
+        userId: params.userId,
+        stripeCustomerId,
       });
     }
 
@@ -147,45 +143,29 @@ export const stripeBillingService = {
           ? subscription.customer
           : subscription.customer.id;
 
-      const stripeCustomer = await prisma.stripeCustomer.findUnique({
-        where: { stripeCustomerId },
-        select: { id: true, userId: true },
-      });
+      const stripeCustomer =
+        await stripeBillingRepository.findStripeCustomerByStripeCustomerId(
+          stripeCustomerId,
+        );
 
       if (stripeCustomer) {
         const status = toPrismaSubscriptionStatus(subscription.status);
         const { currentPeriodStart, currentPeriodEnd } =
           toSubscriptionPeriod(subscription);
 
-        await prisma.subscription.upsert({
-          where: {
-            stripeSubscriptionId: subscription.id,
-          },
-          update: {
-            status,
-            currentPeriodStart,
-            currentPeriodEnd,
-            cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
-            endedAt: subscription.ended_at
-              ? new Date(subscription.ended_at * 1000)
-              : null,
-            priceId: subscription.items?.data?.[0]?.price?.id ?? null,
-            currency: subscription.currency?.toUpperCase() ?? null,
-          },
-          create: {
-            stripeSubscriptionId: subscription.id,
-            userId: stripeCustomer.userId,
-            stripeCustomerId: stripeCustomer.id,
-            status,
-            currentPeriodStart,
-            currentPeriodEnd,
-            cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
-            endedAt: subscription.ended_at
-              ? new Date(subscription.ended_at * 1000)
-              : null,
-            priceId: subscription.items?.data?.[0]?.price?.id ?? null,
-            currency: subscription.currency?.toUpperCase() ?? null,
-          },
+        await stripeBillingRepository.upsertSubscription({
+          stripeSubscriptionId: subscription.id,
+          userId: stripeCustomer.userId,
+          stripeCustomerRecordId: stripeCustomer.id,
+          status,
+          currentPeriodStart,
+          currentPeriodEnd,
+          cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
+          endedAt: subscription.ended_at
+            ? new Date(subscription.ended_at * 1000)
+            : null,
+          priceId: subscription.items?.data?.[0]?.price?.id ?? null,
+          currency: subscription.currency?.toUpperCase() ?? null,
         });
       }
     }

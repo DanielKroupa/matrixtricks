@@ -1,6 +1,6 @@
 import { getVideoPostsPage } from "@/actions/social";
-import { getEffectivePostPreference } from "@/app/helpers/post-preferences";
-import { VideoFeed } from "@/app/components/social/VideoFeed";
+import { getEffectivePostPreference } from "@/lib/helpers/post-preferences";
+import { VideoFeed } from "@/components/social/VideoFeed";
 
 type HomeProps = {
   searchParams?:

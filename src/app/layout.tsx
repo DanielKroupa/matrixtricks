@@ -4,11 +4,11 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { PresenceProvider } from "@/context/PresenceContext";
-import { LoginModal } from "./components/authLayout/LoginModal";
+import { LoginModal } from "@/components/auth/LoginModal";
 import { ThemeProvider } from "next-themes";
-import DevBreakpointBadgeClient from "./components/ui/DevBreakpointBadgeClient";
+import DevBreakpointBadgeClient from "@/components/ui/DevBreakpointBadgeClient";
 import { getServerSession } from "@/lib/get-session";
-import UserChatWidget from "./components/chat/UserChatWidget";
+import UserChatWidget from "@/components/chat/UserChatWidget";
 
 const poppins = Poppins({
   variable: "--font-poppins",

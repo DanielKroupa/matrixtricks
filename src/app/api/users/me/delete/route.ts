@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
-import { deleteAccountSchema } from "@/app/helpers/delete-account-schema";
+import { deleteAccountSchema } from "@/lib/helpers/authSchema/delete-account-schema";
 import {
   accountDeletionService,
   AccountDeletionValidationError,

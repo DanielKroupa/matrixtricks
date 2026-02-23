@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import {
   getCurrentUserOnlineVisibility,
   saveCurrentUserOnlineVisibility,
-} from "@/app/helpers/online-visibility";
+} from "@/lib/helpers/online-visibility";
 
 export async function getOnlineVisibilityPreferenceAction() {
   return getCurrentUserOnlineVisibility();

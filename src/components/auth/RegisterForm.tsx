@@ -1,0 +1,172 @@
+"use client";
+
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  RegisterFormData,
+  registerSchema,
+} from "@/lib/helpers/authSchema/register-schema";
+import { Spinner } from "@/components/ui/spinner";
+import PrimaryButton from "@/components/ui/form/PrimaryButton";
+
+export default function RegisterForm() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const form = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
+
+  const { closeModal } = useAuth();
+
+  async function onSubmit({ email, password, username }: RegisterFormData) {
+    setError(null);
+    setLoading(true);
+    try {
+      const result = await authClient.signUp.email({
+        email,
+        name: username,
+
+        password,
+        callbackURL: "/",
+      });
+
+      if (result.error) {
+        setError(result.error.message || "Sign up failed");
+      } else {
+        // close modal (when used inside modal) and navigate home without router
+        closeModal();
+        // use full page navigation to ensure session state updates
+        window.location.assign("/");
+      }
+    } catch (err: any) {
+      setError(err?.message || "An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-medium text-gray-900 dark:text-white">
+          Create Account
+        </h2>
+        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          Join MatrixTricks today
+        </p>
+      </div>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+        className="space-y-4"
+      >
+        <div>
+          <input
+            type="email"
+            {...register("email")}
+            autoComplete="email"
+            placeholder="Enter your email"
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
+              errors.email ? "border border-red-500" : ""
+            }`}
+          />
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="text"
+            {...register("username")}
+            autoComplete="username"
+            placeholder="Choose a username"
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
+              errors.username ? "border border-red-500" : ""
+            }`}
+          />
+          {errors.username && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.username.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="password"
+            {...register("password")}
+            autoComplete="new-password"
+            placeholder="Create a password"
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
+              errors.password ? "border border-red-500" : ""
+            }`}
+          />
+          {errors.password && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="password"
+            {...register("confirmPassword")}
+            autoComplete="new-password"
+            placeholder="Confirm your password"
+            className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
+              errors.confirmPassword ? "border border-red-500" : ""
+            }`}
+          />
+          {errors.confirmPassword && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.confirmPassword.message}
+            </p>
+          )}
+        </div>
+
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <PrimaryButton
+          type="submit"
+          loading={loading}
+          loadingText="Signing up..."
+        >
+          Sign In
+        </PrimaryButton>
+      </form>
+
+      <div className="border-t border-neutral-300 pt-4 dark:border-neutral-600">
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+          Already have an account?{" "}
+          <Link
+            href="/sign-in"
+            className="cursor-pointer font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}

@@ -3,7 +3,7 @@ import { getServerSession } from "@/lib/get-session";
 import {
   adminOpenThreadSchema,
   adminThreadListSchema,
-} from "@/app/helpers/chat-schema";
+} from "@/lib/helpers/chat-schema";
 import { chatService } from "@/application/chat/chat.service";
 import {
   serializeChatMessage,

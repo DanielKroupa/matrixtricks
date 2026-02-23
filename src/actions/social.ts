@@ -4,7 +4,7 @@ import { getServerSession } from "@/lib/get-session";
 import {
   CreateCommentSchema,
   UpdateCommentSchema,
-} from "@/app/helpers/social-schema";
+} from "@/lib/helpers/social-schema";
 import type { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { postService } from "@/application/social/post.service";

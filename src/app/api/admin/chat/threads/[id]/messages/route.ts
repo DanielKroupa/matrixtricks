@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
-import { createChatMessageSchema } from "@/app/helpers/chat-schema";
+import { createChatMessageSchema } from "@/lib/helpers/chat-schema";
 import { chatService } from "@/application/chat/chat.service";
 import {
   serializeChatMessage,

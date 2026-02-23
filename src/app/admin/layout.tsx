@@ -1,6 +1,6 @@
-import { Navbar } from "../components/pageLayout/Navbar";
+import { Navbar } from "@/components/main/Navbar";
 import AdminSidebar from "./AdminSidebar";
-import { Copyright } from "../components/pageLayout/Copyright";
+import { Copyright } from "@/components/main/Copyright";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

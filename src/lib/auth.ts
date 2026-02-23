@@ -4,9 +4,9 @@ import { username } from "better-auth/plugins";
 
 import { prismaAdapter } from "better-auth/adapters/prisma";
 
-import { PrismaClient } from "../app/generated/prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { EmailTemplate } from "@/lib/email-template";
+import { EmailTemplate } from "@/lib/email/email-template";
 import { FROM_EMAIL, resend } from "./resend";
 
 const adapter = new PrismaPg({
