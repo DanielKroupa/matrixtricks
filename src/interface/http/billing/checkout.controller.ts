@@ -28,6 +28,7 @@ export async function handleBillingCheckout(request: NextRequest) {
       userEmail: session.user.email,
       origin,
       currency: parsed.data.currency,
+      interval: parsed.data.interval,
     });
 
     return NextResponse.json({

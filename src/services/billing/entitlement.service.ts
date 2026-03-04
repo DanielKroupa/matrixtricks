@@ -1,4 +1,5 @@
 import { entitlementRepository } from "@/infrastructure/billing/entitlement.repository";
+import { isAdminRole } from "@/lib/roles";
 import type { VipAccessInput, VipStatus } from "@/types/billing";
 
 function resolveAccess(input: VipAccessInput) {
@@ -6,7 +7,7 @@ function resolveAccess(input: VipAccessInput) {
     return true;
   }
 
-  if (input.viewerRole === "admin") {
+  if (isAdminRole(input.viewerRole)) {
     return true;
   }
 

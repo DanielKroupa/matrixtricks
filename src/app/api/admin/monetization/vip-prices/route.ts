@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { updateVipPricesSchema } from "@/lib/admin-monetization-schema";
 import { getServerSession } from "@/lib/get-session";
+import { isAdminRole } from "@/lib/roles";
 import { vipPriceService } from "@/services/billing/vip-price.service";
 
 function isAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return Boolean(session?.user && session.user.role === "admin");
+  return Boolean(session?.user && isAdminRole(session.user.role));
 }
 
 export async function GET() {

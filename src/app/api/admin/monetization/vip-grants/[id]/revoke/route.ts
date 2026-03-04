@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "@/lib/get-session";
+import { isAdminRole } from "@/lib/roles";
 import { adminVipService } from "@/services/billing/admin-vip.service";
 
 export async function PATCH(
@@ -9,7 +10,7 @@ export async function PATCH(
   try {
     const session = await getServerSession();
 
-    if (!session?.user || session.user.role !== "admin") {
+    if (!session?.user || !isAdminRole(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

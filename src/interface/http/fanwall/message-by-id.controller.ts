@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fanwallUpdateSchema } from "@/interface/schemas/social/fanwall.schema";
+import { fanwallUpdateSchema } from "@/lib/schemas/pageSchema/fanwall-schema";
 import { broadcastFanwallEvent } from "@/lib/fanwall-realtime";
 import { getServerSession } from "@/lib/get-session";
 import {

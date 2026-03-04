@@ -1,11 +1,17 @@
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import type { UpsertSubscriptionParams } from "@/types/billing";
 
+type BillingDbClient = Prisma.TransactionClient | typeof prisma;
+
 export const stripeBillingRepository = {
-  async findStripeCustomerByUserId(userId: string) {
-    return prisma.stripeCustomer.findUnique({
+  async findStripeCustomerByUserId(
+    userId: string,
+    db: BillingDbClient = prisma,
+  ) {
+    return db.stripeCustomer.findUnique({
       where: { userId },
-      select: { stripeCustomerId: true },
+      select: { id: true, stripeCustomerId: true },
     });
   },
 
@@ -13,23 +19,33 @@ export const stripeBillingRepository = {
     userId: string;
     stripeCustomerId: string;
   }) {
-    await prisma.stripeCustomer.create({
+    return prisma.stripeCustomer.create({
       data: {
         userId: params.userId,
         stripeCustomerId: params.stripeCustomerId,
       },
+      select: {
+        id: true,
+        stripeCustomerId: true,
+      },
     });
   },
 
-  async findStripeCustomerByStripeCustomerId(stripeCustomerId: string) {
-    return prisma.stripeCustomer.findUnique({
+  async findStripeCustomerByStripeCustomerId(
+    stripeCustomerId: string,
+    db: BillingDbClient = prisma,
+  ) {
+    return db.stripeCustomer.findUnique({
       where: { stripeCustomerId },
       select: { id: true, userId: true },
     });
   },
 
-  async upsertSubscription(params: UpsertSubscriptionParams) {
-    await prisma.subscription.upsert({
+  async upsertSubscription(
+    params: UpsertSubscriptionParams,
+    db: BillingDbClient = prisma,
+  ) {
+    await db.subscription.upsert({
       where: {
         stripeSubscriptionId: params.stripeSubscriptionId,
       },
@@ -53,6 +69,23 @@ export const stripeBillingRepository = {
         endedAt: params.endedAt,
         priceId: params.priceId,
         currency: params.currency,
+      },
+    });
+  },
+
+  async createWebhookEvent(
+    params: {
+      stripeEventId: string;
+      type: string;
+      payload: unknown;
+    },
+    db: BillingDbClient = prisma,
+  ) {
+    await db.stripeWebhookEvent.create({
+      data: {
+        stripeEventId: params.stripeEventId,
+        type: params.type,
+        payload: params.payload as object,
       },
     });
   },

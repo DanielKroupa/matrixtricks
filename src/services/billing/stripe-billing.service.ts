@@ -1,8 +1,10 @@
 import type Stripe from "stripe";
-import { entitlementRepository } from "@/infrastructure/billing/entitlement.repository";
+import type { Prisma } from "@/generated/prisma/client";
 import { stripe } from "@/infrastructure/billing/stripe.client";
 import { stripeBillingRepository } from "@/infrastructure/billing/stripe-billing.repository";
+import prisma from "@/lib/prisma";
 import { vipPriceService } from "@/services/billing/vip-price.service";
+import type { VipBillingInterval } from "@/types/billing";
 
 type PrismaSubscriptionStatus =
   | "INCOMPLETE"
@@ -20,6 +22,24 @@ function resolveSuccessUrl(origin: string) {
 
 function resolveCancelUrl(origin: string) {
   return `${origin}/settings?vip=cancelled`;
+}
+
+function createCheckoutIdempotencyKey(params: {
+  userId: string;
+  interval: VipBillingInterval;
+  currency: string;
+}) {
+  const minuteBucket = Math.floor(Date.now() / 60_000);
+  return `vip-checkout:${params.userId}:${params.interval}:${params.currency}:${minuteBucket}`;
+}
+
+function isUniqueConstraintError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: string }).code === "P2002"
+  );
 }
 
 function toPrismaSubscriptionStatus(
@@ -62,54 +82,149 @@ function toSubscriptionPeriod(subscription: Stripe.Subscription) {
   };
 }
 
+function toStripeCustomerId(
+  customer: string | Stripe.Customer | Stripe.DeletedCustomer,
+) {
+  if (typeof customer === "string") {
+    return customer;
+  }
+
+  return customer.id;
+}
+
+async function upsertSubscriptionFromStripeObject(
+  subscription: Stripe.Subscription,
+  tx: Prisma.TransactionClient,
+  options?: {
+    forceCanceledNow?: boolean;
+  },
+) {
+  const stripeCustomerId = toStripeCustomerId(subscription.customer);
+  const stripeCustomer =
+    await stripeBillingRepository.findStripeCustomerByStripeCustomerId(
+      stripeCustomerId,
+      tx,
+    );
+
+  if (!stripeCustomer) {
+    return;
+  }
+
+  const status = options?.forceCanceledNow
+    ? "CANCELED"
+    : toPrismaSubscriptionStatus(subscription.status);
+  const { currentPeriodStart, currentPeriodEnd } =
+    toSubscriptionPeriod(subscription);
+  const now = new Date();
+
+  await stripeBillingRepository.upsertSubscription(
+    {
+      stripeSubscriptionId: subscription.id,
+      userId: stripeCustomer.userId,
+      stripeCustomerRecordId: stripeCustomer.id,
+      status,
+      currentPeriodStart,
+      currentPeriodEnd: options?.forceCanceledNow ? now : currentPeriodEnd,
+      cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
+      endedAt: options?.forceCanceledNow
+        ? now
+        : subscription.ended_at
+          ? new Date(subscription.ended_at * 1000)
+          : null,
+      priceId: subscription.items?.data?.[0]?.price?.id ?? null,
+      currency: subscription.currency?.toUpperCase() ?? null,
+    },
+    tx,
+  );
+}
+
 export const stripeBillingService = {
   async createCheckoutSession(params: {
     userId: string;
     userEmail: string;
     origin: string;
     currency: string;
+    interval: VipBillingInterval;
   }) {
-    const priceId = await vipPriceService.getEffectivePriceIdByCurrency(
-      params.currency,
-    );
+    const normalizedCurrency = params.currency.toUpperCase();
+    const priceId = await vipPriceService.getEffectivePriceId({
+      currency: normalizedCurrency,
+      interval: params.interval,
+    });
 
-    const existingCustomer =
+    let existingCustomer =
       await stripeBillingRepository.findStripeCustomerByUserId(params.userId);
 
     let stripeCustomerId = existingCustomer?.stripeCustomerId;
 
     if (!stripeCustomerId) {
-      const customer = await stripe.customers.create({
-        email: params.userEmail,
-        metadata: {
-          userId: params.userId,
+      const customer = await stripe.customers.create(
+        {
+          email: params.userEmail,
+          metadata: {
+            userId: params.userId,
+          },
         },
-      });
+        {
+          idempotencyKey: `vip-customer:${params.userId}`,
+        },
+      );
 
       stripeCustomerId = customer.id;
 
-      await stripeBillingRepository.createStripeCustomer({
-        userId: params.userId,
-        stripeCustomerId,
-      });
+      try {
+        existingCustomer = await stripeBillingRepository.createStripeCustomer({
+          userId: params.userId,
+          stripeCustomerId,
+        });
+      } catch (error) {
+        if (!isUniqueConstraintError(error)) {
+          throw error;
+        }
+
+        existingCustomer =
+          await stripeBillingRepository.findStripeCustomerByUserId(
+            params.userId,
+          );
+
+        stripeCustomerId = existingCustomer?.stripeCustomerId;
+      }
+
+      if (!stripeCustomerId) {
+        throw new Error("Failed to resolve Stripe customer for checkout");
+      }
     }
 
-    return stripe.checkout.sessions.create({
-      mode: "subscription",
-      customer: stripeCustomerId,
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
+    return stripe.checkout.sessions.create(
+      {
+        mode: "subscription",
+        customer: stripeCustomerId,
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        success_url: resolveSuccessUrl(params.origin),
+        cancel_url: resolveCancelUrl(params.origin),
+        automatic_tax: {
+          enabled: true,
         },
-      ],
-      success_url: resolveSuccessUrl(params.origin),
-      cancel_url: resolveCancelUrl(params.origin),
-      metadata: {
-        userId: params.userId,
+        metadata: {
+          userId: params.userId,
+          vipCurrency: normalizedCurrency,
+          vipInterval: params.interval,
+        },
+        allow_promotion_codes: true,
       },
-      allow_promotion_codes: true,
-    });
+      {
+        idempotencyKey: createCheckoutIdempotencyKey({
+          userId: params.userId,
+          interval: params.interval,
+          currency: normalizedCurrency,
+        }),
+      },
+    );
   },
 
   async handleWebhookEvent(payload: string, signature: string) {
@@ -125,56 +240,115 @@ export const stripeBillingService = {
       webhookSecret,
     );
 
-    const alreadyProcessed =
-      await entitlementRepository.hasProcessedWebhookEvent(event.id);
-
-    if (alreadyProcessed) {
-      return { processed: false as const, reason: "duplicate" as const };
-    }
+    const upserts: Array<{
+      subscription: Stripe.Subscription;
+      forceCanceledNow?: boolean;
+    }> = [];
+    const customerLinks: Array<{ userId: string; stripeCustomerId: string }> =
+      [];
 
     if (
       event.type === "customer.subscription.created" ||
       event.type === "customer.subscription.updated" ||
       event.type === "customer.subscription.deleted"
     ) {
-      const subscription = event.data.object as Stripe.Subscription;
+      upserts.push({
+        subscription: event.data.object as Stripe.Subscription,
+      });
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const checkoutSession = event.data.object as Stripe.Checkout.Session;
+      const userId = checkoutSession.metadata?.userId;
       const stripeCustomerId =
-        typeof subscription.customer === "string"
-          ? subscription.customer
-          : subscription.customer.id;
+        typeof checkoutSession.customer === "string"
+          ? checkoutSession.customer
+          : null;
 
-      const stripeCustomer =
-        await stripeBillingRepository.findStripeCustomerByStripeCustomerId(
-          stripeCustomerId,
-        );
-
-      if (stripeCustomer) {
-        const status = toPrismaSubscriptionStatus(subscription.status);
-        const { currentPeriodStart, currentPeriodEnd } =
-          toSubscriptionPeriod(subscription);
-
-        await stripeBillingRepository.upsertSubscription({
-          stripeSubscriptionId: subscription.id,
-          userId: stripeCustomer.userId,
-          stripeCustomerRecordId: stripeCustomer.id,
-          status,
-          currentPeriodStart,
-          currentPeriodEnd,
-          cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
-          endedAt: subscription.ended_at
-            ? new Date(subscription.ended_at * 1000)
-            : null,
-          priceId: subscription.items?.data?.[0]?.price?.id ?? null,
-          currency: subscription.currency?.toUpperCase() ?? null,
-        });
+      if (userId && stripeCustomerId) {
+        customerLinks.push({ userId, stripeCustomerId });
       }
     }
 
-    await entitlementRepository.markWebhookEventProcessed({
-      stripeEventId: event.id,
-      type: event.type,
-      payload: event,
-    });
+    if (
+      event.type === "invoice.payment_succeeded" ||
+      event.type === "invoice.payment_failed"
+    ) {
+      const invoice = event.data.object as Stripe.Invoice;
+      const subscriptionId =
+        typeof invoice.subscription === "string"
+          ? invoice.subscription
+          : invoice.subscription?.id;
+
+      if (subscriptionId) {
+        const subscription =
+          await stripe.subscriptions.retrieve(subscriptionId);
+        upserts.push({ subscription });
+      }
+    }
+
+    if (event.type === "charge.refunded") {
+      const charge = event.data.object as Stripe.Charge;
+      const isFullRefund = charge.amount_refunded >= charge.amount;
+      const invoiceId =
+        typeof charge.invoice === "string" ? charge.invoice : null;
+
+      if (isFullRefund && invoiceId) {
+        const invoice = await stripe.invoices.retrieve(invoiceId);
+        const subscriptionId =
+          typeof invoice.subscription === "string"
+            ? invoice.subscription
+            : invoice.subscription?.id;
+
+        if (subscriptionId) {
+          const subscription =
+            await stripe.subscriptions.retrieve(subscriptionId);
+          upserts.push({ subscription, forceCanceledNow: true });
+        }
+      }
+    }
+
+    try {
+      await prisma.$transaction(async (tx) => {
+        await stripeBillingRepository.createWebhookEvent(
+          {
+            stripeEventId: event.id,
+            type: event.type,
+            payload: event,
+          },
+          tx,
+        );
+
+        for (const link of customerLinks) {
+          const existingCustomer =
+            await stripeBillingRepository.findStripeCustomerByUserId(
+              link.userId,
+              tx,
+            );
+
+          if (!existingCustomer) {
+            await stripeBillingRepository.createStripeCustomer({
+              userId: link.userId,
+              stripeCustomerId: link.stripeCustomerId,
+            });
+          }
+        }
+
+        for (const upsert of upserts) {
+          await upsertSubscriptionFromStripeObject(
+            upsert.subscription,
+            tx,
+            upsert.forceCanceledNow ? { forceCanceledNow: true } : undefined,
+          );
+        }
+      });
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        return { processed: false as const, reason: "duplicate" as const };
+      }
+
+      throw error;
+    }
 
     return { processed: true as const };
   },

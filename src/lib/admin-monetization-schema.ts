@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const vipIntervalSchema = z.enum(["MONTHLY", "SEMIANNUAL", "YEARLY"]);
+
 export const createManualVipGrantSchema = z
   .object({
     userId: z.string().min(1).optional(),
@@ -18,6 +20,7 @@ export const listVipGrantsQuerySchema = z.object({
 
 export const vipPriceRowSchema = z.object({
   currency: z.string().min(3).max(3),
+  interval: vipIntervalSchema,
   priceId: z.string().min(1),
   isActive: z.boolean(),
 });

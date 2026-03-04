@@ -38,6 +38,12 @@ enum EntitlementSource {
   MANUAL
 }
 
+enum VipBillingInterval {
+  MONTHLY
+  SEMIANNUAL
+  YEARLY
+}
+
 enum ChatThreadStatus {
   OPEN
   ARCHIVED
@@ -371,30 +377,33 @@ model StripeWebhookEvent {
 }
 
 model VipPrice {
-  id        String   @id @default(cuid())
-  currency  String   @unique
+  id        String             @id @default(cuid())
+  currency  String
+  interval  VipBillingInterval
   priceId   String
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive  Boolean            @default(true)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 
+  @@unique([currency, interval])
   @@index([isActive])
   @@map("vip_price")
 }
 
 model VipPriceAuditEvent {
-  id               String   @id @default(cuid())
+  id               String             @id @default(cuid())
   currency         String
+  interval         VipBillingInterval
   previousPriceId  String?
   nextPriceId      String?
   previousIsActive Boolean?
   nextIsActive     Boolean
   changedByUserId  String?
-  createdAt        DateTime @default(now())
+  createdAt        DateTime           @default(now())
 
   changedByUser User? @relation(fields: [changedByUserId], references: [id], onDelete: SetNull)
 
-  @@index([currency, createdAt])
+  @@index([currency, interval, createdAt])
   @@index([changedByUserId])
   @@map("vip_price_audit_event")
 }

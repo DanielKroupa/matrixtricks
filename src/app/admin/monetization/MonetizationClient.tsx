@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+const vipIntervals = ["MONTHLY", "SEMIANNUAL", "YEARLY"] as const;
+type VipInterval = (typeof vipIntervals)[number];
+
 type VipGrantRecord = {
   id: string;
   startsAt: string;
@@ -19,6 +22,7 @@ type VipGrantRecord = {
 type VipPriceRecord = {
   id: string;
   currency: string;
+  interval: VipInterval;
   priceId: string;
   isActive: boolean;
 };
@@ -26,6 +30,7 @@ type VipPriceRecord = {
 type VipPriceAuditRecord = {
   id: string;
   currency: string;
+  interval: VipInterval;
   previousPriceId: string | null;
   nextPriceId: string | null;
   previousIsActive: boolean | null;
@@ -61,16 +66,22 @@ export function MonetizationClient({
   const [prices, setPrices] = useState<VipPriceRecord[]>(initialDbPrices);
   const [auditEvents, setAuditEvents] = useState<VipPriceAuditRecord[]>([]);
   const [newCurrency, setNewCurrency] = useState("");
+  const [newInterval, setNewInterval] = useState<VipInterval>("MONTHLY");
   const [newPriceId, setNewPriceId] = useState("");
 
   const hasConfiguredPrices = configuredCurrencies.length > 0;
 
   const rows = useMemo(() => {
-    return Object.entries(configuredPriceMap).map(([currency, value]) => ({
-      currency,
-      configured: Boolean(value),
-      priceId: value || "-",
-    }));
+    return Object.entries(configuredPriceMap).map(([key, value]) => {
+      const [interval, currency] = key.split(":");
+
+      return {
+        currency,
+        interval,
+        configured: Boolean(value),
+        priceId: value || "-",
+      };
+    });
   }, [configuredPriceMap]);
 
   const loadGrants = useCallback(async () => {
@@ -126,6 +137,7 @@ export function MonetizationClient({
 
   function upsertLocalPrice(
     currency: string,
+    interval: VipInterval,
     priceId: string,
     isActive: boolean,
   ) {
@@ -133,13 +145,14 @@ export function MonetizationClient({
 
     setPrices((previousPrices) => {
       const existing = previousPrices.find(
-        (item) => item.currency === normalizedCurrency,
+        (item) =>
+          item.currency === normalizedCurrency && item.interval === interval,
       );
 
       if (existing) {
         return previousPrices.map((item) =>
-          item.currency === normalizedCurrency
-            ? { ...item, priceId, isActive }
+          item.currency === normalizedCurrency && item.interval === interval
+            ? { ...item, priceId, isActive, interval }
             : item,
         );
       }
@@ -147,8 +160,9 @@ export function MonetizationClient({
       return [
         ...previousPrices,
         {
-          id: `local-${normalizedCurrency}`,
+          id: `local-${interval}-${normalizedCurrency}`,
           currency: normalizedCurrency,
+          interval,
           priceId,
           isActive,
         },
@@ -165,6 +179,7 @@ export function MonetizationClient({
       const payload = {
         prices: prices.map((item) => ({
           currency: item.currency,
+          interval: item.interval,
           priceId: item.priceId,
           isActive: item.isActive,
         })),
@@ -276,10 +291,12 @@ export function MonetizationClient({
         <div className="mt-3 grid gap-2 text-sm">
           {rows.map((row) => (
             <div
-              key={row.currency}
+              key={`${row.interval}:${row.currency}`}
               className="flex items-center justify-between rounded bg-neutral-700/40 px-3 py-2"
             >
-              <span>{row.currency}</span>
+              <span>
+                {row.interval} / {row.currency}
+              </span>
               <span
                 className={row.configured ? "text-green-400" : "text-red-400"}
               >
@@ -304,8 +321,13 @@ export function MonetizationClient({
           {prices.map((item) => (
             <div
               key={item.id}
-              className="grid gap-2 rounded bg-neutral-700/40 p-3 md:grid-cols-[110px_1fr_120px]"
+              className="grid gap-2 rounded bg-neutral-700/40 p-3 md:grid-cols-[160px_110px_1fr_120px]"
             >
+              <input
+                value={item.interval}
+                disabled
+                className="rounded bg-neutral-800 px-3 py-2 text-white"
+              />
               <input
                 value={item.currency}
                 disabled
@@ -316,6 +338,7 @@ export function MonetizationClient({
                 onChange={(event) =>
                   upsertLocalPrice(
                     item.currency,
+                    item.interval,
                     event.target.value,
                     item.isActive,
                   )
@@ -329,6 +352,7 @@ export function MonetizationClient({
                   onChange={(event) =>
                     upsertLocalPrice(
                       item.currency,
+                      item.interval,
                       item.priceId,
                       event.target.checked,
                     )
@@ -340,7 +364,20 @@ export function MonetizationClient({
           ))}
         </div>
 
-        <div className="grid gap-2 md:grid-cols-[110px_1fr_130px]">
+        <div className="grid gap-2 md:grid-cols-[160px_110px_1fr_130px]">
+          <select
+            value={newInterval}
+            onChange={(event) =>
+              setNewInterval(event.target.value as VipInterval)
+            }
+            className="rounded bg-neutral-300 px-3 py-2 text-black outline-none dark:bg-neutral-800 dark:text-white"
+          >
+            {vipIntervals.map((interval) => (
+              <option key={interval} value={interval}>
+                {interval}
+              </option>
+            ))}
+          </select>
           <input
             value={newCurrency}
             onChange={(event) =>
@@ -363,7 +400,12 @@ export function MonetizationClient({
                 return;
               }
 
-              upsertLocalPrice(newCurrency, newPriceId.trim(), true);
+              upsertLocalPrice(
+                newCurrency,
+                newInterval,
+                newPriceId.trim(),
+                true,
+              );
               setNewCurrency("");
               setNewPriceId("");
             }}
@@ -406,8 +448,8 @@ export function MonetizationClient({
                 className="rounded bg-neutral-700/40 px-3 py-2 text-sm"
               >
                 <p className="font-medium">
-                  {event.currency}: {event.previousPriceId || "-"} →{" "}
-                  {event.nextPriceId || "-"}
+                  {event.interval} / {event.currency}:{" "}
+                  {event.previousPriceId || "-"} → {event.nextPriceId || "-"}
                 </p>
                 <p className="text-neutral-300">
                   Active: {String(event.previousIsActive)} →{" "}

@@ -4,10 +4,11 @@ import {
   listVipGrantsQuerySchema,
 } from "@/lib/admin-monetization-schema";
 import { getServerSession } from "@/lib/get-session";
+import { isAdminRole } from "@/lib/roles";
 import { adminVipService } from "@/services/billing/admin-vip.service";
 
 function ensureAdmin(session: Awaited<ReturnType<typeof getServerSession>>) {
-  return Boolean(session?.user && session.user.role === "admin");
+  return Boolean(session?.user && isAdminRole(session.user.role));
 }
 
 export async function GET(request: NextRequest) {

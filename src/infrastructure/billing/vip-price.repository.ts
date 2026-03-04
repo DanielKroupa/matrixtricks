@@ -8,18 +8,29 @@ export const vipPriceRepository = {
   },
 
   async upsertMany(
-    rows: Array<{ currency: string; priceId: string; isActive: boolean }>,
+    rows: Array<{
+      currency: string;
+      interval: "MONTHLY" | "SEMIANNUAL" | "YEARLY";
+      priceId: string;
+      isActive: boolean;
+    }>,
   ) {
     await prisma.$transaction(
       rows.map((row) =>
         prisma.vipPrice.upsert({
-          where: { currency: row.currency },
+          where: {
+            currency_interval: {
+              currency: row.currency,
+              interval: row.interval,
+            },
+          },
           update: {
             priceId: row.priceId,
             isActive: row.isActive,
           },
           create: {
             currency: row.currency,
+            interval: row.interval,
             priceId: row.priceId,
             isActive: row.isActive,
           },
@@ -33,6 +44,7 @@ export const vipPriceRepository = {
   async createAuditEvents(
     rows: Array<{
       currency: string;
+      interval: "MONTHLY" | "SEMIANNUAL" | "YEARLY";
       previousPriceId: string | null;
       nextPriceId: string | null;
       previousIsActive: boolean | null;

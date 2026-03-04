@@ -4,6 +4,8 @@ export type VipStatus = {
   expiresAt: Date | null;
 };
 
+export type VipBillingInterval = "MONTHLY" | "SEMIANNUAL" | "YEARLY";
+
 export type VipAccessInput = {
   vipOnly: boolean;
   authorId: string;
@@ -31,4 +33,9 @@ export type UpsertSubscriptionParams = {
   endedAt: Date | null;
   priceId: string | null;
   currency: string | null;
+};
+
+export type VipCheckoutRequest = {
+  currency: string;
+  interval: VipBillingInterval;
 };

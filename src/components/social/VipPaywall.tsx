@@ -3,10 +3,19 @@ import Link from "next/link";
 
 import { FaLock } from "react-icons/fa";
 
+type VipPaywallPost = {
+  title?: string | null;
+  content?: string | null;
+  media?: Array<{
+    type?: string | null;
+    url?: string | null;
+  }>;
+};
+
 export function VipPaywall({
   post,
 }: {
-  post: any;
+  post: VipPaywallPost;
   rubric: string;
   closeHref?: string;
 }) {

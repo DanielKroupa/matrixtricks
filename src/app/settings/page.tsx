@@ -6,6 +6,7 @@ import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityTogg
 import { canUserChangePassword } from "@/lib/auth-capabilities";
 import { getServerSession } from "@/lib/get-session";
 import { getCurrentUserOnlineVisibility } from "@/lib/online-visibility";
+import { isAdminRole } from "@/lib/roles";
 import { entitlementService } from "@/services/billing/entitlement.service";
 import { vipPriceService } from "@/services/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
@@ -19,7 +20,10 @@ export default async function Page() {
   const canChangePassword = user?.id
     ? await canUserChangePassword(user.id)
     : false;
-  const configuredCurrencies = effectivePrices.map((price) => price.currency);
+  const priceOptions = effectivePrices.map((price) => ({
+    currency: price.currency,
+    interval: price.interval,
+  }));
   const vipExpiresText = vipStatus.expiresAt
     ? vipStatus.expiresAt.toLocaleDateString("cs-CZ")
     : "No expiry";
@@ -52,8 +56,8 @@ export default async function Page() {
               <VipCheckoutCard
                 isVipActive={vipStatus.isVipActive}
                 vipExpiresText={vipExpiresText}
-                currencies={configuredCurrencies}
-                isAdmin={user?.role === "ADMIN"}
+                priceOptions={priceOptions}
+                isAdmin={isAdminRole(user?.role)}
               />
             </div>
           </div>

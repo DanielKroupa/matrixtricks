@@ -10,8 +10,8 @@ import PrimaryButton from "@/components/ui/form/PrimaryButton";
 import { RichTextEditor } from "@/components/ui/form/RichTextEditor";
 import { Spinner } from "@/components/ui/spinner";
 import {
-  postSchema,
   type PostFormData,
+  postSchema,
 } from "@/lib/schemas/postsChema/post-schema";
 
 const rubrics = [

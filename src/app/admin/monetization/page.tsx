@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { forbidden, unauthorized } from "next/navigation";
 import { getServerSession } from "@/lib/get-session";
+import { isAdminRole } from "@/lib/roles";
 import { vipPriceService } from "@/services/billing/vip-price.service";
 import { MonetizationClient } from "./MonetizationClient";
 
@@ -16,16 +17,21 @@ export default async function Page() {
     vipPriceService.listDbPrices(),
     vipPriceService.listEffectivePrices(),
   ]);
-  const configuredCurrencies = effectivePrices.map((price) => price.currency);
+  const configuredCurrencies = [
+    ...new Set(effectivePrices.map((price) => price.currency)),
+  ];
   const configuredPriceMap = Object.fromEntries(
-    effectivePrices.map((price) => [price.currency, price.priceId]),
+    effectivePrices.map((price) => [
+      `${price.interval}:${price.currency}`,
+      price.priceId,
+    ]),
   );
   const envPriceMap = vipPriceService.getEnvPriceMap();
 
   if (!user) {
     unauthorized();
   }
-  if (user?.role !== "admin") {
+  if (!isAdminRole(user?.role)) {
     forbidden();
   }
   return (
