@@ -32,20 +32,32 @@ export default function NewPostPage() {
     watch,
     setValue,
     reset,
-    formState: { errors },
+    formState: { errors, submitCount },
   } = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       title: "",
       content: "",
-      type: undefined,
+      type: "media",
       rubric: undefined,
+      mediaCount: 0,
       scheduledAt: undefined,
       vipOnly: false,
     },
   });
 
   const postType = watch("type");
+  const selectedRubric = watch("rubric");
+  const allowedRubrics =
+    postType === "media"
+      ? rubrics.filter((rubric) => rubric.value !== "TEXTS")
+      : rubrics.filter((rubric) => rubric.value === "TEXTS");
+  const rubricIsAllowed = allowedRubrics.some(
+    (rubric) => rubric.value === selectedRubric,
+  );
+  const isMissingRequiredMedia =
+    postType === "media" && mediaFiles.length === 0;
+  const shouldShowSubmitErrors = submitCount > 0;
 
   const onSubmit = async (data: PostFormData) => {
     setIsLoading(true);
@@ -55,6 +67,7 @@ export default function NewPostPage() {
       formData.append("content", data.content || "");
       formData.append("type", data.type);
       formData.append("rubric", data.rubric);
+      formData.append("mediaCount", String(mediaFiles.length));
 
       if (data.scheduledAt) {
         formData.append("scheduledAt", data.scheduledAt);
@@ -164,13 +177,18 @@ export default function NewPostPage() {
             <select
               required
               {...register("rubric")}
-              defaultValue="default"
+              value={
+                rubricIsAllowed && selectedRubric ? selectedRubric : "default"
+              }
+              onChange={(event) =>
+                setValue("rubric", event.target.value as PostFormData["rubric"])
+              }
               className="mt-2 w-full cursor-pointer rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
             >
               <option value="default" disabled hidden>
                 Select rubric
               </option>
-              {rubrics.map((rubric) => (
+              {allowedRubrics.map((rubric) => (
                 <option key={rubric.value} value={rubric.value}>
                   {rubric.label}
                 </option>
@@ -196,6 +214,12 @@ export default function NewPostPage() {
           {(postType === "text" || postType === "media") && (
             <div className="mb-4">
               <p className="mb-2 block text-black dark:text-white">Media</p>
+              <input
+                type="hidden"
+                readOnly
+                {...register("mediaCount", { valueAsNumber: true })}
+                value={mediaFiles.length}
+              />
               <div className="flex">
                 <input
                   id="media_upload"
@@ -219,6 +243,14 @@ export default function NewPostPage() {
                   Upload Media
                 </label>
               </div>
+
+              {shouldShowSubmitErrors &&
+                postType === "media" &&
+                isMissingRequiredMedia && (
+                  <p className="text-red-500">
+                    Upload at least one image or video.
+                  </p>
+                )}
 
               <div className="flex flex-wrap gap-4">
                 {mediaFiles.map((file) => {

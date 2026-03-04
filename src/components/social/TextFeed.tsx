@@ -63,7 +63,7 @@ export const TextFeed = ({
       </div>
 
       {hasMore && (
-        <div className="mt-2 flex justify-center">
+        <div className="my-2 flex justify-center">
           <button
             type="button"
             onClick={handleLoadMore}

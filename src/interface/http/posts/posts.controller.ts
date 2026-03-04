@@ -19,6 +19,7 @@ export async function handlePostsPost(request: NextRequest) {
       content: data.content || "",
       type: data.type,
       rubric: data.rubric,
+      mediaCount: Number(data.mediaCount ?? "0"),
       scheduledAt: (data.scheduledAt as string) || undefined,
       vipOnly: data.vipOnly === "true",
     });
