@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useTransition } from "react";
 import { getRubricPostsPage } from "@/actions/social";
+import { useI18n } from "@/lib/i18n/client";
 import type { PostSortOption, RubricParam } from "@/types/social";
 import { VideoCard } from "./VideoCard";
 
@@ -22,6 +23,8 @@ export const VideoFeed = ({
   sortBy,
   cardAspectClassName = "aspect-video",
 }: VideoFeedProps) => {
+  const { dictionary } = useI18n();
+  const { common } = dictionary;
   const [posts, setPosts] = useState(initialPosts);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -72,7 +75,7 @@ export const VideoFeed = ({
             disabled={isPending}
             className="rounded-lg bg-cyan-800 px-5 py-2 font-medium text-white transition hover:bg-cyan-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isPending ? "Loading..." : "Load more posts"}
+            {isPending ? common.loading : common.loadMorePosts}
           </button>
         </div>
       )}

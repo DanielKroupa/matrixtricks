@@ -7,19 +7,12 @@ import {
   getPostPreferenceAction,
   savePostPreferenceAction,
 } from "@/actions/post-preferences";
+import { useI18n } from "@/lib/i18n/client";
 import {
   allowedPostsPerPage,
   postPreferenceSchema,
 } from "@/lib/schemas/postsChema/post-preference-schema";
 import type { PostSortOption, RubricParam } from "@/types/social";
-
-const filterOptions: Array<{ value: PostSortOption; label: string }> = [
-  { value: "newest", label: "Newest" },
-  { value: "oldest", label: "Oldest" },
-  { value: "shareCount", label: "Most shares" },
-  { value: "likeCount", label: "Most likes" },
-  { value: "commentCount", label: "Most comments" },
-];
 
 function getRubricFromPathname(pathname: string): RubricParam {
   if (pathname.includes("/rubrics/texts")) return "TEXTS";
@@ -29,6 +22,8 @@ function getRubricFromPathname(pathname: string): RubricParam {
 }
 
 export function PostSettings() {
+  const { dictionary } = useI18n();
+  const { main } = dictionary;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -42,6 +37,13 @@ export function PostSettings() {
     () => getRubricFromPathname(pathname || "/"),
     [pathname],
   );
+  const filterOptions: Array<{ value: PostSortOption; label: string }> = [
+    { value: "newest", label: main.sortNewest },
+    { value: "oldest", label: main.sortOldest },
+    { value: "shareCount", label: main.sortMostShares },
+    { value: "likeCount", label: main.sortMostLikes },
+    { value: "commentCount", label: main.sortMostComments },
+  ];
 
   useEffect(() => {
     startTransition(async () => {
@@ -100,7 +102,8 @@ export function PostSettings() {
   }
 
   const _selectedFilterLabel =
-    filterOptions.find((option) => option.value === sortBy)?.label || "Newest";
+    filterOptions.find((option) => option.value === sortBy)?.label ||
+    main.sortNewest;
 
   return (
     <div
@@ -117,7 +120,7 @@ export function PostSettings() {
           }}
           className="inline-flex min-w-24 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-4 py-2 font-medium transition-colors dark:border-neutral-700 dark:bg-neutral-700"
         >
-          Posts
+          {main.posts}
           <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-neutral-400 p-3.5 dark:border-white">
             <p className="text-sm font-semibold">{postsPerPage}</p>
           </div>
@@ -126,7 +129,7 @@ export function PostSettings() {
         <div
           className={`absolute top-12 z-30 min-w-44 rounded-lg border-2 border-neutral-300 bg-neutral-200 p-2 shadow-md transition-all duration-150 dark:border-neutral-600 dark:bg-neutral-700 ${isPostsMenuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"}`}
         >
-          <p className="mb-2 px-2 text-sm font-medium">Posts per page</p>
+          <p className="mb-2 px-2 text-sm font-medium">{main.postsPerPage}</p>
           {allowedPostsPerPage.map((option) => (
             <label
               key={option}
@@ -140,7 +143,9 @@ export function PostSettings() {
                   handleSave(option, sortBy);
                 }}
               />
-              <span>{option} posts</span>
+              <span>
+                {option} {main.postsSuffix}
+              </span>
             </label>
           ))}
         </div>
@@ -156,11 +161,11 @@ export function PostSettings() {
           }}
           className="inline-flex min-w-24 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-4 py-3 font-medium transition-colors dark:border-neutral-700 dark:bg-neutral-700"
         >
-          <p className="text-black dark:text-white">Filter</p>
+          <p className="text-black dark:text-white">{main.filter}</p>
 
           <Image
             src="/icons/filter-arrows.svg"
-            alt="filter-icon"
+            alt={main.filterIconAlt}
             width={23}
             height={17}
             className="invert-75 dark:invert-0"
@@ -170,7 +175,7 @@ export function PostSettings() {
         <div
           className={`absolute top-12 right-0 z-30 min-w-56 rounded-lg border-2 border-neutral-300 bg-neutral-200 p-2 shadow-md transition-all duration-150 dark:border-neutral-600 dark:bg-neutral-700 ${isFilterMenuOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"}`}
         >
-          <p className="mb-2 px-2 text-sm font-medium">Sort posts</p>
+          <p className="mb-2 px-2 text-sm font-medium">{main.sortPosts}</p>
           {filterOptions.map((option) => (
             <label
               key={option.value}

@@ -15,6 +15,7 @@ import { usePresenceStatuses } from "@/hooks/PresenceContext";
 import { useFanwallActions } from "@/hooks/useFanwallActions";
 import { useFanwallPagination } from "@/hooks/useFanwallPagination";
 import { useFanwallSocket } from "@/hooks/useFanwallSocket";
+import { useI18n } from "@/lib/i18n/client";
 import type {
   ApiResponse,
   FanWallClientProps,
@@ -26,7 +27,7 @@ import Badge from "../ui/Badge";
 import AutoResizeTextarea from "../ui/form/AutoResizeTextarea";
 import { getAuthorName, getAvatarSrc } from "./fanwall/message-state";
 
-function formatTime(iso: string) {
+function formatTime(iso: string, localeTag: string) {
   const date = new Date(iso);
 
   if (Number.isNaN(date.getTime())) {
@@ -36,7 +37,7 @@ function formatTime(iso: string) {
   const now = Date.now();
   const diffInSeconds = Math.round((date.getTime() - now) / 1000);
   const absSeconds = Math.abs(diffInSeconds);
-  const rtf = new Intl.RelativeTimeFormat("cs", { numeric: "auto" });
+  const rtf = new Intl.RelativeTimeFormat(localeTag, { numeric: "auto" });
 
   if (absSeconds < 60) {
     return rtf.format(diffInSeconds, "second");
@@ -57,16 +58,16 @@ function formatTime(iso: string) {
     return rtf.format(diffInDays, "day");
   }
 
-  return date.toLocaleString("cs-CZ");
+  return date.toLocaleString(localeTag);
 }
 
-function formatExactTime(iso: string) {
+function formatExactTime(iso: string, localeTag: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) {
     return "";
   }
 
-  return date.toLocaleString("cs-CZ");
+  return date.toLocaleString(localeTag);
 }
 
 function renderFanwallBody(body: string, className: string) {
@@ -91,6 +92,11 @@ type PinnedMessageCardProps = {
   isAuthorOnline: boolean;
   isAdmin: boolean;
   isMenuOpen: boolean;
+  localeTag: string;
+  labels: {
+    online: string;
+    unpin: string;
+  };
   onToggleMenu: () => void;
   onTogglePin: (message: FanwallMessage) => void;
   onCloseMenu: () => void;
@@ -101,6 +107,8 @@ function PinnedMessageCard({
   isAuthorOnline,
   isAdmin,
   isMenuOpen,
+  localeTag,
+  labels,
   onToggleMenu,
   onTogglePin,
   onCloseMenu,
@@ -124,7 +132,7 @@ function PinnedMessageCard({
 
           {message.userId || isAuthorOnline ? (
             <span
-              title={isAuthorOnline ? "Online" : ""}
+              title={isAuthorOnline ? labels.online : ""}
               className={`absolute right-0 bottom-1 z-10 flex size-4 rounded-full border-4 border-neutral-300 dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"} `}
             />
           ) : null}
@@ -140,9 +148,9 @@ function PinnedMessageCard({
             <time
               className="text-xs text-neutral-500"
               dateTime={message.createdAt}
-              title={formatExactTime(message.createdAt)}
+              title={formatExactTime(message.createdAt, localeTag)}
             >
-              {formatTime(message.createdAt)}
+              {formatTime(message.createdAt, localeTag)}
             </time>
           </p>
           <div className="rounded-lg bg-neutral-200 px-4 py-2 shadow dark:bg-neutral-500">
@@ -171,7 +179,7 @@ function PinnedMessageCard({
                     }}
                   >
                     {message.isPinned ? <BsFillPinAngleFill /> : <BsPinFill />}
-                    Unpin
+                    {labels.unpin}
                   </button>
                 </div>
               )}
@@ -194,6 +202,19 @@ type FanwallMessageItemProps = {
   loading: boolean;
   updateBlockMessage: string | null;
   deleteBlockMessage: string | null;
+  localeTag: string;
+  labels: {
+    online: string;
+    save: string;
+    cancel: string;
+    editPost: string;
+    pinPost: string;
+    pin: string;
+    unpin: string;
+    edit: string;
+    deletePost: string;
+    delete: string;
+  };
   onToggleMenu: () => void;
   onStartEdit: (message: FanwallMessage) => void;
   onStopEdit: () => void;
@@ -215,6 +236,8 @@ function FanwallMessageItem({
   loading,
   updateBlockMessage,
   deleteBlockMessage,
+  localeTag,
+  labels,
   onToggleMenu,
   onStartEdit,
   onStopEdit,
@@ -247,7 +270,7 @@ function FanwallMessageItem({
         </UserInfoBubble>
         {message.userId ? (
           <span
-            title={isAuthorOnline ? "Online" : ""}
+            title={isAuthorOnline ? labels.online : ""}
             className={`absolute right-0 bottom-1 z-10 flex size-4 rounded-full border-4 border-neutral-200 shadow dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"}`}
           />
         ) : null}
@@ -266,9 +289,9 @@ function FanwallMessageItem({
           <time
             className="text-xs text-neutral-500"
             dateTime={message.createdAt}
-            title={formatExactTime(message.createdAt)}
+            title={formatExactTime(message.createdAt, localeTag)}
           >
-            {formatTime(message.createdAt)}
+            {formatTime(message.createdAt, localeTag)}
           </time>
         </p>
         <div className="w-fit rounded-lg bg-neutral-300 px-4 py-2 shadow-md dark:bg-neutral-500">
@@ -291,7 +314,7 @@ function FanwallMessageItem({
                       : undefined
                   }
                 >
-                  Save
+                  {labels.save}
                 </button>
                 <button
                   type="button"
@@ -299,7 +322,7 @@ function FanwallMessageItem({
                   onClick={onStopEdit}
                   disabled={loading}
                 >
-                  Cancel
+                  {labels.cancel}
                 </button>
               </div>
             </div>
@@ -311,7 +334,7 @@ function FanwallMessageItem({
           <>
             <button
               type="button"
-              title="Edit post"
+              title={labels.editPost}
               className="fanwall-menu-button absolute top-2 right-2 cursor-pointer rounded-full bg-none p-1 opacity-100 transition-opacity md:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 md:hover:bg-neutral-400 md:dark:bg-neutral-600 md:dark:hover:bg-neutral-400"
               onClick={onToggleMenu}
             >
@@ -323,14 +346,14 @@ function FanwallMessageItem({
                   <button
                     type="button"
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm hover:bg-neutral-200 dark:hover:bg-neutral-500"
-                    title="Pin post"
+                    title={labels.pinPost}
                     onClick={() => {
                       onTogglePin(message);
                       onCloseMenu();
                     }}
                   >
                     {message.isPinned ? <BsPinFill /> : <BsFillPinAngleFill />}
-                    {message.isPinned ? "Unpin" : "Pin"}
+                    {message.isPinned ? labels.unpin : labels.pin}
                   </button>
                 )}
                 {canEdit && !isEditing && (
@@ -349,13 +372,13 @@ function FanwallMessageItem({
                     }}
                   >
                     <FaPen />
-                    Edit
+                    {labels.edit}
                   </button>
                 )}
                 {canDelete && (
                   <button
                     type="button"
-                    title="Delete post"
+                    title={labels.deletePost}
                     className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm text-red-500 hover:bg-red-100 dark:text-red-300 dark:hover:bg-neutral-500"
                     disabled={loading || isDeleteBlocked}
                     aria-disabled={loading || isDeleteBlocked}
@@ -365,7 +388,7 @@ function FanwallMessageItem({
                     }}
                   >
                     <IoTrash />
-                    Delete
+                    {labels.delete}
                   </button>
                 )}
               </div>
@@ -389,6 +412,14 @@ type FanwallFormProps = {
   isWriteCheckLoading: boolean;
   writeBlockMessage: string | null;
   messageLabel: string;
+  labels: {
+    nicknameRequired: string;
+    contactRequired: string;
+    titlePlaceholder: string;
+    messagePlaceholder: string;
+    sending: string;
+    sendMessage: string;
+  };
   onNicknameChange: (value: string) => void;
   onContactChange: (value: string) => void;
   onTitleChange: (value: string) => void;
@@ -408,6 +439,7 @@ function FanwallForm({
   isWriteCheckLoading,
   writeBlockMessage,
   messageLabel,
+  labels,
   onNicknameChange,
   onContactChange,
   onTitleChange,
@@ -425,7 +457,7 @@ function FanwallForm({
         <div className="block w-full flex-row gap-2 py-2 md:flex md:w-1/2">
           <input
             type="text"
-            placeholder="Nickname*"
+            placeholder={labels.nicknameRequired}
             value={nickname}
             onChange={(e) => onNicknameChange(e.target.value)}
             className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 shadow-md ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-96 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
@@ -433,7 +465,7 @@ function FanwallForm({
           />
           <input
             type="text"
-            placeholder="Contact*"
+            placeholder={labels.contactRequired}
             value={contact}
             onChange={(e) => onContactChange(e.target.value)}
             className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 shadow-md ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-96 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
@@ -446,7 +478,7 @@ function FanwallForm({
         {isAdmin && (
           <input
             type="text"
-            placeholder="Title"
+            placeholder={labels.titlePlaceholder}
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
             className="mb-2 w-full rounded-md bg-neutral-300 py-2 indent-2 ring-neutral-400 outline-none placeholder:text-neutral-400 focus:ring-2 md:mb-0 md:w-1/2 dark:bg-neutral-500 dark:placeholder:text-[#aaaaaa]"
@@ -454,7 +486,7 @@ function FanwallForm({
           />
         )}
         <AutoResizeTextarea
-          placeholder="Type a message... Show your support or ask a question"
+          placeholder={labels.messagePlaceholder}
           value={body}
           onChange={onBodyChange}
           disabled={loading || isWriteBlocked || isWriteCheckLoading}
@@ -476,7 +508,7 @@ function FanwallForm({
           className="flex cursor-pointer items-center gap-2 rounded-md bg-cyan-700 px-4 py-2 text-sm text-white shadow transition-colors hover:bg-cyan-800 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={loading || isWriteBlocked || isWriteCheckLoading}
         >
-          {loading ? "Sending..." : "Send message"}
+          {loading ? labels.sending : labels.sendMessage}
           <PiPaperPlaneRightFill />
         </button>
       </div>
@@ -489,6 +521,9 @@ export default function FanWallClient({
   sessionUser,
   isAdmin,
 }: FanWallClientProps) {
+  const { dictionary, locale } = useI18n();
+  const { social } = dictionary;
+  const localeTag = locale === "cs" ? "cs-CZ" : "en-GB";
   const [messages, setMessages] = useState<FanwallMessage[]>(initialMessages);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
@@ -586,10 +621,10 @@ export default function FanWallClient({
   }, []);
 
   const sessionDisplayName =
-    sessionUser?.name || sessionUser?.username || "Username";
+    sessionUser?.name || sessionUser?.username || social.usernameFallback;
 
   const messageLabel = sessionUser
-    ? `You are posting as ${sessionDisplayName}`
+    ? `${social.fanwallPostingAs} ${sessionDisplayName}`
     : "";
 
   const toggleMenu = (id: string) =>
@@ -598,7 +633,7 @@ export default function FanWallClient({
   return (
     <div className="mx-auto my-0 w-full px-1 md:block md:px-0">
       <p className="rounded-t-lg bg-linear-to-r from-cyan-700 via-cyan-700/85 to-cyan-700 py-2 text-center text-lg text-white md:px-4">
-        FanWall
+        {social.fanwallTitle}
       </p>
 
       {pinnedMessage && (
@@ -611,6 +646,11 @@ export default function FanWallClient({
           }
           isAdmin={isAdmin}
           isMenuOpen={openMenuId === pinnedMessage.id}
+          localeTag={localeTag}
+          labels={{
+            online: social.online,
+            unpin: social.unpin,
+          }}
           onToggleMenu={() => toggleMenu(pinnedMessage.id)}
           onTogglePin={togglePin}
           onCloseMenu={() => setOpenMenuId(null)}
@@ -620,7 +660,7 @@ export default function FanWallClient({
       <div className="bg-neutral-200 dark:bg-neutral-700">
         {otherMessages.length === 0 && (
           <div className="px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-300">
-            No messages yet.
+            {social.fanwallNoMessages}
           </div>
         )}
 
@@ -631,7 +671,7 @@ export default function FanWallClient({
         >
           {loadingOlder && (
             <div className="px-4 py-2 text-center text-xs text-neutral-500">
-              Loading older messages…
+              {social.fanwallLoadingOlder}
             </div>
           )}
 
@@ -652,6 +692,19 @@ export default function FanWallClient({
               loading={loading}
               updateBlockMessage={writeBlockMessages.update}
               deleteBlockMessage={writeBlockMessages.delete}
+              localeTag={localeTag}
+              labels={{
+                online: social.online,
+                save: social.save,
+                cancel: social.cancel,
+                editPost: social.fanwallEditPost,
+                pinPost: social.fanwallPinPost,
+                pin: social.pin,
+                unpin: social.unpin,
+                edit: social.edit,
+                deletePost: social.fanwallDeletePost,
+                delete: social.delete,
+              }}
               onToggleMenu={() => toggleMenu(message.id)}
               onStartEdit={startEditing}
               onStopEdit={stopEditing}
@@ -676,6 +729,14 @@ export default function FanWallClient({
         isWriteCheckLoading={isWriteCheckLoading}
         writeBlockMessage={writeBlockMessage}
         messageLabel={messageLabel}
+        labels={{
+          nicknameRequired: social.fanwallNicknameRequired,
+          contactRequired: social.fanwallContactRequired,
+          titlePlaceholder: social.fanwallTitlePlaceholder,
+          messagePlaceholder: social.fanwallMessagePlaceholder,
+          sending: social.fanwallSending,
+          sendMessage: social.fanwallSendMessage,
+        }}
         onNicknameChange={setNickname}
         onContactChange={setContact}
         onTitleChange={setTitle}

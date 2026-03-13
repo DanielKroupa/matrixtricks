@@ -1,16 +1,8 @@
 "use client";
 
 import { createPortal } from "react-dom";
+import { useI18n } from "@/lib/i18n/client";
 import type { BlockScopes, BlockUserDialogProps } from "@/types/social";
-
-const scopeOptions: Array<[keyof BlockScopes, string]> = [
-  ["commentCreate", "Comment create"],
-  ["commentUpdate", "Comment edit"],
-  ["commentDelete", "Comment delete"],
-  ["fanwallCreate", "Fanwall create"],
-  ["fanwallUpdate", "Fanwall edit"],
-  ["fanwallDelete", "Fanwall delete"],
-];
 
 export function BlockUserDialog({
   isOpen,
@@ -26,6 +18,18 @@ export function BlockUserDialog({
   onClose,
   onConfirm,
 }: BlockUserDialogProps) {
+  const { dictionary } = useI18n();
+  const { social } = dictionary;
+
+  const scopeOptions: Array<[keyof BlockScopes, string]> = [
+    ["commentCreate", social.blockScopeCommentCreate],
+    ["commentUpdate", social.blockScopeCommentUpdate],
+    ["commentDelete", social.blockScopeCommentDelete],
+    ["fanwallCreate", social.blockScopeFanwallCreate],
+    ["fanwallUpdate", social.blockScopeFanwallUpdate],
+    ["fanwallDelete", social.blockScopeFanwallDelete],
+  ];
+
   if (!isOpen || typeof document === "undefined") {
     return null;
   }
@@ -33,17 +37,16 @@ export function BlockUserDialog({
   return createPortal(
     <div className="fixed inset-0 z-90 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-lg border border-neutral-300 bg-neutral-100 p-4 shadow-xl dark:border-neutral-600 dark:bg-neutral-800">
-        <h3 className="text-base font-semibold">Block user</h3>
+        <h3 className="text-base font-semibold">{social.blockDialogTitle}</h3>
         <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-300">
-          This will prevent writing comments and fanwall messages. Anonymous
-          restrictions can affect users sharing the same IP/device.
+          {social.blockDialogDescription}
         </p>
 
         <div className="mt-3 space-y-3">
           <textarea
             value={blockReason}
             onChange={(event) => onBlockReasonChange(event.target.value)}
-            placeholder="Reason (required)"
+            placeholder={social.blockReasonPlaceholder}
             className="w-full resize-none rounded-md border border-neutral-300 bg-white p-2 text-sm outline-none focus:border-cyan-600 dark:border-neutral-600 dark:bg-neutral-700"
             rows={3}
           />
@@ -55,7 +58,7 @@ export function BlockUserDialog({
                 checked={blockType === "permanent"}
                 onChange={() => onBlockTypeChange("permanent")}
               />
-              Permanent
+              {social.permanent}
             </label>
             <label className="flex items-center gap-1">
               <input
@@ -63,7 +66,7 @@ export function BlockUserDialog({
                 checked={blockType === "temporary"}
                 onChange={() => onBlockTypeChange("temporary")}
               />
-              Temporary
+              {social.temporary}
             </label>
           </div>
 
@@ -98,7 +101,7 @@ export function BlockUserDialog({
             onClick={onClose}
             className="cursor-pointer rounded-md border border-neutral-400 px-3 py-2 text-sm"
           >
-            Cancel
+            {social.cancel}
           </button>
           <button
             type="button"
@@ -106,7 +109,7 @@ export function BlockUserDialog({
             disabled={blockLoading}
             className="cursor-pointer rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {blockLoading ? "Blocking…" : "Confirm Block"}
+            {blockLoading ? social.blocking : social.confirmBlock}
           </button>
         </div>
       </div>

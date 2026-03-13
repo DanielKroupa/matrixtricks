@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { getRubricPostsPage } from "@/actions/social";
+import { useI18n } from "@/lib/i18n/client";
 import type { PostSortOption, RubricParam } from "@/types/social";
 import { Spinner } from "../ui/spinner";
 import { TextCard } from "./TextCard";
@@ -22,6 +23,8 @@ export const TextFeed = ({
   postsPerPage,
   sortBy,
 }: TextFeedProps) => {
+  const { dictionary } = useI18n();
+  const { common } = dictionary;
   const [posts, setPosts] = useState(initialPosts);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialHasMore);
@@ -73,10 +76,10 @@ export const TextFeed = ({
             {isPending ? (
               <div className="flex items-center gap-2">
                 <Spinner className="size-5" />
-                <span>Loading...</span>
+                <span>{common.loading}</span>
               </div>
             ) : (
-              "Load more posts"
+              common.loadMorePosts
             )}
           </button>
         </div>

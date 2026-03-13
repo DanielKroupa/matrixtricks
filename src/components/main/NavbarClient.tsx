@@ -3,15 +3,22 @@
 import { ChevronDownIcon, MenuIcon, PlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { IoSettings } from "react-icons/io5";
 import { RiAdminFill } from "react-icons/ri";
 import type { User } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
+import {
+  getOppositeLocale,
+  isAppLocale,
+  LOCALE_COOKIE_NAME,
+} from "@/lib/i18n/config";
+import { getMessages } from "@/lib/i18n/messages";
+import { localeFromPathname, localizePathname } from "@/lib/i18n/routing";
 import Badge from "../ui/Badge";
 
 type Props = {
@@ -19,6 +26,16 @@ type Props = {
   initialSession: any;
   user?: User | null;
   isVipActive?: boolean;
+};
+
+type CookieStoreLike = {
+  set: (options: {
+    name: string;
+    value: string;
+    path?: string;
+    maxAge?: number;
+    sameSite?: "lax" | "strict" | "none";
+  }) => Promise<void> | void;
 };
 
 export default function NavbarClient({
@@ -94,10 +111,110 @@ export default function NavbarClient({
   };
 
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const locale = localeFromPathname(pathname || "/");
+  const labels = getMessages(locale).navbar;
+  const nextLocale = getOppositeLocale(locale);
+  const searchString = searchParams.toString();
+  const hasEnglishPrefix =
+    pathname === "/en" || Boolean(pathname?.startsWith("/en/"));
+
+  const localizedHref = (path: string) => localizePathname(path, locale);
+
+  const setLocaleCookie = useCallback(
+    async (preferredLanguage: "cs" | "en") => {
+      const cookieStore = (
+        globalThis as typeof globalThis & {
+          cookieStore?: CookieStoreLike;
+        }
+      ).cookieStore;
+
+      if (!cookieStore) {
+        return;
+      }
+
+      try {
+        await cookieStore.set({
+          name: LOCALE_COOKIE_NAME,
+          value: preferredLanguage,
+          path: "/",
+          maxAge: 60 * 60 * 24 * 365,
+          sameSite: "lax",
+        });
+      } catch {}
+    },
+    [],
+  );
+
+  const persistLanguage = async (preferredLanguage: "cs" | "en") => {
+    await setLocaleCookie(preferredLanguage);
+
+    if (!isLoggedIn) {
+      return;
+    }
+
+    try {
+      await fetch("/api/users/me/language", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ preferredLanguage }),
+      });
+    } catch {}
+  };
+
+  const handleLanguageSwitch = async () => {
+    const currentPath = pathname || "/";
+    const targetPath = localizePathname(currentPath, nextLocale);
+    const targetUrl = searchString
+      ? `${targetPath}?${searchString}`
+      : targetPath;
+
+    await persistLanguage(nextLocale);
+
+    setProfileMenuOpen(false);
+    setMobileMenuOpen(false);
+    router.push(targetUrl);
+  };
+
+  useEffect(() => {
+    const preferredLanguage = session?.user?.preferredLanguage;
+
+    if (!isAppLocale(preferredLanguage)) {
+      return;
+    }
+
+    void setLocaleCookie(preferredLanguage);
+
+    if (preferredLanguage !== "en" || hasEnglishPrefix) {
+      return;
+    }
+
+    const currentPath = pathname || "/";
+    const targetPath = localizePathname(currentPath, preferredLanguage);
+    const targetUrl = searchString
+      ? `${targetPath}?${searchString}`
+      : targetPath;
+
+    if (
+      targetUrl !== `${currentPath}${searchString ? `?${searchString}` : ""}`
+    ) {
+      router.replace(targetUrl);
+    }
+  }, [
+    session?.user?.preferredLanguage,
+    hasEnglishPrefix,
+    pathname,
+    router,
+    searchString,
+    setLocaleCookie,
+  ]);
 
   const openChatWidget = () => {
     if (user?.role === "admin") {
-      router.push("/admin/chat");
+      router.push(localizedHref("/admin/chat"));
       return;
     }
 
@@ -109,7 +226,7 @@ export default function NavbarClient({
     try {
       await authClient.signOut();
       setSession(null);
-      router.push("/");
+      router.push(localizedHref("/"));
     } finally {
       setSigningOut(false);
       setProfileMenuOpen(false);
@@ -134,7 +251,7 @@ export default function NavbarClient({
         {/* Mobile hamburger */}
         <button
           type="button"
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={mobileMenuOpen ? labels.closeMenu : labels.openMenu}
           onClick={() => {
             setMobileMenuOpen((open) => !open);
             setProfileMenuOpen(false);
@@ -154,7 +271,7 @@ export default function NavbarClient({
                 setMobileMenuOpen(false);
               }}
               aria-haspopup="menu"
-              title="Profile options"
+              title={labels.profileOptions}
               aria-expanded={profileMenuOpen}
               aria-controls="profile-menu"
               className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-2 py-1 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
@@ -184,34 +301,34 @@ export default function NavbarClient({
             >
               <div className="flex flex-col gap-1 p-2">
                 <Link
-                  href="/profile"
+                  href={localizedHref("/profile")}
                   role="menuitem"
                   onClick={() => setProfileMenuOpen(false)}
                   className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
                 >
                   <FaUser className="text-neutral-600 dark:text-neutral-300" />
-                  Profile
+                  {labels.profile}
                 </Link>
                 {user?.role === "admin" && (
                   <Link
-                    href="/admin"
+                    href={localizedHref("/admin")}
                     role="menuitem"
                     onClick={() => setProfileMenuOpen(false)}
                     className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
                   >
                     <RiAdminFill className="text-neutral-600 dark:text-neutral-300" />
-                    Admin settings
+                    {labels.adminSettings}
                   </Link>
                 )}
                 {user?.role !== "admin" && (
                   <Link
-                    href="/settings"
+                    href={localizedHref("/settings")}
                     role="menuitem"
                     onClick={() => setProfileMenuOpen(false)}
                     className="flex items-center gap-2 rounded-lg px-3 py-2 text-black transition hover:bg-neutral-300 dark:text-white dark:hover:bg-neutral-600"
                   >
                     <IoSettings className="text-neutral-600 dark:text-neutral-300" />
-                    Settings
+                    {labels.settings}
                   </Link>
                 )}
 
@@ -224,7 +341,7 @@ export default function NavbarClient({
                   className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-black transition dark:text-white ${signingOut ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600"}`}
                 >
                   <FaSignOutAlt className="text-neutral-600 dark:text-neutral-300" />
-                  {signingOut ? "Signing out..." : "Sign out"}
+                  {signingOut ? labels.signingOut : labels.signOut}
                 </button>
               </div>
             </div>
@@ -235,7 +352,7 @@ export default function NavbarClient({
           <button
             type="button"
             onClick={openChatWidget}
-            title="Support"
+            title={labels.support}
             className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
             <Image
@@ -251,7 +368,8 @@ export default function NavbarClient({
 
         <button
           type="button"
-          title="Language switch"
+          title={labels.languageSwitch}
+          onClick={handleLanguageSwitch}
           className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
         >
           <Image
@@ -261,24 +379,24 @@ export default function NavbarClient({
             height={24}
             className="object-contain"
           />
-          <span>CS &gt;</span>
+          <span>{locale.toUpperCase()} &gt;</span>
         </button>
 
         {user?.role === "admin" && (
           <button
             type="button"
-            onClick={() => router.push("/new-post")}
+            onClick={() => router.push(localizedHref("/new-post"))}
             className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
             <PlusIcon size={20} />
-            New post
+            {labels.newPost}
           </button>
         )}
 
         <button
           type="button"
           onClick={toggleTheme}
-          aria-label="Toggle theme"
+          aria-label={labels.switchTheme}
           className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
         >
           <Image
@@ -293,10 +411,10 @@ export default function NavbarClient({
 
         {!isLoggedIn ? (
           <Link
-            href="/sign-in"
+            href={localizedHref("/sign-in")}
             className="hidden cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
           >
-            Sign In
+            {labels.signIn}
             <Image
               src="/icons/sign-in-icon.svg"
               alt="sign-in"
@@ -317,7 +435,7 @@ export default function NavbarClient({
         <div className="flex h-full w-full">
           <button
             type="button"
-            aria-label="Close menu overlay"
+            aria-label={labels.closeMenuOverlay}
             onClick={() => setMobileMenuOpen(false)}
             className="hidden h-full flex-1 bg-black/35 sm:block"
           />
@@ -343,7 +461,7 @@ export default function NavbarClient({
               </div>
               <button
                 type="button"
-                aria-label="Close menu"
+                aria-label={labels.closeMenu}
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
               >
@@ -355,48 +473,48 @@ export default function NavbarClient({
               {isLoggedIn ? (
                 <>
                   <Link
-                    href="/profile"
+                    href={localizedHref("/profile")}
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex w-full items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                   >
                     <FaUser className="text-neutral-600 dark:text-neutral-300" />
-                    Profile
+                    {labels.profile}
                   </Link>
 
                   {user?.role === "admin" && (
                     <Link
-                      href="/admin"
+                      href={localizedHref("/admin")}
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
                     >
                       <RiAdminFill
                         size={20}
                         className="text-neutral-600 dark:text-neutral-300"
                       />
-                      Admin settings
+                      {labels.adminSettings}
                     </Link>
                   )}
                   {user?.role !== "admin" && (
                     <Link
-                      href="/settings"
+                      href={localizedHref("/settings")}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex w-full items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                     >
                       <IoSettings className="text-neutral-600 dark:text-neutral-300" />
-                      Settings
+                      {labels.settings}
                     </Link>
                   )}
 
                   {user?.role === "admin" && (
                     <button
                       type="button"
-                      onClick={() => router.push("/new-post")}
+                      onClick={() => router.push(localizedHref("/new-post"))}
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
                     >
                       <PlusIcon
                         size={20}
                         className="text-neutral-600 dark:text-neutral-300"
                       />
-                      New post
+                      {labels.newPost}
                     </button>
                   )}
 
@@ -404,7 +522,7 @@ export default function NavbarClient({
                     <button
                       type="button"
                       onClick={openChatWidget}
-                      title="Support"
+                      title={labels.support}
                       className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition md:flex dark:border-neutral-500 dark:bg-neutral-600 dark:text-white"
                     >
                       <Image
@@ -415,7 +533,7 @@ export default function NavbarClient({
                         style={{ height: "auto" }}
                         className="size-5 invert-50 dark:invert-0"
                       />
-                      Message support
+                      {labels.supportMessage}
                     </button>
                   )}
 
@@ -424,7 +542,7 @@ export default function NavbarClient({
                   <div className="flex gap-8">
                     <button
                       type="button"
-                      title="Toggle Theme"
+                      title={labels.switchTheme}
                       onClick={() => {
                         setMobileMenuOpen(false);
                         toggleTheme();
@@ -439,11 +557,13 @@ export default function NavbarClient({
                         height={20}
                         className="object-contain invert-75 dark:invert-0"
                       />
-                      Theme
+                      {labels.theme}
                     </button>
 
                     <button
                       type="button"
+                      title={labels.languageSwitch}
+                      onClick={handleLanguageSwitch}
                       className="flex w-full cursor-pointer items-center justify-start gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                     >
                       <Image
@@ -454,7 +574,7 @@ export default function NavbarClient({
                         height={24}
                         className="object-contain"
                       />
-                      <span>CS &gt;</span>
+                      <span>{locale.toUpperCase()} &gt;</span>
                     </button>
                   </div>
                   <hr className="my-2 rounded-full border text-neutral-400 dark:text-neutral-600" />
@@ -465,17 +585,17 @@ export default function NavbarClient({
                     className={`flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition dark:border-neutral-500 dark:bg-neutral-600 dark:text-white ${signingOut ? "cursor-not-allowed opacity-50" : "hover:bg-neutral-300/80 dark:hover:bg-neutral-600/80"}`}
                   >
                     <FaSignOutAlt className="fill-neutral-600 dark:fill-white" />
-                    {signingOut ? "Signing out..." : "Sign out"}
+                    {signingOut ? labels.signingOut : labels.signOut}
                   </button>
                 </>
               ) : (
                 <>
                   <Link
-                    href="/sign-in"
+                    href={localizedHref("/sign-in")}
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                   >
-                    Sign In
+                    {labels.signIn}
                     <Image
                       src="/icons/sign-in-icon.svg"
                       alt="sign-in"
@@ -488,7 +608,7 @@ export default function NavbarClient({
                   <div className="flex gap-8">
                     <button
                       type="button"
-                      title="Toggle Theme"
+                      title={labels.switchTheme}
                       onClick={() => {
                         setMobileMenuOpen(false);
                         toggleTheme();
@@ -503,11 +623,13 @@ export default function NavbarClient({
                         height={20}
                         className="object-contain invert-75 dark:invert-0"
                       />
-                      Switch Theme
+                      {labels.switchTheme}
                     </button>
 
                     <button
                       type="button"
+                      title={labels.languageSwitch}
+                      onClick={handleLanguageSwitch}
                       className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-neutral-400 bg-neutral-300 px-3 py-2 text-black transition hover:bg-neutral-300/80 dark:border-neutral-500 dark:bg-neutral-600 dark:text-white dark:hover:bg-neutral-600/80"
                     >
                       <Image
@@ -518,7 +640,7 @@ export default function NavbarClient({
                         height={24}
                         className="object-contain"
                       />
-                      <span>CS &gt;</span>
+                      <span>{locale.toUpperCase()} &gt;</span>
                     </button>
                   </div>
                 </>

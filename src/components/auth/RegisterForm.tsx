@@ -7,12 +7,15 @@ import { useForm } from "react-hook-form";
 import PrimaryButton from "@/components/ui/form/PrimaryButton";
 import { useAuth } from "@/hooks/AuthContext";
 import { authClient } from "@/lib/auth-client";
+import { useI18n } from "@/lib/i18n/client";
 import {
   type RegisterFormData,
   registerSchema,
 } from "@/lib/schemas/authSchema/register-schema";
 
 export default function RegisterForm() {
+  const { dictionary, localizeHref } = useI18n();
+  const { auth } = dictionary;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +54,7 @@ export default function RegisterForm() {
     };
 
     if (!response.ok || !payload.available) {
-      return payload.error || "Username is already taken";
+      return payload.error || auth.usernameTaken;
     }
 
     return null;
@@ -80,21 +83,19 @@ export default function RegisterForm() {
         name: normalizedUsername,
 
         password,
-        callbackURL: "/",
+        callbackURL: localizeHref("/"),
       });
 
       if (result.error) {
-        setError(result.error.message || "Sign up failed");
+        setError(result.error.message || auth.signUpFailed);
       } else {
         // close modal (when used inside modal) and navigate home without router
         closeModal();
         // use full page navigation to ensure session state updates
-        window.location.assign("/");
+        window.location.assign(localizeHref("/"));
       }
     } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred",
-      );
+      setError(err instanceof Error ? err.message : auth.unexpectedError);
     } finally {
       setLoading(false);
     }
@@ -104,10 +105,10 @@ export default function RegisterForm() {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-medium text-gray-900 dark:text-white">
-          Create Account
+          {auth.signUpTitle}
         </h2>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-          Join MatrixTricks today
+          {auth.signUpSubtitle}
         </p>
       </div>
 
@@ -121,7 +122,7 @@ export default function RegisterForm() {
             type="email"
             {...register("email")}
             autoComplete="email"
-            placeholder="Enter your email"
+            placeholder={auth.emailPlaceholder}
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.email ? "border border-red-500" : ""
             }`}
@@ -136,7 +137,7 @@ export default function RegisterForm() {
             type="text"
             {...register("username")}
             autoComplete="username"
-            placeholder="Choose a username"
+            placeholder={auth.usernamePlaceholder}
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.username ? "border border-red-500" : ""
             }`}
@@ -153,7 +154,7 @@ export default function RegisterForm() {
             type="password"
             {...register("password")}
             autoComplete="new-password"
-            placeholder="Create a password"
+            placeholder={auth.passwordCreatePlaceholder}
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.password ? "border border-red-500" : ""
             }`}
@@ -170,7 +171,7 @@ export default function RegisterForm() {
             type="password"
             {...register("confirmPassword")}
             autoComplete="new-password"
-            placeholder="Confirm your password"
+            placeholder={auth.passwordConfirmPlaceholder}
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.confirmPassword ? "border border-red-500" : ""
             }`}
@@ -187,20 +188,20 @@ export default function RegisterForm() {
         <PrimaryButton
           type="submit"
           loading={loading}
-          loadingText="Signing up..."
+          loadingText={auth.signingUp}
         >
-          Sign In
+          {auth.signUp}
         </PrimaryButton>
       </form>
 
       <div className="border-t border-neutral-300 pt-4 dark:border-neutral-600">
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Already have an account?{" "}
+          {auth.alreadyHaveAccount}{" "}
           <Link
-            href="/sign-in"
+            href={localizeHref("/sign-in")}
             className="cursor-pointer font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
           >
-            Sign in
+            {auth.loginTitle}
           </Link>
         </p>
       </div>

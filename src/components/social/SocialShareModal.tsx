@@ -1,6 +1,7 @@
 "use client";
 import { Link, X } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa6";
+import { useI18n } from "@/lib/i18n/client";
 
 interface SocialShareModalProps {
   isOpen: boolean;
@@ -15,8 +16,11 @@ export const SocialShareModal = ({
   onClose,
   url,
   title,
-  heading = "Share Video",
+  heading,
 }: SocialShareModalProps) => {
+  const { dictionary } = useI18n();
+  const { social } = dictionary;
+
   if (!isOpen) return null;
 
   const encodedUrl = encodeURIComponent(url);
@@ -42,7 +46,7 @@ export const SocialShareModal = ({
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(url);
-    alert("Link copied to clipboard!");
+    alert(social.linkCopied);
   };
 
   return (
@@ -51,15 +55,17 @@ export const SocialShareModal = ({
         type="button"
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
-        aria-label="Close share modal"
+        aria-label={social.closeShareModal}
       />
       <div className="relative z-10 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl dark:bg-neutral-800">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">{heading}</h3>
+          <h3 className="text-lg font-semibold">
+            {heading ?? social.shareVideo}
+          </h3>
           <button
             type="button"
             onClick={onClose}
-            title="Close"
+            title={social.closeText}
             className="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-neutral-700"
           >
             <X size={20} />
@@ -92,7 +98,7 @@ export const SocialShareModal = ({
               <Link size={20} />
             </div>
             <span className="text-xs text-gray-600 dark:text-neutral-500">
-              Copy
+              {social.copy}
             </span>
           </button>
         </div>

@@ -2,13 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useI18n } from "@/lib/i18n/client";
 import type { VipBillingInterval } from "@/types/billing";
-
-const intervalLabels: Record<VipBillingInterval, string> = {
-  MONTHLY: "Monthly",
-  SEMIANNUAL: "6 months",
-  YEARLY: "Yearly",
-};
 
 const vipCurrencyStorageKey = "vip.checkout.currency";
 
@@ -71,6 +66,8 @@ export function VipCheckoutCard({
   priceOptions: Array<{ currency: string; interval: VipBillingInterval }>;
   isAdmin: boolean;
 }) {
+  const { dictionary } = useI18n();
+  const { settings } = dictionary;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -103,6 +100,11 @@ export function VipCheckoutCard({
   const [showResultModal, setShowResultModal] = useState(false);
 
   const vipResult = searchParams.get("vip");
+  const intervalLabels: Record<VipBillingInterval, string> = {
+    MONTHLY: settings.monthly,
+    SEMIANNUAL: settings.semiannual,
+    YEARLY: settings.yearly,
+  };
 
   useEffect(() => {
     if (!currencies.includes(currency)) {
@@ -175,13 +177,13 @@ export function VipCheckoutCard({
       const payload = await response.json();
 
       if (!response.ok || !payload?.url) {
-        setError(payload?.error || "Unable to start checkout");
+        setError(payload?.error || settings.unableStartCheckout);
         return;
       }
 
       window.location.href = payload.url;
     } catch (_error) {
-      setError("Unable to start checkout");
+      setError(settings.unableStartCheckout);
     } finally {
       setLoading(false);
     }
@@ -190,8 +192,10 @@ export function VipCheckoutCard({
   return (
     <div className="block space-y-2">
       <p>
-        {isVipActive ? "VIP Membership" : "No active VIP"}{" "}
-        <span>(expires {vipExpiresText})</span>
+        {isVipActive ? settings.vipMembership : settings.noActiveVip}{" "}
+        <span>
+          {settings.expiresPrefix} {vipExpiresText})
+        </span>
       </p>
 
       {!isAdmin && (
@@ -228,20 +232,22 @@ export function VipCheckoutCard({
             disabled={!canCheckout || loading}
             className="rounded-md bg-cyan-800 px-3 py-2 text-white disabled:opacity-60"
           >
-            {loading ? "Redirecting..." : isVipActive ? "Renew VIP" : "Buy VIP"}
+            {loading
+              ? settings.redirecting
+              : isVipActive
+                ? settings.renewVip
+                : settings.buyVip}
           </button>
           {!canCheckout && (
             <span className="text-sm text-red-300">
-              No currency configured.
+              {settings.noCurrencyConfigured}
             </span>
           )}
         </div>
       )}
 
       {isAdmin && (
-        <p className="text-sm text-neutral-300">
-          VIP grants and pricing are managed in admin monetization.
-        </p>
+        <p className="text-sm text-neutral-300">{settings.adminManagedVip}</p>
       )}
 
       {showResultModal && vipResult && (
@@ -249,20 +255,20 @@ export function VipCheckoutCard({
           <div className="w-full max-w-md rounded-md border border-neutral-600 bg-neutral-900 p-4">
             <h4 className="text-base font-semibold">
               {vipResult === "success"
-                ? "Payment successful"
-                : "Payment cancelled"}
+                ? settings.paymentSuccessful
+                : settings.paymentCancelled}
             </h4>
             <p className="mt-2 text-sm text-neutral-300">
               {vipResult === "success"
-                ? "Your VIP purchase was completed. Status will update shortly."
-                : "You cancelled the checkout before completion."}
+                ? settings.purchaseCompleted
+                : settings.checkoutCancelled}
             </p>
             <button
               type="button"
               onClick={closeResultModal}
               className="mt-4 rounded bg-cyan-800 px-3 py-2 text-white hover:bg-cyan-900"
             >
-              Close
+              {settings.close}
             </button>
           </div>
         </div>

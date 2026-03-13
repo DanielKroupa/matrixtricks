@@ -5,6 +5,9 @@ import {
   FaTiktok,
   FaXTwitter,
 } from "react-icons/fa6";
+import { getMessages } from "@/lib/i18n/messages";
+import { localizePathname } from "@/lib/i18n/routing";
+import { getRequestLocale } from "@/lib/i18n/server";
 
 import { Tooltip } from "../ui/Tooltip";
 import { Copyright } from "./Copyright";
@@ -16,10 +19,13 @@ const socialLinks = [
   { label: "X / Twitter", href: "#", icon: FaXTwitter },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const locale = await getRequestLocale();
+  const { footer } = getMessages(locale);
+
   return (
     <footer className="bg:text-dark flex w-full flex-col items-center bg-neutral-300 dark:bg-neutral-700">
-      <p className="pt-4 text-center text-base">Follow me on</p>
+      <p className="pt-4 text-center text-base">{footer.followMe}</p>
 
       <div className="flex w-full justify-center gap-6 py-4 text-black">
         {socialLinks.map(({ label, href, icon: Icon }) => (
@@ -37,9 +43,11 @@ export function Footer() {
         ))}
       </div>
       <div className="flex w-full flex-row items-center justify-center gap-4 border-b-2 border-b-neutral-500 pb-2">
-        <Link href="/">GDPR</Link>
-        <Link href="/">Privacy Policy</Link>
-        <Link href="/">Cookies settings</Link>
+        <Link href={localizePathname("/", locale)}>GDPR</Link>
+        <Link href={localizePathname("/", locale)}>{footer.privacyPolicy}</Link>
+        <Link href={localizePathname("/", locale)}>
+          {footer.cookiesSettings}
+        </Link>
       </div>
 
       <Copyright />

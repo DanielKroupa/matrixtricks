@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { saveOnlineVisibilityPreferenceAction } from "@/actions/online-visibility";
 import { usePresence } from "@/hooks/PresenceContext";
+import { useI18n } from "@/lib/i18n/client";
 
 type OnlineVisibilityToggleProps = {
   initialEnabled: boolean;
@@ -11,6 +12,8 @@ type OnlineVisibilityToggleProps = {
 export function OnlineVisibilityToggle({
   initialEnabled,
 }: OnlineVisibilityToggleProps) {
+  const { dictionary } = useI18n();
+  const { social } = dictionary;
   const [enabled, setEnabled] = useState(initialEnabled);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -37,7 +40,7 @@ export function OnlineVisibilityToggle({
 
   return (
     <div className="flex items-center gap-2">
-      Online visibility:
+      {social.onlineVisibility}
       <button
         type="button"
         onClick={toggle}
@@ -51,7 +54,7 @@ export function OnlineVisibilityToggle({
               : "bg-amber-600"
           }`}
         ></span>
-        {enabled ? " ON" : " OFF"}
+        {enabled ? ` ${social.on}` : ` ${social.off}`}
       </button>
       {error ? <p className="text-sm text-red-500">{error}</p> : null}
     </div>

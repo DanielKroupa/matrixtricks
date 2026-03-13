@@ -2323,6 +2323,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  preferredLanguage: 'preferredLanguage',
   role: 'role',
   onlineVisibility: 'onlineVisibility',
   pendingDeletionAt: 'pendingDeletionAt',

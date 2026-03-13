@@ -46,3 +46,4 @@ export const postSchema = z
   });
 
 export type PostFormData = z.infer<typeof postSchema>;
+export type PostFormInput = z.input<typeof postSchema>;

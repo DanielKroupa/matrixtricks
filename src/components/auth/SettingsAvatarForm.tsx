@@ -5,12 +5,15 @@ import { useState } from "react";
 import AvatarUpload from "@/app/admin/AvatarUpload";
 import { Spinner } from "@/components/ui/spinner";
 import type { User } from "@/lib/auth";
+import { useI18n } from "@/lib/i18n/client";
 
 type SettingsAvatarFormProps = {
   user: User;
 };
 
 export default function SettingsAvatarForm({ user }: SettingsAvatarFormProps) {
+  const { dictionary } = useI18n();
+  const { auth } = dictionary;
   const router = useRouter();
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
@@ -40,18 +43,18 @@ export default function SettingsAvatarForm({ user }: SettingsAvatarFormProps) {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result?.error || "Avatar upload failed");
+        setError(result?.error || auth.avatarUploadFailed);
         return;
       }
 
       setAvatarFile(null);
-      setSuccess("Avatar updated successfully");
+      setSuccess(auth.avatarUpdated);
       router.refresh();
     } catch (uploadError: unknown) {
       const message =
         uploadError instanceof Error
           ? uploadError.message
-          : "An unexpected error occurred";
+          : auth.unexpectedError;
       setError(message);
     } finally {
       setSaving(false);
@@ -77,10 +80,10 @@ export default function SettingsAvatarForm({ user }: SettingsAvatarFormProps) {
           {saving ? (
             <span className="flex items-center gap-2">
               <Spinner className="size-5" />
-              <span>Saving...</span>
+              <span>{auth.saving}</span>
             </span>
           ) : (
-            "Save avatar"
+            auth.saveAvatar
           )}
         </button>
       )}

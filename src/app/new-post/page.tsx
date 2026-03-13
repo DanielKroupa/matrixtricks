@@ -9,19 +9,23 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import PrimaryButton from "@/components/ui/form/PrimaryButton";
 import { RichTextEditor } from "@/components/ui/form/RichTextEditor";
 import { Spinner } from "@/components/ui/spinner";
+import { useI18n } from "@/lib/i18n/client";
 import {
   type PostFormData,
+  type PostFormInput,
   postSchema,
 } from "@/lib/schemas/postsChema/post-schema";
 
-const rubrics = [
-  { value: "TEXTS", label: "Texts" },
-  { value: "BASICS", label: "Basics" },
-  { value: "VIDEOS", label: "Videos" },
-  { value: "TRICKS", label: "Tricks" },
-] as const;
-
 export default function NewPostPage() {
+  const { dictionary } = useI18n();
+  const { newPost } = dictionary;
+  const rubrics = [
+    { value: "TEXTS", label: newPost.rubricTexts },
+    { value: "BASICS", label: newPost.rubricBasics },
+    { value: "VIDEOS", label: newPost.rubricVideos },
+    { value: "TRICKS", label: newPost.rubricTricks },
+  ] as const;
+
   const [isLoading, setIsLoading] = useState(false);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const [vipOnly, setVipOnly] = useState(false);
@@ -33,7 +37,7 @@ export default function NewPostPage() {
     setValue,
     reset,
     formState: { errors, submitCount },
-  } = useForm<PostFormData>({
+  } = useForm<PostFormInput, unknown, PostFormData>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       title: "",
@@ -81,7 +85,7 @@ export default function NewPostPage() {
       });
 
       if (!response.ok) {
-        alert("Error creating post");
+        alert(newPost.createError);
         return;
       }
 
@@ -100,13 +104,13 @@ export default function NewPostPage() {
         }
       }
 
-      alert("Post created successfully!");
+      alert(newPost.createdSuccess);
       reset();
       setMediaFiles([]);
       setVipOnly(false);
     } catch (error) {
       console.error(error);
-      alert("Error");
+      alert(newPost.genericError);
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +120,7 @@ export default function NewPostPage() {
     <div className="block md:flex">
       <div className="mx-auto my-3 w-full px-1 md:block md:px-0">
         <h3 className="bg-cyan-800 py-2 text-center text-lg font-medium text-white dark:bg-cyan-900">
-          New post
+          {newPost.title}
         </h3>
         <form
           encType="multipart/form-data"
@@ -125,7 +129,7 @@ export default function NewPostPage() {
         >
           <div className="mb-4">
             <p className="mb-2 block text-black dark:text-white">
-              Choose a type:
+              {newPost.chooseType}
             </p>
             <div className="flex gap-4">
               <label className="hover flex cursor-pointer items-center rounded-md bg-neutral-300 px-4 py-2 transition-colors peer-checked:bg-neutral-400 hover:bg-neutral-400 dark:bg-neutral-600 dark:peer-checked:bg-cyan-800 dark:hover:bg-neutral-500">
@@ -136,7 +140,7 @@ export default function NewPostPage() {
                   className="peer sr-only"
                 />
                 <span className="mr-2 h-4 w-4 rounded-full border-2 border-white peer-checked:border-cyan-700 peer-checked:bg-cyan-700" />
-                Text
+                {newPost.text}
               </label>
               <label className="hover flex cursor-pointer items-center rounded-md bg-neutral-300 px-4 py-2 transition-colors peer-checked:bg-neutral-400 hover:bg-neutral-400 dark:bg-neutral-600 dark:peer-checked:bg-cyan-800 dark:hover:bg-neutral-500">
                 <input
@@ -146,7 +150,7 @@ export default function NewPostPage() {
                   className="peer sr-only"
                 />
                 <span className="mr-2 h-4 w-4 rounded-full border-2 border-white peer-checked:border-cyan-700 peer-checked:bg-cyan-700" />
-                Media
+                {newPost.media}
               </label>
             </div>
             {errors.type && (
@@ -156,14 +160,14 @@ export default function NewPostPage() {
 
           <div className="mb-4">
             <label className="block text-black dark:text-white" htmlFor="title">
-              <span className="text-red-600">*</span> Title
+              <span className="text-red-600">*</span> {newPost.titleLabel}
             </label>
             <input
               type="text"
               id="title"
               {...register("title")}
               className="mt-2 w-full rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
-              placeholder="Enter title"
+              placeholder={newPost.titlePlaceholder}
             />
             {errors.title && (
               <p className="text-red-500">{errors.title.message}</p>
@@ -172,7 +176,7 @@ export default function NewPostPage() {
 
           <div className="mb-4 max-w-64">
             <p className="block text-black dark:text-white">
-              <span className="text-red-600">*</span> Rubric
+              <span className="text-red-600">*</span> {newPost.rubric}
             </p>
             <select
               required
@@ -186,7 +190,7 @@ export default function NewPostPage() {
               className="mt-2 w-full cursor-pointer rounded bg-neutral-300 px-2 py-1.5 outline-none dark:bg-neutral-600"
             >
               <option value="default" disabled hidden>
-                Select rubric
+                {newPost.selectRubric}
               </option>
               {allowedRubrics.map((rubric) => (
                 <option key={rubric.value} value={rubric.value}>
@@ -202,7 +206,7 @@ export default function NewPostPage() {
           {postType === "text" && (
             <div className="mb-4">
               <span className="mb-2 block text-black dark:text-white">
-                Content
+                {newPost.content}
               </span>
               <RichTextEditor
                 value={watch("content") || ""}
@@ -213,7 +217,9 @@ export default function NewPostPage() {
 
           {(postType === "text" || postType === "media") && (
             <div className="mb-4">
-              <p className="mb-2 block text-black dark:text-white">Media</p>
+              <p className="mb-2 block text-black dark:text-white">
+                {newPost.media}
+              </p>
               <input
                 type="hidden"
                 readOnly
@@ -240,16 +246,14 @@ export default function NewPostPage() {
                   className="mr-2 mb-4 flex w-fit cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md hover:bg-cyan-900"
                 >
                   <MdOutlineFileUpload size={20} />
-                  Upload Media
+                  {newPost.uploadMedia}
                 </label>
               </div>
 
               {shouldShowSubmitErrors &&
                 postType === "media" &&
                 isMissingRequiredMedia && (
-                  <p className="text-red-500">
-                    Upload at least one image or video.
-                  </p>
+                  <p className="text-red-500">{newPost.uploadAtLeastOne}</p>
                 )}
 
               <div className="flex flex-wrap gap-4">
@@ -285,7 +289,8 @@ export default function NewPostPage() {
                           {file.name}
                         </p>
                         <p className="text-xs text-black dark:text-white">
-                          Size: {(file.size / 1024 / 1024).toFixed(2)} MB
+                          {newPost.size}: {(file.size / 1024 / 1024).toFixed(2)}{" "}
+                          MB
                         </p>
                       </div>
 
@@ -302,7 +307,7 @@ export default function NewPostPage() {
                         }
                         className="mt-1 cursor-pointer rounded-md bg-red-500 px-2 py-1 text-sm text-white hover:bg-red-700"
                       >
-                        Remove
+                        {newPost.remove}
                       </button>
                     </div>
                   );
@@ -313,7 +318,7 @@ export default function NewPostPage() {
 
           <div className="mb-4">
             <p className="mb-2 block text-black dark:text-white">
-              Schedule (optional)
+              {newPost.scheduleOptional}
             </p>
             <input
               type="datetime-local"
@@ -341,8 +346,9 @@ export default function NewPostPage() {
               </span>
 
               <p className="text-base text-neutral-700 dark:text-neutral-300">
-                Show this content only for{" "}
-                <span className="font-golden font-semibold">VIP</span> users.
+                {newPost.vipOnlyPrefix}{" "}
+                <span className="font-golden font-semibold">VIP</span>{" "}
+                {newPost.vipOnlySuffix}
               </p>
             </label>
           </div>
@@ -350,10 +356,10 @@ export default function NewPostPage() {
           <PrimaryButton type="submit" disabled={isLoading}>
             {isLoading ? (
               <span className="flex items-center justify-center gap-2">
-                <Spinner className="size-5" /> Creating a new post...
+                <Spinner className="size-5" /> {newPost.creating}
               </span>
             ) : (
-              "Create Post"
+              newPost.createPost
             )}
           </PrimaryButton>
         </form>

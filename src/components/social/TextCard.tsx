@@ -1,5 +1,8 @@
+"use client";
+
 import { Heart } from "lucide-react";
 import Image from "next/image";
+import { useI18n } from "@/lib/i18n/client";
 
 interface TextCardProps {
   // biome-ignore lint/suspicious/noExplicitAny: Post DTO differs between endpoints and is gradually being unified.
@@ -7,9 +10,11 @@ interface TextCardProps {
 }
 
 export const TextCard = ({ post }: TextCardProps) => {
+  const { dictionary, localizeHref } = useI18n();
+  const { social } = dictionary;
   const rubricSlug =
     typeof post.rubric === "string" ? post.rubric.toLowerCase() : "texts";
-  const postHref = `/rubrics/${rubricSlug}/post/${post.id}`;
+  const postHref = localizeHref(`/rubrics/${rubricSlug}/post/${post.id}`);
   const preview = getTextPreview(post.content ?? "", 150);
   const likesCount = post?._count?.likes ?? 0;
   const sharesCount = post?.shareCount ?? 0;
@@ -26,7 +31,7 @@ export const TextCard = ({ post }: TextCardProps) => {
         </h3>
         {isLocked && (
           <p className="mb-2 text-xs font-medium text-yellow-700 dark:text-yellow-400">
-            VIP only content
+            {social.vipOnlyContent}
           </p>
         )}
         {preview ? (
@@ -38,7 +43,7 @@ export const TextCard = ({ post }: TextCardProps) => {
         ) : null}
         {isLocked && (
           <p className="mt-2 text-xs font-medium text-cyan-700 dark:text-cyan-400">
-            Unlock full post with VIP subscription
+            {social.unlockWithVip}
           </p>
         )}
       </div>
@@ -52,7 +57,7 @@ export const TextCard = ({ post }: TextCardProps) => {
           <Image
             src="/icons/share.svg"
             className="invert-80 dark:invert-0"
-            alt="Share"
+            alt={social.share}
             width={16}
             height={16}
           />

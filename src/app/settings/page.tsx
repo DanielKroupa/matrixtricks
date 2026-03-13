@@ -5,6 +5,8 @@ import UpdatePasswordForm from "@/components/auth/UpdatePasswordForm";
 import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
 import { canUserChangePassword } from "@/lib/auth-capabilities";
 import { getServerSession } from "@/lib/get-session";
+import { getMessages } from "@/lib/i18n/messages";
+import { getRequestLocale } from "@/lib/i18n/server";
 import { getCurrentUserOnlineVisibility } from "@/lib/online-visibility";
 import { isAdminRole } from "@/lib/roles";
 import { entitlementService } from "@/services/billing/entitlement.service";
@@ -12,6 +14,8 @@ import { vipPriceService } from "@/services/billing/vip-price.service";
 import { VipCheckoutCard } from "./VipCheckoutCard";
 
 export default async function Page() {
+  const locale = await getRequestLocale();
+  const { settings } = getMessages(locale);
   const session = await getServerSession();
   const user = session?.user;
   const vipStatus = await entitlementService.getUserVipStatus(user?.id);
@@ -24,9 +28,10 @@ export default async function Page() {
     currency: price.currency,
     interval: price.interval,
   }));
+  const localeTag = locale === "cs" ? "cs-CZ" : "en-GB";
   const vipExpiresText = vipStatus.expiresAt
-    ? vipStatus.expiresAt.toLocaleDateString("cs-CZ")
-    : "No expiry";
+    ? vipStatus.expiresAt.toLocaleDateString(localeTag)
+    : settings.noExpiry;
 
   if (!user) {
     unauthorized();
@@ -36,7 +41,7 @@ export default async function Page() {
       <div className="block justify-center gap-2 md:flex">
         <div className="mb-4 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:min-w-sm lg:min-w-lg dark:border-neutral-700">
           <h3 className="bg-neutral-300 p-2 text-center font-medium dark:bg-neutral-700">
-            User info
+            {settings.userInfo}
           </h3>
           <div className="space-y-4 p-4">
             <span className="text-xl font-medium">{user?.name} </span>
@@ -50,8 +55,10 @@ export default async function Page() {
 
             <div className="flex">
               <p className="">
-                VIP:{" "}
-                <span>{vipStatus.isVipActive ? "Active" : "Inactive"}</span>
+                {settings.vipLabel}:{" "}
+                <span>
+                  {vipStatus.isVipActive ? settings.active : settings.inactive}
+                </span>
               </p>
               <VipCheckoutCard
                 isVipActive={vipStatus.isVipActive}

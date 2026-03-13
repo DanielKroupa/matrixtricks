@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth-client";
+import { useI18n } from "@/lib/i18n/client";
 
 type DeleteAccountFormProps = {
   canChangePassword: boolean;
@@ -11,6 +12,8 @@ type DeleteAccountFormProps = {
 export default function DeleteAccountForm({
   canChangePassword,
 }: DeleteAccountFormProps) {
+  const { dictionary, localizeHref } = useI18n();
+  const { auth } = dictionary;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [step, setStep] = useState<"confirm" | "password">("confirm");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -40,14 +43,12 @@ export default function DeleteAccountForm({
     setError(null);
 
     if (!canChangePassword) {
-      setError(
-        "Account deletion is available only for accounts with password.",
-      );
+      setError(auth.deleteRequiresPassword);
       return;
     }
 
     if (!currentPassword.trim()) {
-      setError("Current password is required.");
+      setError(auth.currentPasswordRequired);
       return;
     }
 
@@ -68,7 +69,7 @@ export default function DeleteAccountForm({
       } | null;
 
       if (!response.ok) {
-        setError(data?.error ?? "Failed to schedule account deletion");
+        setError(data?.error ?? auth.scheduleDeletionFailed);
         return;
       }
 
@@ -76,12 +77,12 @@ export default function DeleteAccountForm({
         await authClient.signOut();
       } catch {}
 
-      window.location.assign("/?accountDeletion=success");
+      window.location.assign(localizeHref("/?accountDeletion=success"));
     } catch (submitError: unknown) {
       setError(
         submitError instanceof Error
           ? submitError.message
-          : "Failed to schedule account deletion",
+          : auth.scheduleDeletionFailed,
       );
     } finally {
       setLoading(false);
@@ -96,7 +97,7 @@ export default function DeleteAccountForm({
           onClick={openModal}
           className="mx-auto mr-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded px-3 py-2 font-semibold text-red-500 md:w-fit"
         >
-          Delete account
+          {auth.deleteAccount}
         </button>
       </div>
 
@@ -105,16 +106,16 @@ export default function DeleteAccountForm({
           <button
             type="button"
             onClick={closeModal}
-            aria-label="Close delete account modal"
+            aria-label={auth.closeDeleteModal}
             className="absolute inset-0"
           />
           <div className="w-full max-w-md rounded-lg bg-neutral-100 p-6 shadow-2xl dark:bg-neutral-800">
-            <h3 className="text-lg font-semibold">Delete account</h3>
+            <h3 className="text-lg font-semibold">{auth.deleteAccountTitle}</h3>
 
             {!canChangePassword ? (
               <div className="mt-4 space-y-4">
                 <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                  Account deletion is available only for accounts with password.
+                  {auth.deleteRequiresPassword}
                 </p>
                 <div className="flex justify-end">
                   <button
@@ -122,19 +123,17 @@ export default function DeleteAccountForm({
                     onClick={closeModal}
                     className="cursor-pointer rounded bg-neutral-300 px-3 py-2 text-sm dark:bg-neutral-700"
                   >
-                    Close
+                    {auth.closeText}
                   </button>
                 </div>
               </div>
             ) : step === "confirm" ? (
               <div className="mt-4 space-y-4">
                 <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                  Your account will be deactivated immediately and scheduled for
-                  permanent deletion in 14 days.
+                  {auth.deletionNotice1}
                 </p>
                 <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                  If you sign in again within 14 days, your account will be
-                  fully restored.
+                  {auth.deletionNotice2}
                 </p>
                 <div className="flex justify-end gap-2">
                   <button
@@ -142,14 +141,14 @@ export default function DeleteAccountForm({
                     onClick={closeModal}
                     className="cursor-pointer rounded bg-neutral-300 px-3 py-2 text-sm dark:bg-neutral-700"
                   >
-                    Cancel
+                    {auth.cancel}
                   </button>
                   <button
                     type="button"
                     onClick={() => setStep("password")}
                     className="cursor-pointer rounded bg-red-700 px-3 py-2 text-sm text-white hover:bg-red-600"
                   >
-                    Continue
+                    {auth.continue}
                   </button>
                 </div>
               </div>
@@ -160,7 +159,7 @@ export default function DeleteAccountForm({
                     htmlFor="delete-account-password"
                     className="text-sm font-medium"
                   >
-                    Account password
+                    {auth.accountPassword}
                   </label>
                   <input
                     id="delete-account-password"
@@ -189,7 +188,7 @@ export default function DeleteAccountForm({
                     className="cursor-pointer rounded bg-neutral-300 px-3 py-2 text-sm dark:bg-neutral-700"
                     disabled={loading}
                   >
-                    Back
+                    {auth.back}
                   </button>
                   <button
                     type="submit"
@@ -203,10 +202,10 @@ export default function DeleteAccountForm({
                     {loading ? (
                       <span className="flex items-center gap-2">
                         <Spinner className="size-4" />
-                        <span>Deleting...</span>
+                        <span>{auth.deleting}</span>
                       </span>
                     ) : (
-                      "Confirm deletion"
+                      auth.confirmDeletion
                     )}
                   </button>
                 </div>

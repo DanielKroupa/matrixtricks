@@ -9,6 +9,7 @@ import { FaApple, FaCheck, FaEye, FaEyeSlash } from "react-icons/fa6";
 import PrimaryButton from "@/components/ui/form/PrimaryButton";
 import { useAuth } from "@/hooks/AuthContext";
 import { authClient } from "@/lib/auth-client";
+import { useI18n } from "@/lib/i18n/client";
 import {
   type LoginFormData,
   loginSchema,
@@ -18,6 +19,8 @@ type Provider = "google" | "facebook" | "apple";
 
 export default function LoginForm() {
   const { switchForm } = useAuth();
+  const { dictionary, localizeHref } = useI18n();
+  const { auth } = dictionary;
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -29,11 +32,11 @@ export default function LoginForm() {
       setSocialLoading(true);
       await authClient.signIn.social({
         provider,
-        callbackURL: "/",
+        callbackURL: localizeHref("/"),
       });
     } catch (err) {
       console.error("Social sign-in error:", err);
-      setServerError("Something went wrong");
+      setServerError(auth.socialError);
     } finally {
       setSocialLoading(false);
     }
@@ -66,7 +69,7 @@ export default function LoginForm() {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to resolve login");
+      throw new Error(auth.loginResolveError);
     }
 
     const data = (await response.json()) as { email?: string | null };
@@ -81,7 +84,7 @@ export default function LoginForm() {
       const email = await resolveLoginEmail(normalizedLogin);
 
       if (!email) {
-        setServerError("Invalid email/username or password");
+        setServerError(auth.invalidCredentials);
         return;
       }
 
@@ -89,25 +92,21 @@ export default function LoginForm() {
         email,
         password,
         rememberMe: rememberMe ?? false,
-        callbackURL: "/",
+        callbackURL: localizeHref("/"),
       });
 
       if (error) {
         setServerError(
-          typeof error === "string"
-            ? error
-            : error.message || "Something went wrong",
+          typeof error === "string" ? error : error.message || auth.socialError,
         );
         console.log(error);
       } else {
         // close modal and force a full navigation so session cookie is reflected immediately
         closeModal();
-        window.location.assign("/");
+        window.location.assign(localizeHref("/"));
       }
     } catch (err: unknown) {
-      setServerError(
-        err instanceof Error ? err.message : "Something went wrong",
-      );
+      setServerError(err instanceof Error ? err.message : auth.socialError);
     } finally {
       setLoading(false);
     }
@@ -118,7 +117,7 @@ export default function LoginForm() {
       {/* Title */}
       <div className="text-center">
         <h2 className="text-2xl font-medium text-gray-900 dark:text-white">
-          Sign In
+          {auth.loginTitle}
         </h2>
       </div>
 
@@ -129,7 +128,7 @@ export default function LoginForm() {
           <input
             type="text"
             {...register("login")}
-            placeholder="Email or username"
+            placeholder={auth.loginInput}
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.login ? "border border-red-500" : ""
             }`}
@@ -145,7 +144,7 @@ export default function LoginForm() {
           <input
             type={showPassword ? "text" : "password"}
             {...register("password")}
-            placeholder="Password"
+            placeholder={auth.passwordInput}
             className={`mt-2 w-full rounded-lg bg-neutral-300 px-4 py-2.5 pr-10 text-neutral-700 placeholder-neutral-500 transition-colors outline-none dark:bg-neutral-700 dark:text-neutral-300 dark:shadow-md ${
               errors.password ? "border border-red-500" : ""
             }`}
@@ -153,7 +152,7 @@ export default function LoginForm() {
           />
           <button
             type="button"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? auth.hidePassword : auth.showPassword}
             onClick={() => setShowPassword((s) => !s)}
             className="absolute top-7.5 right-3 -translate-y-1/2 text-neutral-600 hover:text-neutral-900"
           >
@@ -161,13 +160,13 @@ export default function LoginForm() {
               <FaEyeSlash
                 size={20}
                 className="cursor-pointer dark:text-neutral-500 dark:hover:text-neutral-400"
-                title="Show password"
+                title={auth.hidePassword}
               />
             ) : (
               <FaEye
                 size={20}
                 className="cursor-pointer dark:text-neutral-500 dark:hover:text-neutral-400"
-                title="Hide password"
+                title={auth.showPassword}
               />
             )}
           </button>
@@ -199,7 +198,7 @@ export default function LoginForm() {
             </span>
 
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
-              Stay signed in
+              {auth.staySignedIn}
             </span>
           </label>
         </div>
@@ -212,15 +211,15 @@ export default function LoginForm() {
         <PrimaryButton
           type="submit"
           loading={loading}
-          loadingText="Signing in..."
+          loadingText={auth.signingIn}
         >
-          Sign In
+          {auth.loginTitle}
         </PrimaryButton>
         <Link
-          href="/forgot-password"
+          href={localizeHref("/forgot-password")}
           className="block w-full cursor-pointer text-center text-sm text-cyan-700 hover:text-cyan-900 dark:text-cyan-500 dark:hover:text-cyan-600"
         >
-          Forgot your Password?
+          {auth.forgotPassword}
         </Link>
       </form>
 
@@ -231,7 +230,7 @@ export default function LoginForm() {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="bg-white px-2 text-neutral-400 dark:bg-neutral-800">
-            Or also
+            {auth.orAlso}
           </span>
         </div>
       </div>
@@ -255,7 +254,7 @@ export default function LoginForm() {
             width={24}
             height={24}
           />
-          Sign In with Facebook
+          {auth.signInWithFacebook}
         </button>
         {/* Google */}
         <button
@@ -269,7 +268,7 @@ export default function LoginForm() {
           }`}
         >
           <Image src="/icons/google.svg" alt="Google" width={24} height={24} />
-          {socialLoading ? "Signing in..." : "Sign In with Google"}
+          {socialLoading ? auth.signingIn : auth.signInWithGoogle}
         </button>
 
         {/* Apple */}
@@ -284,7 +283,7 @@ export default function LoginForm() {
           }`}
         >
           <FaApple size={24} />
-          Sign In with Apple
+          {auth.signInWithApple}
         </button>
       </div>
 
@@ -295,12 +294,12 @@ export default function LoginForm() {
           onClick={() => switchForm("register")}
           className="block w-full text-center text-sm text-neutral-500"
         >
-          Don't have an account?
+          {auth.noAccount}
           <Link
-            href="/sign-up"
+            href={localizeHref("/sign-up")}
             className="ml-1 cursor-pointer font-semibold text-cyan-600 transition-colors hover:text-cyan-700"
           >
-            Sign up
+            {auth.signUp}
           </Link>
         </button>
       </div>

@@ -1,6 +1,9 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { getMessages } from "@/lib/i18n/messages";
+import { localeFromPathname } from "@/lib/i18n/routing";
 
 const vipIntervals = ["MONTHLY", "SEMIANNUAL", "YEARLY"] as const;
 type VipInterval = (typeof vipIntervals)[number];
@@ -55,6 +58,10 @@ export function MonetizationClient({
   initialDbPrices: VipPriceRecord[];
   envPriceMap: Record<string, string | null | undefined>;
 }) {
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname || "/");
+  const labels = getMessages(locale).admin;
+  const dateLocale = locale === "cs" ? "cs-CZ" : "en-US";
   const [userEmail, setUserEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [endsAt, setEndsAt] = useState("");
@@ -98,17 +105,17 @@ export function MonetizationClient({
       const payload = await response.json();
 
       if (!response.ok) {
-        setError(payload?.error || "Failed to load grants");
+        setError(payload?.error || labels.loadGrantsFailed);
         return;
       }
 
       setGrants(payload.grants || []);
     } catch (_error) {
-      setError("Failed to load grants");
+      setError(labels.loadGrantsFailed);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [labels.loadGrantsFailed]);
 
   const loadPrices = useCallback(async () => {
     try {
@@ -119,16 +126,16 @@ export function MonetizationClient({
       const payload = await response.json();
 
       if (!response.ok) {
-        setError(payload?.error || "Failed to load prices");
+        setError(payload?.error || labels.loadPricesFailed);
         return;
       }
 
       setPrices(payload.dbPrices || []);
       setAuditEvents(payload.auditEvents || []);
     } catch (_error) {
-      setError("Failed to load prices");
+      setError(labels.loadPricesFailed);
     }
-  }, []);
+  }, [labels.loadPricesFailed]);
 
   useEffect(() => {
     loadGrants();
@@ -196,15 +203,15 @@ export function MonetizationClient({
       const responsePayload = await response.json();
 
       if (!response.ok) {
-        setError(responsePayload?.error || "Failed to save prices");
+        setError(responsePayload?.error || labels.savePricesFailed);
         return;
       }
 
-      setSuccess("VIP prices saved");
+      setSuccess(labels.vipPricesSaved);
       setPrices(responsePayload.dbPrices || []);
       await loadPrices();
     } catch (_error) {
-      setError("Failed to save prices");
+      setError(labels.savePricesFailed);
     } finally {
       setLoading(false);
     }
@@ -233,18 +240,18 @@ export function MonetizationClient({
       const payload = await response.json();
 
       if (!response.ok) {
-        setError(payload?.error || "Failed to create grant");
+        setError(payload?.error || labels.createGrantFailed);
         return;
       }
 
-      setSuccess("VIP grant created");
+      setSuccess(labels.vipGrantCreated);
       setUserEmail("");
       setUserId("");
       setEndsAt("");
       setNote("");
       await loadGrants();
     } catch (_error) {
-      setError("Failed to create grant");
+      setError(labels.createGrantFailed);
     } finally {
       setLoading(false);
     }
@@ -266,14 +273,14 @@ export function MonetizationClient({
       const payload = await response.json();
 
       if (!response.ok) {
-        setError(payload?.error || "Failed to revoke grant");
+        setError(payload?.error || labels.revokeGrantFailed);
         return;
       }
 
-      setSuccess("VIP grant revoked");
+      setSuccess(labels.vipGrantRevoked);
       await loadGrants();
     } catch (_error) {
-      setError("Failed to revoke grant");
+      setError(labels.revokeGrantFailed);
     } finally {
       setLoading(false);
     }
@@ -282,11 +289,13 @@ export function MonetizationClient({
   return (
     <div className="space-y-6">
       <div className="rounded-md border border-neutral-500 p-4">
-        <h4 className="text-base font-semibold">Configured Stripe Prices</h4>
+        <h4 className="text-base font-semibold">
+          {labels.configuredStripePrices}
+        </h4>
         <p className="mt-1 text-sm text-neutral-300">
           {hasConfiguredPrices
-            ? `Available currencies: ${configuredCurrencies.join(", ")}`
-            : "No Stripe VIP price configured in environment variables."}
+            ? `${labels.availableCurrenciesPrefix} ${configuredCurrencies.join(", ")}`
+            : labels.noStripePriceConfigured}
         </p>
         <div className="mt-3 grid gap-2 text-sm">
           {rows.map((row) => (
@@ -308,14 +317,16 @@ export function MonetizationClient({
       </div>
 
       <div className="space-y-3 rounded-md border border-neutral-500 p-4">
-        <h4 className="text-base font-semibold">Admin Price Overrides (DB)</h4>
-        <p className="text-sm text-neutral-300">
-          DB prices override env prices for active currencies.
-        </p>
+        <h4 className="text-base font-semibold">
+          {labels.adminPriceOverrides}
+        </h4>
+        <p className="text-sm text-neutral-300">{labels.dbPricesOverrideEnv}</p>
 
         <div className="grid gap-2">
           {prices.length === 0 && (
-            <p className="text-sm text-neutral-300">No DB overrides yet.</p>
+            <p className="text-sm text-neutral-300">
+              {labels.noDbOverridesYet}
+            </p>
           )}
 
           {prices.map((item) => (
@@ -358,7 +369,7 @@ export function MonetizationClient({
                     )
                   }
                 />
-                Active
+                {labels.active}
               </label>
             </div>
           ))}
@@ -411,7 +422,7 @@ export function MonetizationClient({
             }}
             className="rounded bg-neutral-600 px-3 py-2 text-white hover:bg-neutral-500"
           >
-            Add/Update
+            {labels.addUpdate}
           </button>
         </div>
 
@@ -421,11 +432,11 @@ export function MonetizationClient({
           disabled={loading || prices.length === 0}
           className="w-fit rounded bg-cyan-800 px-4 py-2 text-white hover:bg-cyan-900 disabled:opacity-60"
         >
-          Save Price Overrides
+          {labels.savePriceOverrides}
         </button>
 
         <div className="rounded bg-neutral-700/40 p-3 text-sm">
-          <p className="mb-2 font-medium">Environment fallback</p>
+          <p className="mb-2 font-medium">{labels.environmentFallback}</p>
           {Object.entries(envPriceMap).map(([currency, priceId]) => (
             <p key={currency} className="text-neutral-300">
               {currency}: {priceId || "-"}
@@ -435,11 +446,9 @@ export function MonetizationClient({
       </div>
 
       <div className="space-y-3 rounded-md border border-neutral-500 p-4">
-        <h4 className="text-base font-semibold">Price Change History</h4>
+        <h4 className="text-base font-semibold">{labels.priceChangeHistory}</h4>
         {auditEvents.length === 0 ? (
-          <p className="text-sm text-neutral-300">
-            No price changes logged yet.
-          </p>
+          <p className="text-sm text-neutral-300">{labels.noPriceChangesYet}</p>
         ) : (
           <div className="space-y-2">
             {auditEvents.map((event) => (
@@ -452,12 +461,12 @@ export function MonetizationClient({
                   {event.previousPriceId || "-"} → {event.nextPriceId || "-"}
                 </p>
                 <p className="text-neutral-300">
-                  Active: {String(event.previousIsActive)} →{" "}
+                  {labels.active}: {String(event.previousIsActive)} →{" "}
                   {String(event.nextIsActive)}
                 </p>
                 <p className="text-neutral-300">
-                  By: {event.changedByUser?.email || "Unknown"} |{" "}
-                  {new Date(event.createdAt).toLocaleString("cs-CZ")}
+                  {labels.by}: {event.changedByUser?.email || labels.unknown} |{" "}
+                  {new Date(event.createdAt).toLocaleString(dateLocale)}
                 </p>
               </div>
             ))}
@@ -469,10 +478,11 @@ export function MonetizationClient({
         onSubmit={handleCreateGrant}
         className="space-y-3 rounded-md border border-neutral-500 p-4"
       >
-        <h4 className="text-base font-semibold">Create Manual VIP Grant</h4>
+        <h4 className="text-base font-semibold">
+          {labels.createManualVipGrant}
+        </h4>
         <p className="text-sm text-neutral-300">
-          Fill user email or user ID. Leave expiration empty for permanent
-          grant.
+          {labels.createVipGrantDescription}
         </p>
         <div className="grid gap-3 md:grid-cols-2">
           <input
@@ -486,7 +496,7 @@ export function MonetizationClient({
             value={userId}
             onChange={(event) => setUserId(event.target.value)}
             type="text"
-            placeholder="User ID (optional)"
+            placeholder={labels.userIdOptional}
             className="rounded bg-neutral-300 px-3 py-2 text-black outline-none dark:bg-neutral-800 dark:text-white"
           />
           <input
@@ -499,7 +509,7 @@ export function MonetizationClient({
             value={note}
             onChange={(event) => setNote(event.target.value)}
             type="text"
-            placeholder="Internal note"
+            placeholder={labels.internalNote}
             className="rounded bg-neutral-300 px-3 py-2 text-black outline-none dark:bg-neutral-800 dark:text-white"
           />
         </div>
@@ -508,15 +518,15 @@ export function MonetizationClient({
           disabled={loading}
           className="rounded bg-cyan-800 px-4 py-2 text-white hover:bg-cyan-900 disabled:opacity-60"
         >
-          Create VIP Grant
+          {labels.createVipGrant}
         </button>
       </form>
 
       <div className="rounded-md border border-neutral-500 p-4">
-        <h4 className="text-base font-semibold">Recent VIP Grants</h4>
+        <h4 className="text-base font-semibold">{labels.recentVipGrants}</h4>
         <div className="mt-3 space-y-2">
           {grants.length === 0 && (
-            <p className="text-sm text-neutral-300">No grants yet.</p>
+            <p className="text-sm text-neutral-300">{labels.noGrantsYet}</p>
           )}
           {grants.map((grant) => (
             <div
@@ -528,15 +538,17 @@ export function MonetizationClient({
                   {grant.user.name} ({grant.user.email})
                 </p>
                 <p className="text-neutral-300">
-                  Start: {new Date(grant.startsAt).toLocaleString("cs-CZ")} |
-                  End:{" "}
+                  {labels.start}:{" "}
+                  {new Date(grant.startsAt).toLocaleString(dateLocale)} |
+                  {labels.end}:{" "}
                   {grant.endsAt
-                    ? new Date(grant.endsAt).toLocaleString("cs-CZ")
-                    : "No expiry"}
+                    ? new Date(grant.endsAt).toLocaleString(dateLocale)
+                    : labels.noExpiry}
                 </p>
                 {grant.revokedAt && (
                   <p className="text-red-300">
-                    Revoked: {new Date(grant.revokedAt).toLocaleString("cs-CZ")}
+                    {labels.revoked}:{" "}
+                    {new Date(grant.revokedAt).toLocaleString(dateLocale)}
                   </p>
                 )}
               </div>
@@ -548,7 +560,7 @@ export function MonetizationClient({
                   disabled={loading}
                   className="rounded bg-red-700 px-3 py-1.5 text-sm text-white hover:bg-red-800 disabled:opacity-60"
                 >
-                  Revoke
+                  {labels.revoke}
                 </button>
               )}
             </div>

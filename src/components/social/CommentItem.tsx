@@ -9,6 +9,7 @@ import { IoTrash } from "react-icons/io5";
 import Badge from "@/components/ui/Badge";
 import { usePresenceStatuses } from "@/hooks/PresenceContext";
 import type { CommentViewModel } from "@/hooks/useComments";
+import { useI18n } from "@/lib/i18n/client";
 import { UserInfoBubble } from "./UserInfoBubble";
 
 function renderCommentBody(content: string, className?: string) {
@@ -46,6 +47,8 @@ export const CommentItem = ({
   editBlockMessage?: string | null;
   deleteBlockMessage?: string | null;
 }) => {
+  const { dictionary, locale } = useI18n();
+  const { social } = dictionary;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
@@ -56,7 +59,7 @@ export const CommentItem = ({
     setActionError("");
     const success = await onToggleLike();
     if (!success) {
-      setActionError("Failed to update like");
+      setActionError(social.failedLikeUpdate);
     }
   };
 
@@ -114,9 +117,7 @@ export const CommentItem = ({
 
   const handleStartEdit = () => {
     if (isEditBlocked) {
-      setActionError(
-        editBlockMessage || "You are blocked from editing comments.",
-      );
+      setActionError(editBlockMessage || social.editBlocked);
       setIsMenuOpen(false);
       return;
     }
@@ -131,15 +132,13 @@ export const CommentItem = ({
     if (!canEdit || isSaving) return;
 
     if (isEditBlocked) {
-      setActionError(
-        editBlockMessage || "You are blocked from editing comments.",
-      );
+      setActionError(editBlockMessage || social.editBlocked);
       return;
     }
 
     const trimmedContent = editedContent.trim();
     if (!trimmedContent) {
-      setActionError("Comment cannot be empty");
+      setActionError(social.commentCannotBeEmpty);
       return;
     }
 
@@ -148,7 +147,7 @@ export const CommentItem = ({
 
     const success = await onCommentUpdated(comment.id, trimmedContent);
     if (!success) {
-      setActionError("Failed to update comment");
+      setActionError(social.failedUpdateComment);
       setIsSaving(false);
       return;
     }
@@ -161,16 +160,12 @@ export const CommentItem = ({
     if (!canDelete || isSaving) return;
 
     if (isDeleteBlocked) {
-      setActionError(
-        deleteBlockMessage || "You are blocked from deleting comments.",
-      );
+      setActionError(deleteBlockMessage || social.deleteBlocked);
       setIsMenuOpen(false);
       return;
     }
 
-    const confirmed = window.confirm(
-      "Do you really want to delete this comment?",
-    );
+    const confirmed = window.confirm(social.confirmDeleteComment);
     if (!confirmed) {
       setIsMenuOpen(false);
       return;
@@ -180,7 +175,7 @@ export const CommentItem = ({
     setIsSaving(true);
     const success = await onCommentDeleted(comment.id);
     if (!success) {
-      setActionError("Failed to delete comment");
+      setActionError(social.failedDeleteComment);
       setIsSaving(false);
       return;
     }
@@ -209,7 +204,7 @@ export const CommentItem = ({
         </UserInfoBubble>
         {comment.userId ? (
           <span
-            title={isAuthorOnline ? "Online" : ""}
+            title={isAuthorOnline ? social.online : ""}
             className={`absolute right-0 bottom-0 z-10 flex size-4 rounded-full border-4 border-white dark:border-neutral-700 ${isAuthorOnline ? "bg-green-500" : "hidden"}`}
           />
         ) : null}
@@ -224,14 +219,16 @@ export const CommentItem = ({
             </UserInfoBubble>
             {user?.isVipActive && <Badge className="ml-2" />}
             <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-              {new Date(comment.createdAt).toLocaleDateString()}
+              {new Date(comment.createdAt).toLocaleDateString(
+                locale === "cs" ? "cs-CZ" : "en-GB",
+              )}
             </span>
           </div>
           {(canEdit || canDelete) && (
             <div className="relative">
               <button
                 type="button"
-                title="Comment actions"
+                title={social.commentActions}
                 className="comment-menu-button cursor-pointer rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-neutral-600 dark:hover:text-gray-200"
                 onClick={() => setIsMenuOpen((open) => !open)}
                 disabled={isSaving}
@@ -253,7 +250,7 @@ export const CommentItem = ({
                       }
                     >
                       <FaPen size={12} />
-                      Edit
+                      {social.edit}
                     </button>
                   )}
                   {canDelete && (
@@ -269,7 +266,7 @@ export const CommentItem = ({
                       }
                     >
                       <IoTrash size={14} />
-                      Delete
+                      {social.delete}
                     </button>
                   )}
                 </div>
@@ -296,7 +293,7 @@ export const CommentItem = ({
                   isEditBlocked ? (editBlockMessage ?? undefined) : undefined
                 }
               >
-                Save
+                {social.save}
               </button>
               <button
                 type="button"
@@ -308,7 +305,7 @@ export const CommentItem = ({
                 }}
                 disabled={isSaving}
               >
-                Cancel
+                {social.cancel}
               </button>
             </div>
           </div>

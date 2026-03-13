@@ -5,15 +5,22 @@ import { Footer } from "@/components/main/Footer";
 import { Navbar } from "@/components/main/Navbar";
 import { Title } from "@/components/main/Title";
 import { getServerSession } from "@/lib/get-session";
+import { getMessages } from "@/lib/i18n/messages";
+import { getRequestLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "New Post | Matrix Tricks",
-  robots: {
-    index: false,
-    follow: false,
-    nocache: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const { metadata } = getMessages(locale);
+
+  return {
+    title: metadata.newPostTitle,
+    robots: {
+      index: false,
+      follow: false,
+      nocache: true,
+    },
+  };
+}
 
 export default async function Layout({
   children,

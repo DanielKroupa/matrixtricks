@@ -2,6 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { FaLock } from "react-icons/fa";
+import { getMessages } from "@/lib/i18n/messages";
+import { localizePathname } from "@/lib/i18n/routing";
+import { getRequestLocale } from "@/lib/i18n/server";
 
 type VipPaywallPost = {
   title?: string | null;
@@ -12,13 +15,15 @@ type VipPaywallPost = {
   }>;
 };
 
-export function VipPaywall({
+export async function VipPaywall({
   post,
 }: {
   post: VipPaywallPost;
   rubric: string;
   closeHref?: string;
 }) {
+  const locale = await getRequestLocale();
+  const { social } = getMessages(locale);
   const media = post?.media?.[0];
 
   return (
@@ -29,14 +34,14 @@ export function VipPaywall({
           <div className="mt-2 flex items-center gap-2">
             <FaLock size={16} className="font-medium text-[#F4BF4F]" />
             <p className="font-golden mt-1 items-center gap-2 text-base">
-              This content is available only for
-              <span className="font-semibold text-[#F4BF4F]"> VIP</span>{" "}
-              members.
+              {social.vipOnlyNotice}
+              <span className="font-semibold text-[#F4BF4F]"> VIP</span>
+              {social.vipOnlyMembersSuffix}
             </p>
           </div>
         </div>
 
-        {media?.type === "video" ? (
+        {media?.type === "video" && media.url ? (
           <video
             src={media.url}
             className="h-80 w-full object-cover blur-md"
@@ -47,7 +52,7 @@ export function VipPaywall({
           <div className="relative h-80 w-full">
             <Image
               src={media.url}
-              alt={post?.title || "VIP post"}
+              alt={post?.title || social.vipPostAlt}
               fill
               className="object-cover blur-md"
             />
@@ -63,10 +68,10 @@ export function VipPaywall({
 
           <div className="flex items-center justify-center gap-3">
             <Link
-              href="/settings"
+              href={localizePathname("/settings", locale)}
               className="bg-golden rounded-md px-4 py-2 text-sm font-medium text-white transition text-shadow-lg hover:brightness-90"
             >
-              Activate VIP
+              {social.activateVip}
             </Link>
           </div>
         </div>

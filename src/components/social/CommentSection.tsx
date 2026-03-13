@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { type JSX, type ReactNode, useEffect, useMemo, useState } from "react";
 import type { CommentViewModel } from "@/hooks/useComments";
 import { useComments } from "@/hooks/useComments";
+import { useI18n } from "@/lib/i18n/client";
 import { CommentItem } from "./CommentItem";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), { ssr: false });
@@ -20,6 +21,8 @@ export const CommentSection = ({
   session: any;
   headerRight?: ReactNode;
 }): JSX.Element => {
+  const { dictionary, locale } = useI18n();
+  const { social } = dictionary;
   const [content, setContent] = useState("");
   const [nickname, setNickname] = useState("");
   const {
@@ -45,6 +48,7 @@ export const CommentSection = ({
   });
 
   const writeBlockMessage = writeBlockMessages.create;
+  const localeTag = locale === "cs" ? "cs-CZ" : "en-GB";
 
   const isWriteBlocked = useMemo(
     () => Boolean(writeBlockMessage),
@@ -59,7 +63,6 @@ export const CommentSection = ({
       try {
         const loadActionBlock = async (
           action: "COMMENT_CREATE" | "COMMENT_UPDATE" | "COMMENT_DELETE",
-          label: string,
         ) => {
           const response = await fetch(
             `/api/moderation/write-access?action=${action}`,
@@ -79,17 +82,24 @@ export const CommentSection = ({
           }
 
           const endsAtLabel = payload.endsAt
-            ? ` until ${new Date(payload.endsAt).toLocaleString("cs-CZ")}`
-            : " permanently";
+            ? `${social.blockedUntil}${new Date(payload.endsAt).toLocaleString(localeTag)}`
+            : social.blockedPermanently;
 
-          return `You are blocked from ${label}${endsAtLabel}. Reason: ${payload.reason ?? "No reason provided"}`;
+          const label =
+            action === "COMMENT_CREATE"
+              ? social.writingComments
+              : action === "COMMENT_UPDATE"
+                ? social.editingComments
+                : social.deletingComments;
+
+          return `${social.blockedReasonPrefix}${label}${endsAtLabel}${social.blockedReasonJoin}${payload.reason ?? social.blockedReasonFallback}`;
         };
 
         const [createMessage, updateMessage, deleteMessage] = await Promise.all(
           [
-            loadActionBlock("COMMENT_CREATE", "writing comments"),
-            loadActionBlock("COMMENT_UPDATE", "editing comments"),
-            loadActionBlock("COMMENT_DELETE", "deleting comments"),
+            loadActionBlock("COMMENT_CREATE"),
+            loadActionBlock("COMMENT_UPDATE"),
+            loadActionBlock("COMMENT_DELETE"),
           ],
         );
 
@@ -120,7 +130,17 @@ export const CommentSection = ({
     return () => {
       isCancelled = true;
     };
-  }, []);
+  }, [
+    localeTag,
+    social.blockedReasonFallback,
+    social.deletingComments,
+    social.writingComments,
+    social.blockedUntil,
+    social.editingComments,
+    social.blockedReasonPrefix,
+    social.blockedPermanently,
+    social.blockedReasonJoin,
+  ]);
 
   // biome-ignore lint/suspicious/noExplicitAny: Third-party emoji picker callback type is not exported in this package setup.
   const onEmojiClick = (emojiObject: any) => {
@@ -153,7 +173,7 @@ export const CommentSection = ({
     setError("");
 
     if (isWriteBlocked) {
-      setError(writeBlockMessage || "You are blocked from writing comments.");
+      setError(writeBlockMessage || social.writeBlocked);
       return;
     }
 
@@ -168,7 +188,7 @@ export const CommentSection = ({
         setNickname("");
       }
     } catch (_e) {
-      setError("Failed to post comment");
+      setError(social.failedPostComment);
     } finally {
     }
   };
@@ -176,14 +196,16 @@ export const CommentSection = ({
   return (
     <div className="flex h-full flex-col bg-white text-black dark:bg-neutral-700 dark:text-white">
       <div className="flex items-center justify-between gap-2 border-b border-neutral-300 p-4 dark:border-neutral-600">
-        <h3 className="text-lg font-semibold">Comments ({comments.length})</h3>
+        <h3 className="text-lg font-semibold">
+          {social.comments} ({comments.length})
+        </h3>
         {headerRight}
       </div>
 
       <div className="custom-scrollbar mb-0 flex-1 overflow-y-auto p-4">
         {comments.length === 0 ? (
           <p className="py-4 text-center text-gray-500 dark:text-gray-400">
-            No comments yet. Be the first!
+            {social.noComments}
           </p>
         ) : (
           comments.map((comment) => (
@@ -214,7 +236,7 @@ export const CommentSection = ({
           {!session && (
             <input
               className="w-full rounded-md border border-neutral-300 p-2 text-sm transition-colors outline-none focus:border-cyan-500"
-              placeholder="Your Nickname (required)"
+              placeholder={social.nicknameRequired}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               required={!session}
@@ -234,7 +256,7 @@ export const CommentSection = ({
             )}
             <textarea
               className="flex-1 resize-none rounded-md border border-neutral-300 p-3 pr-20 text-sm transition-colors outline-none focus:border-cyan-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white"
-              placeholder="Leave a comment..."
+              placeholder={social.leaveComment}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required

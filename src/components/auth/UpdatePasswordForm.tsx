@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Spinner } from "@/components/ui/spinner";
 import { authClient } from "@/lib/auth-client";
+import { useI18n } from "@/lib/i18n/client";
 import {
   type UpdatePasswordData,
   updatePasswordSchema,
@@ -18,6 +19,8 @@ type UpdatePasswordFormProps = {
 export default function UpdatePasswordForm({
   canChangePassword,
 }: UpdatePasswordFormProps) {
+  const { dictionary, localizeHref } = useI18n();
+  const { auth } = dictionary;
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -42,7 +45,7 @@ export default function UpdatePasswordForm({
     newPassword,
   }: UpdatePasswordData) {
     if (!canChangePassword) {
-      setError("This account currently has no local password credential.");
+      setError(auth.noLocalCredential);
       return;
     }
 
@@ -58,15 +61,13 @@ export default function UpdatePasswordForm({
       });
 
       if (error) {
-        setError(error.message || "Failed to update password");
+        setError(error.message || auth.updatePasswordFailed);
       } else {
         setSuccess(true);
         form.reset();
       }
     } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : "An unexpected error occurred",
-      );
+      setError(err instanceof Error ? err.message : auth.unexpectedError);
     } finally {
       setLoading(false);
     }
@@ -78,17 +79,17 @@ export default function UpdatePasswordForm({
         <div className="flex w-fit gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 dark:border-neutral-700">
           <div className="w-full">
             <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-700">
-              Change sign in password:
+              {auth.changePassword}
             </h3>
             <div className="space-y-3 p-4 px-6">
               <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                This account uses social sign in and has no local password yet.
+                {auth.accountNoPassword}
               </p>
               <Link
-                href="/forgot-password"
+                href={localizeHref("/forgot-password")}
                 className="inline-flex w-fit rounded bg-cyan-800 px-3 py-2 text-sm text-white shadow-md dark:bg-cyan-900"
               >
-                Set password via email
+                {auth.setPasswordViaEmail}
               </Link>
             </div>
           </div>
@@ -103,13 +104,13 @@ export default function UpdatePasswordForm({
       <div className="flex w-full gap-2 rounded-br-md rounded-bl-md border-r-2 border-b-2 border-l-2 border-neutral-300 md:w-fit dark:border-neutral-700">
         <div className="w-full">
           <h3 className="bg-neutral-300 p-1 text-center text-lg dark:bg-neutral-700">
-            Change sign in password:
+            {auth.changePassword}
           </h3>
 
           <div className="space-y-4 p-4 px-6">
             {/* Current Password Input */}
             <div className="flex flex-col justify-center gap-1">
-              <label htmlFor="current-password">Current password</label>
+              <label htmlFor="current-password">{auth.currentPassword}</label>
               <input
                 id="current-password"
                 type="password"
@@ -126,7 +127,7 @@ export default function UpdatePasswordForm({
 
             {/* New Password Input */}
             <div className="flex flex-col gap-1">
-              <label htmlFor="new-password">New password</label>
+              <label htmlFor="new-password">{auth.newPassword}</label>
               <input
                 id="new-password"
                 type="password"
@@ -143,7 +144,9 @@ export default function UpdatePasswordForm({
 
             {/* Confirm New Password Input */}
             <div className="flex flex-col gap-1">
-              <label htmlFor="confirm-new-password">Confirm new password</label>
+              <label htmlFor="confirm-new-password">
+                {auth.confirmNewPassword}
+              </label>
               <input
                 id="confirm-new-password"
                 type="password"
@@ -162,7 +165,7 @@ export default function UpdatePasswordForm({
             )}
             {success && (
               <p className="mt-1 text-sm font-medium text-green-500">
-                Password updated successfully.
+                {auth.passwordUpdated}
               </p>
             )}
             <button
@@ -177,10 +180,10 @@ export default function UpdatePasswordForm({
               {loading ? (
                 <span className="flex items-center gap-2">
                   <Spinner className="size-5" />
-                  <span>Updating...</span>
+                  <span>{auth.updatingPassword}</span>
                 </span>
               ) : (
-                "Update password"
+                auth.updatePassword
               )}
             </button>
           </div>

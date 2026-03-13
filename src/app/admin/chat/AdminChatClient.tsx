@@ -1,14 +1,25 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, type Socket } from "socket.io-client";
+import { getMessages } from "@/lib/i18n/messages";
+import { localeFromPathname } from "@/lib/i18n/routing";
 import type { ChatStatus, ThreadDetail, ThreadItem } from "@/types/chat";
 
 const statusOptions: ChatStatus[] = ["OPEN", "ARCHIVED", "BLOCKED"];
 
 export default function AdminChatClient() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const locale = localeFromPathname(pathname || "/");
+  const labels = getMessages(locale).admin;
+  const dateLocale = locale === "cs" ? "cs-CZ" : "en-US";
+  const statusLabelMap: Record<ChatStatus, string> = {
+    OPEN: labels.chatStatusOpen,
+    ARCHIVED: labels.chatStatusArchived,
+    BLOCKED: labels.chatStatusBlocked,
+  };
   const [status, setStatus] = useState<ChatStatus>("OPEN");
   const [search, setSearch] = useState("");
   const [items, setItems] = useState<ThreadItem[]>([]);
@@ -42,7 +53,7 @@ export default function AdminChatClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Failed to load threads");
+        setError(data.error ?? labels.chatLoadThreadsFailed);
         return;
       }
 
@@ -50,52 +61,58 @@ export default function AdminChatClient() {
     } finally {
       setLoadingList(false);
     }
-  }, [search, status]);
+  }, [labels.chatLoadThreadsFailed, search, status]);
 
-  const loadThreadDetail = useCallback(async (threadId: string) => {
-    setLoadingDetail(true);
-    setError(null);
+  const loadThreadDetail = useCallback(
+    async (threadId: string) => {
+      setLoadingDetail(true);
+      setError(null);
 
-    try {
-      const res = await fetch(`/api/admin/chat/threads/${threadId}`, {
-        cache: "no-store",
+      try {
+        const res = await fetch(`/api/admin/chat/threads/${threadId}`, {
+          cache: "no-store",
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.error ?? labels.chatLoadThreadFailed);
+          return;
+        }
+
+        setDetail(data);
+
+        if ((data.thread?.unreadForAdmin ?? 0) > 0) {
+          await fetch(`/api/admin/chat/threads/${threadId}/read`, {
+            method: "POST",
+          });
+        }
+      } finally {
+        setLoadingDetail(false);
+      }
+    },
+    [labels.chatLoadThreadFailed],
+  );
+
+  const openOrCreateThreadByUserId = useCallback(
+    async (userId: string) => {
+      setError(null);
+
+      const res = await fetch("/api/admin/chat/threads", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ userId }),
       });
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Failed to load thread");
-        return;
+        setError(data.error ?? labels.chatOpenThreadFailed);
+        return null;
       }
 
-      setDetail(data);
-
-      if ((data.thread?.unreadForAdmin ?? 0) > 0) {
-        await fetch(`/api/admin/chat/threads/${threadId}/read`, {
-          method: "POST",
-        });
-      }
-    } finally {
-      setLoadingDetail(false);
-    }
-  }, []);
-
-  const openOrCreateThreadByUserId = useCallback(async (userId: string) => {
-    setError(null);
-
-    const res = await fetch("/api/admin/chat/threads", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ userId }),
-    });
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.error ?? "Failed to open thread");
-      return null;
-    }
-
-    return (data.thread?.id as string | undefined) ?? null;
-  }, []);
+      return (data.thread?.id as string | undefined) ?? null;
+    },
+    [labels.chatOpenThreadFailed],
+  );
 
   useEffect(() => {
     void loadThreads();
@@ -213,7 +230,7 @@ export default function AdminChatClient() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Failed to send message");
+        setError(data.error ?? labels.chatSendFailed);
         return;
       }
 
@@ -241,7 +258,7 @@ export default function AdminChatClient() {
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "Failed to update status");
+      setError(data.error ?? labels.chatStatusUpdateFailed);
       return;
     }
 
@@ -251,9 +268,9 @@ export default function AdminChatClient() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Admin chat inbox</h3>
+      <h3 className="text-lg font-medium">{labels.chatInboxTitle}</h3>
       <p className="text-sm text-neutral-500 dark:text-neutral-300">
-        1:1 communication between admin and registered users.
+        {labels.chatInboxDescription}
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -264,24 +281,24 @@ export default function AdminChatClient() {
             onClick={() => setStatus(option)}
             className={`cursor-pointer rounded-md px-3 py-1.5 text-sm font-medium ${status === option ? "bg-cyan-800 text-white dark:bg-cyan-900" : "bg-neutral-200 dark:bg-neutral-700"}`}
           >
-            {option}
+            {statusLabelMap[option]}
           </button>
         ))}
 
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by name, username, email"
+          placeholder={labels.chatSearchPlaceholder}
           className="min-w-64 rounded-md border-2 border-neutral-300 bg-transparent px-3 py-1.5 text-sm outline-none focus:border-cyan-700 dark:border-neutral-600"
         />
 
         <button
           type="button"
-          title="Refresh threads"
+          title={labels.chatRefreshThreads}
           onClick={() => void loadThreads()}
           className="cursor-pointer rounded-md bg-neutral-300 px-3 py-1.5 text-sm font-medium dark:bg-neutral-700"
         >
-          Refresh
+          {labels.chatRefresh}
         </button>
       </div>
 
@@ -290,9 +307,13 @@ export default function AdminChatClient() {
       <div className="grid gap-4 md:grid-cols-[320px_1fr]">
         <div className="chat-scroll max-h-128 space-y-2 overflow-y-auto rounded-lg border-2 border-neutral-300 p-2 dark:border-neutral-700">
           {loadingList ? (
-            <p className="p-2 text-sm text-neutral-500">Loading threads...</p>
+            <p className="p-2 text-sm text-neutral-500">
+              {labels.chatLoadingThreads}
+            </p>
           ) : items.length === 0 ? (
-            <p className="p-2 text-sm text-neutral-500">No threads found.</p>
+            <p className="p-2 text-sm text-neutral-500">
+              {labels.chatNoThreadsFound}
+            </p>
           ) : (
             items.map((item) => {
               const active = selectedThreadId === item.thread.id;
@@ -317,7 +338,7 @@ export default function AdminChatClient() {
                     {item.thread.user.email}
                   </p>
                   <p className="mt-1 truncate text-xs">
-                    {item.lastMessage?.body ?? "No messages"}
+                    {item.lastMessage?.body ?? labels.chatNoMessages}
                   </p>
                 </button>
               );
@@ -328,7 +349,7 @@ export default function AdminChatClient() {
         <div className="flex h-128 min-h-0 flex-col rounded-lg border-2 border-neutral-300 dark:border-neutral-700">
           {!selectedThreadId || !activeThread ? (
             <div className="p-4 text-sm text-neutral-500">
-              Select a thread to view messages.
+              {labels.chatSelectThread}
             </div>
           ) : (
             <>
@@ -343,27 +364,27 @@ export default function AdminChatClient() {
                 <div className="flex gap-2">
                   <button
                     type="button"
-                    title="Move thread to open chat"
+                    title={labels.chatMoveToOpen}
                     onClick={() => void onChangeStatus("OPEN")}
                     className="cursor-pointer rounded-md bg-neutral-200 px-2 py-1 text-xs dark:bg-neutral-700"
                   >
-                    Open
+                    {labels.chatOpen}
                   </button>
                   <button
                     type="button"
-                    title="Archive thread"
+                    title={labels.chatArchiveThread}
                     onClick={() => void onChangeStatus("ARCHIVED")}
                     className="cursor-pointer rounded-md bg-neutral-200 px-2 py-1 text-xs dark:bg-neutral-700"
                   >
-                    Archive
+                    {labels.chatArchive}
                   </button>
                   <button
                     type="button"
-                    title="Block thread"
+                    title={labels.chatBlockThread}
                     onClick={() => void onChangeStatus("BLOCKED")}
                     className="cursor-pointer rounded-md bg-red-700 px-2 py-1 text-xs text-white"
                   >
-                    Block
+                    {labels.chatBlock}
                   </button>
                 </div>
               </div>
@@ -375,7 +396,7 @@ export default function AdminChatClient() {
               >
                 {loadingDetail ? (
                   <p className="text-sm text-neutral-500">
-                    Loading messages...
+                    {labels.chatLoadingMessages}
                   </p>
                 ) : detail?.messages.length ? (
                   detail.messages.map((message) => {
@@ -389,13 +410,17 @@ export default function AdminChatClient() {
                         <p
                           className={`mt-1 text-[10px] ${isAdmin ? "text-cyan-100" : "text-neutral-500"}`}
                         >
-                          {new Date(message.createdAt).toLocaleString("cs-CZ")}
+                          {new Date(message.createdAt).toLocaleString(
+                            dateLocale,
+                          )}
                         </p>
                       </div>
                     );
                   })
                 ) : (
-                  <p className="text-sm text-neutral-500">No messages yet.</p>
+                  <p className="text-sm text-neutral-500">
+                    {labels.chatNoMessagesYet}
+                  </p>
                 )}
               </div>
 
@@ -404,7 +429,7 @@ export default function AdminChatClient() {
                   rows={3}
                   value={messageBody}
                   onChange={(event) => setMessageBody(event.target.value)}
-                  placeholder="Write admin reply..."
+                  placeholder={labels.chatWriteReply}
                   className="w-full resize-none rounded-md border-2 border-neutral-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-cyan-700 dark:border-neutral-600"
                 />
                 <button
@@ -413,7 +438,7 @@ export default function AdminChatClient() {
                   disabled={sending || messageBody.trim().length === 0}
                   className="mt-2 cursor-pointer rounded-md bg-cyan-800 px-3 py-2 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60 dark:bg-cyan-900"
                 >
-                  {sending ? "Sending..." : "Send"}
+                  {sending ? labels.chatSending : labels.chatSend}
                 </button>
               </div>
             </>

@@ -8,6 +8,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import { IoBrush } from "react-icons/io5";
 import { MdAdminPanelSettings, MdDataset } from "react-icons/md";
 import { RiMoneyDollarCircleFill, RiUserSettingsFill } from "react-icons/ri";
+import { getMessages } from "@/lib/i18n/messages";
+import { localeFromPathname, localizePathname } from "@/lib/i18n/routing";
 
 type MenuItem = {
   id: string;
@@ -16,60 +18,77 @@ type MenuItem = {
   Icon: IconType;
 };
 
-const menuItems: MenuItem[] = [
-  {
-    id: "profile",
-    href: "/admin",
-    label: "Profile settings",
-    Icon: RiUserSettingsFill,
-  },
-  {
-    id: "posts",
-    href: "/admin/posts",
-    label: "Posts",
-    Icon: MdAdminPanelSettings,
-  },
-  {
-    id: "moderation",
-    href: "/admin/moderation",
-    label: "Moderation",
-    Icon: MdAdminPanelSettings,
-  },
-  {
-    id: "chat",
-    href: "/admin/chat",
-    label: "Chat inbox",
-    Icon: BsChatSquareTextFill,
-  },
-
-  { id: "rubrics", href: "/admin/rubrics", label: "Rubrics", Icon: MdDataset },
-  {
-    id: "monetization",
-    href: "/admin/monetization",
-    label: "Monetization",
-    Icon: RiMoneyDollarCircleFill,
-  },
-  { id: "graphic", href: "/admin/graphics", label: "Graphic", Icon: IoBrush },
-  { id: "eshop", href: "/admin/eshop", label: "E-shop", Icon: FaShoppingCart },
-];
-
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const locale = localeFromPathname(pathname || "/");
+  const { admin } = getMessages(locale);
+  const localizedHref = (href: string) => localizePathname(href, locale);
+  const menuItems: MenuItem[] = [
+    {
+      id: "profile",
+      href: "/admin",
+      label: admin.sidebarProfileSettings,
+      Icon: RiUserSettingsFill,
+    },
+    {
+      id: "posts",
+      href: "/admin/posts",
+      label: admin.sidebarPosts,
+      Icon: MdAdminPanelSettings,
+    },
+    {
+      id: "moderation",
+      href: "/admin/moderation",
+      label: admin.sidebarModeration,
+      Icon: MdAdminPanelSettings,
+    },
+    {
+      id: "chat",
+      href: "/admin/chat",
+      label: admin.sidebarChatInbox,
+      Icon: BsChatSquareTextFill,
+    },
+    {
+      id: "rubrics",
+      href: "/admin/rubrics",
+      label: admin.sidebarRubrics,
+      Icon: MdDataset,
+    },
+    {
+      id: "monetization",
+      href: "/admin/monetization",
+      label: admin.sidebarMonetization,
+      Icon: RiMoneyDollarCircleFill,
+    },
+    {
+      id: "graphic",
+      href: "/admin/graphics",
+      label: admin.sidebarGraphic,
+      Icon: IoBrush,
+    },
+    {
+      id: "eshop",
+      href: "/admin/eshop",
+      label: admin.sidebarEshop,
+      Icon: FaShoppingCart,
+    },
+  ];
 
   return (
     <div className="min-h-175 w-16 space-y-1.5 rounded-bl-md bg-neutral-200 p-1.5 md:w-1/4 lg:w-1/6 dark:bg-neutral-700">
       {menuItems.slice(0, 7).map((item) => {
+        const targetHref = localizedHref(item.href);
         const isActive =
           item.href === "/admin"
-            ? pathname === "/admin"
-            : pathname?.startsWith(item.href);
+            ? pathname === targetHref
+            : pathname?.startsWith(targetHref);
         const itemClass =
           "flex py-2.5 px-3 gap-2 rounded items-center md:justify-start justify-center font-medium transition " +
           (isActive
             ? "dark:bg-cyan-900 bg-cyan-800 text-white"
             : "dark:bg-neutral-600 bg-neutral-300 dark:text-white/90 text-neutral-800 dark:hover:bg-neutral-500 hover:bg-neutral-400");
         return (
-          <Link href={item.href} className={itemClass} key={item.id}>
+          <Link href={targetHref} className={itemClass} key={item.id}>
             <item.Icon size={20} />
             <span className="hidden md:block">{item.label}</span>
           </Link>
@@ -77,19 +96,18 @@ export default function AdminSidebar() {
       })}
       <hr className="m-2 rounded-full border-2 text-neutral-300 md:m-4 dark:text-neutral-600" />
       <Link
-        href={menuItems[7].href}
+        href={localizedHref(menuItems[7].href)}
         className={
           "flex cursor-pointer items-center justify-center gap-2 rounded bg-neutral-300 px-3 py-2.5 font-medium transition md:justify-start " +
-          (pathname?.startsWith(menuItems[7].href)
+          (pathname?.startsWith(localizedHref(menuItems[7].href))
             ? "bg-cyan-800 text-white dark:bg-cyan-900"
             : " bg-cyan-800 text-neutral-800 hover:bg-neutral-400 dark:bg-neutral-600 dark:text-white/90")
         }
       >
         <FaShoppingCart size={20} />
-        <label htmlFor="" className="hidden cursor-pointer md:block">
-          {" "}
+        <span className="hidden cursor-pointer md:block">
           {menuItems[7].label}
-        </label>
+        </span>
       </Link>
     </div>
   );

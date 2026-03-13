@@ -1,13 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { updateSiteSettings } from "@/actions/site-settings";
 import { OnlineVisibilityToggle } from "@/components/social/OnlineVisibilityToggle";
 import { Spinner } from "@/components/ui/spinner";
 import type { User } from "@/lib/auth";
+import { getMessages } from "@/lib/i18n/messages";
+import { localeFromPathname } from "@/lib/i18n/routing";
 import {
   type UpdateProfileFormData,
   updateProfileSchema,
@@ -28,6 +30,9 @@ export function ProfileDetailsForm({
   initialBio,
   initialOnlineVisibilityEnabled,
 }: ProfileDetailsFormProps) {
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname || "/");
+  const labels = getMessages(locale).admin;
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -68,7 +73,7 @@ export function ProfileDetailsForm({
     };
 
     if (!response.ok || !payload.available) {
-      return payload.error || "Nickname is already taken";
+      return payload.error || labels.nicknameTaken;
     }
 
     return null;
@@ -125,7 +130,7 @@ export function ProfileDetailsForm({
         setError(
           typeof nicknamePayload.error === "string"
             ? nicknamePayload.error
-            : "Failed to update profile",
+            : labels.updateProfileFailed,
         );
         return;
       }
@@ -142,9 +147,7 @@ export function ProfileDetailsForm({
         const result = await response.json();
 
         if (!response.ok) {
-          setError(
-            result?.error || "Profile name updated, avatar upload failed",
-          );
+          setError(result?.error || labels.profileNameAvatarFailed);
           return;
         }
 
@@ -161,11 +164,11 @@ export function ProfileDetailsForm({
         return;
       }
 
-      setSuccess("Profile updated successfully");
+      setSuccess(labels.profileUpdated);
       router.refresh();
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "An unexpected error occurred";
+        err instanceof Error ? err.message : labels.unexpectedError;
       setError(message);
     } finally {
       setLoading(false);
@@ -190,12 +193,14 @@ export function ProfileDetailsForm({
           initialEnabled={initialOnlineVisibilityEnabled}
         />
         <div className="flex flex-col gap-2">
-          <label htmlFor="profile-nickname">Nickname:</label>
+          <label htmlFor="profile-nickname">{labels.nicknameLabel}</label>
           <input
             id="profile-nickname"
             type="text"
             autoComplete="off"
-            placeholder={user.username || user.name || "Enter nickname"}
+            placeholder={
+              user.username || user.name || labels.nicknamePlaceholder
+            }
             className="w-auto rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
             {...register("nickname")}
           />
@@ -206,12 +211,12 @@ export function ProfileDetailsForm({
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="profile-title">Edit main title:</label>
+          <label htmlFor="profile-title">{labels.editMainTitleLabel}</label>
           <input
             id="profile-title"
             type="text"
             autoComplete="off"
-            placeholder={initialTitle || "Enter main title"}
+            placeholder={initialTitle || labels.mainTitlePlaceholder}
             className="w-auto rounded bg-neutral-300 px-2 py-1.5 ring-neutral-400 outline-none focus:ring-2 md:w-72 dark:bg-neutral-700 dark:ring-neutral-600 dark:focus:ring-2"
             {...register("title")}
           />
@@ -223,7 +228,7 @@ export function ProfileDetailsForm({
         </div>
         {/* Input change bio information */}
         <div className="flex flex-col gap-2">
-          <label htmlFor="profile-bio">Change bio information:</label>
+          <label htmlFor="profile-bio">{labels.bioLabel}</label>
           <Controller
             name="bio"
             control={control}
@@ -233,7 +238,7 @@ export function ProfileDetailsForm({
                 autocorrect="off"
                 value={field.value}
                 onChange={field.onChange}
-                placeholder={initialBio || "Enter bio"}
+                placeholder={initialBio || labels.bioPlaceholder}
               />
             )}
           />
@@ -254,10 +259,10 @@ export function ProfileDetailsForm({
           {loading ? (
             <span className="flex items-center gap-2">
               <Spinner className="size-5" />
-              <span>Saving...</span>
+              <span>{labels.saving}</span>
             </span>
           ) : (
-            "Save changes"
+            labels.saveChanges
           )}
         </button>
         {error && (

@@ -8,6 +8,7 @@ import { FaPen } from "react-icons/fa";
 import { IoTrash } from "react-icons/io5";
 import { usePostInteractions } from "@/hooks/usePostInteractions";
 import { authClient } from "@/lib/auth-client";
+import { useI18n } from "@/lib/i18n/client";
 import { CommentSection } from "./CommentSection";
 import { SocialShareModal } from "./SocialShareModal";
 import { UserInfoBubble } from "./UserInfoBubble";
@@ -22,6 +23,8 @@ export const PostModal = ({
   onClose: () => void;
   mode?: "modal" | "page";
 }) => {
+  const { dictionary, localizeHref } = useI18n();
+  const { social } = dictionary;
   const router = useRouter();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>("");
@@ -86,9 +89,12 @@ export const PostModal = ({
   }, [isMenuOpen]);
 
   const handleShare = async () => {
+    const sharePath = localizeHref(
+      `/rubrics/${initialPost.rubric.toLowerCase()}/post/${initialPost.id}`,
+    );
     const url =
       typeof window !== "undefined"
-        ? `${window.location.origin}/rubrics/${initialPost.rubric.toLowerCase()}/post/${initialPost.id}`
+        ? `${window.location.origin}${sharePath}`
         : "";
     await handleShareIncrement();
     setShareUrl(url);
@@ -111,13 +117,16 @@ export const PostModal = ({
     const currentTitle = fullPost?.title ?? initialPost.title ?? "";
     const currentContent = fullPost?.content ?? "";
 
-    const nextTitle = window.prompt("Edit post title", currentTitle);
+    const nextTitle = window.prompt(social.editPostTitlePrompt, currentTitle);
     if (nextTitle === null) {
       setIsMenuOpen(false);
       return;
     }
 
-    const nextContent = window.prompt("Edit post content", currentContent);
+    const nextContent = window.prompt(
+      social.editPostContentPrompt,
+      currentContent,
+    );
     if (nextContent === null) {
       setIsMenuOpen(false);
       return;
@@ -137,7 +146,7 @@ export const PostModal = ({
       });
 
       if (!response.ok) {
-        alert("Failed to update post");
+        alert(social.failedUpdatePost);
         return;
       }
 
@@ -146,7 +155,7 @@ export const PostModal = ({
       setFullPost((prev: any) => ({ ...prev, ...updatedPost }));
       router.refresh();
     } catch (_error) {
-      alert("Failed to update post");
+      alert(social.failedUpdatePost);
     } finally {
       setIsSaving(false);
       setIsMenuOpen(false);
@@ -156,7 +165,7 @@ export const PostModal = ({
   const handleDeletePost = async () => {
     if (!canManagePost || isSaving) return;
 
-    const confirmed = window.confirm("Do you really want to delete this post?");
+    const confirmed = window.confirm(social.confirmDeletePost);
     if (!confirmed) {
       setIsMenuOpen(false);
       return;
@@ -169,7 +178,7 @@ export const PostModal = ({
       });
 
       if (!response.ok) {
-        alert("Failed to delete post");
+        alert(social.failedDeletePost);
         return;
       }
 
@@ -177,7 +186,7 @@ export const PostModal = ({
       onClose();
       router.refresh();
     } catch (_error) {
-      alert("Failed to delete post");
+      alert(social.failedDeletePost);
     } finally {
       setIsSaving(false);
     }
@@ -209,7 +218,7 @@ export const PostModal = ({
       });
 
       if (!response.ok) {
-        alert("Failed to update pin state");
+        alert(social.failedPinUpdate);
         return;
       }
 
@@ -218,7 +227,7 @@ export const PostModal = ({
       setFullPost((prev: any) => ({ ...prev, ...updatedPost }));
       router.refresh();
     } catch {
-      alert("Failed to update pin state");
+      alert(social.failedPinUpdate);
     } finally {
       setIsSaving(false);
       setIsMenuOpen(false);
@@ -229,7 +238,7 @@ export const PostModal = ({
     <div className="relative">
       <button
         type="button"
-        title="Post actions"
+        title={social.postActions}
         className="post-menu-button cursor-pointer rounded-full bg-neutral-300 p-1 transition-colors hover:bg-neutral-400 dark:bg-neutral-600 dark:hover:bg-neutral-500"
         onClick={() => setIsMenuOpen((open) => !open)}
         disabled={isSaving}
@@ -246,7 +255,7 @@ export const PostModal = ({
               disabled={isSaving}
             >
               <BsFillPinAngleFill />
-              {isPinned ? "Unpin" : "Pin"}
+              {isPinned ? social.unpin : social.pin}
             </button>
           )}
           <button
@@ -256,7 +265,7 @@ export const PostModal = ({
             disabled={isSaving}
           >
             <FaPen />
-            Edit
+            {social.edit}
           </button>
           <button
             type="button"
@@ -265,7 +274,7 @@ export const PostModal = ({
             disabled={isSaving}
           >
             <IoTrash />
-            Delete
+            {social.delete}
           </button>
         </div>
       )}
@@ -307,7 +316,7 @@ export const PostModal = ({
             <div className="relative h-80 w-full bg-black sm:h-105">
               <Image
                 src={media.url}
-                alt="Content"
+                alt={social.contentAlt}
                 fill
                 className="object-contain"
               />
@@ -325,7 +334,7 @@ export const PostModal = ({
             <button
               type="button"
               onClick={handleLike}
-              title="Like"
+              title={social.like}
               className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                 liked
                   ? "border-2 border-pink-500/20 bg-pink-500/20 text-pink-600 dark:text-pink-400"
@@ -338,12 +347,12 @@ export const PostModal = ({
             <button
               type="button"
               onClick={handleShare}
-              title="Share post"
+              title={social.sharePost}
               className="flex cursor-pointer items-center gap-2 rounded-full bg-neutral-300 px-3 py-1.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-400 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600"
             >
               <Image
                 src="/icons/share.svg"
-                alt="Share"
+                alt={social.share}
                 width={16}
                 height={16}
                 className="invert-80 dark:invert-0"
@@ -372,7 +381,7 @@ export const PostModal = ({
           onClose={() => setIsShareOpen(false)}
           url={shareUrl}
           title={initialPost.title}
-          heading="Share post"
+          heading={social.sharePost}
         />
       </div>
     );
@@ -382,7 +391,7 @@ export const PostModal = ({
     <div className="animate-in fade-in fixed inset-0 z-50 flex items-center justify-center p-0 duration-200 sm:p-6 md:p-4">
       <button
         type="button"
-        aria-label="Close"
+        aria-label={social.closeOverlay}
         className="absolute inset-0 bg-black/80 backdrop-blur-md"
         onClick={onClose}
       ></button>
@@ -390,7 +399,7 @@ export const PostModal = ({
       <button
         type="button"
         onClick={onClose}
-        title="Close"
+        title={social.closeText}
         className="absolute top-4 right-4 z-50 cursor-pointer rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70"
       >
         <X size={24} />
@@ -426,7 +435,7 @@ export const PostModal = ({
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/75 via-black/30 to-transparent" />
               <div className="absolute right-3 bottom-3 left-3 z-10 flex items-end justify-between">
-                <button type="button" onClick={handleLike} title="Like">
+                <button type="button" onClick={handleLike} title={social.like}>
                   <Heart size={16} fill={liked ? "currentColor" : "none"} />
                   <span>{likeCount}</span>
                 </button>
@@ -437,7 +446,7 @@ export const PostModal = ({
                 >
                   <Image
                     src="/icons/share.svg"
-                    alt="Share"
+                    alt={social.share}
                     width={16}
                     height={16}
                   />
@@ -449,7 +458,7 @@ export const PostModal = ({
             <div className="relative h-full w-full">
               <Image
                 src={media.url}
-                alt="Content"
+                alt={social.contentAlt}
                 fill
                 className="object-contain"
               />
@@ -473,7 +482,7 @@ export const PostModal = ({
                 <button
                   type="button"
                   onClick={handleLike}
-                  title="Like"
+                  title={social.like}
                   className={`flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-white transition-colors ${liked ? "bg-pink-500/80" : "bg-black/45 hover:bg-black/60"}`}
                 >
                   <Heart size={16} fill={liked ? "currentColor" : "none"} />
@@ -482,12 +491,12 @@ export const PostModal = ({
                 <button
                   type="button"
                   onClick={handleShare}
-                  title="Share"
+                  title={social.share}
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
                 >
                   <Image
                     src="/icons/share.svg"
-                    alt="Share"
+                    alt={social.share}
                     width={16}
                     height={16}
                   />
@@ -525,12 +534,12 @@ export const PostModal = ({
                 <button
                   type="button"
                   onClick={handleShare}
-                  title="Share"
+                  title={social.share}
                   className="flex cursor-pointer items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-black/60"
                 >
                   <Image
                     src="/icons/share.svg"
-                    alt="Share"
+                    alt={social.share}
                     width={16}
                     height={16}
                   />
@@ -565,7 +574,7 @@ export const PostModal = ({
         onClose={() => setIsShareOpen(false)}
         url={shareUrl}
         title={initialPost.title}
-        heading="Share Video"
+        heading={social.shareVideo}
       />
     </div>
   );

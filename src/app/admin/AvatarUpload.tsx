@@ -1,10 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import type { User } from "@/lib/auth";
+import { getMessages } from "@/lib/i18n/messages";
+import { localeFromPathname } from "@/lib/i18n/routing";
 
 function formatBytes(bytes: number) {
   if (bytes === 0) return "0 B";
@@ -27,9 +30,12 @@ function stripExtension(fileName: string) {
   return fileName.replace(/\.[^/.]+$/, "");
 }
 
-async function compressForPreviewAndUpload(file: File) {
+async function compressForPreviewAndUpload(
+  file: File,
+  labels: ReturnType<typeof getMessages>["admin"],
+) {
   if (!file.type.startsWith("image/")) {
-    throw new Error("Only image files are allowed.");
+    throw new Error(labels.avatarOnlyImages);
   }
 
   const sourceUrl = URL.createObjectURL(file);
@@ -38,7 +44,7 @@ async function compressForPreviewAndUpload(file: File) {
     const img = await new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new window.Image();
       image.onload = () => resolve(image);
-      image.onerror = () => reject(new Error("Failed to read image."));
+      image.onerror = () => reject(new Error(labels.avatarReadFailed));
       image.src = sourceUrl;
     });
 
@@ -48,7 +54,7 @@ async function compressForPreviewAndUpload(file: File) {
     const context = canvas.getContext("2d");
 
     if (!context) {
-      throw new Error("Canvas is not available in this browser.");
+      throw new Error(labels.avatarCanvasUnavailable);
     }
 
     const sourceSize = Math.min(img.naturalWidth, img.naturalHeight);
@@ -82,7 +88,7 @@ async function compressForPreviewAndUpload(file: File) {
     });
 
     if (!pngBlob) {
-      throw new Error("Failed to process image.");
+      throw new Error(labels.avatarProcessFailed);
     }
 
     return new File([pngBlob], `${stripExtension(file.name)}.png`, {
@@ -98,6 +104,9 @@ export default function AvatarUpload({
   user,
   onImageChange,
 }: AvatarUploadProps) {
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname || "/");
+  const labels = getMessages(locale).admin;
   const [file, setFile] = useState<File | null>(null);
   const [localPreview, setLocalPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -121,16 +130,14 @@ export default function AvatarUpload({
 
     if (file.size > maxSize) {
       clearFile();
-      setError(
-        `The image size is too big. Max allowed is ${formatBytes(maxSize)}.`,
-      );
+      setError(`${labels.avatarTooLargePrefix} ${formatBytes(maxSize)}.`);
       // reset input so the same file can be picked again
       if (inputRef.current) inputRef.current.value = "";
       return;
     }
 
     try {
-      const processedFile = await compressForPreviewAndUpload(file);
+      const processedFile = await compressForPreviewAndUpload(file, labels);
 
       setError(null);
       setFile(processedFile);
@@ -142,7 +149,7 @@ export default function AvatarUpload({
       });
       onImageChange?.(processedFile);
     } catch {
-      setError("Failed to process the selected image.");
+      setError(labels.avatarSelectedProcessFailed);
       setFile(null);
       setLocalPreview((prev) => {
         if (prev) {
@@ -177,7 +184,7 @@ export default function AvatarUpload({
         {previewSource ? (
           <Image
             src={previewSource}
-            alt="avatar preview"
+            alt={labels.avatarPreviewAlt}
             className="h-24 w-24 rounded-full object-cover"
             width={100}
             height={100}
@@ -186,7 +193,7 @@ export default function AvatarUpload({
         ) : (
           <Image
             src={fallbackAvatar}
-            alt="default avatar"
+            alt={labels.defaultAvatarAlt}
             className="h-24 w-24 rounded-full object-cover"
             width={100}
             height={100}
@@ -212,7 +219,7 @@ export default function AvatarUpload({
               className="mr-2 flex w-fit cursor-pointer items-center justify-center gap-2 rounded bg-cyan-800 px-3 py-2 text-white shadow-md dark:bg-cyan-900"
             >
               <MdOutlineFileUpload size={20} />
-              Upload avatar
+              {labels.uploadAvatar}
             </label>
           </div>
 
@@ -220,7 +227,7 @@ export default function AvatarUpload({
             id="avatar-help"
             className="mt-1 text-center text-xs text-neutral-400 md:text-left"
           >
-            Max size: {formatBytes(maxSize)}
+            {labels.maxSize}: {formatBytes(maxSize)}
           </div>
 
           {error && (
@@ -236,10 +243,11 @@ export default function AvatarUpload({
           {file && (
             <div className="mt-2 text-sm text-neutral-400">
               <div>
-                <span className="font-semibold">Name:</span> {file.name}
+                <span className="font-semibold">{labels.fileName}:</span>{" "}
+                {file.name}
               </div>
               <div>
-                <span className="font-semibold">Size:</span>{" "}
+                <span className="font-semibold">{labels.fileSize}:</span>{" "}
                 {formatBytes(file.size)}
               </div>
               <div className="mt-2 flex gap-2">
@@ -248,7 +256,7 @@ export default function AvatarUpload({
                   onClick={clearFile}
                   className="cursor-pointer rounded bg-neutral-500 px-2 py-1 text-white dark:bg-neutral-600"
                 >
-                  Remove
+                  {labels.remove}
                 </button>
               </div>
             </div>

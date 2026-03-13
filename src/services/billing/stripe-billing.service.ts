@@ -92,6 +92,38 @@ function toStripeCustomerId(
   return customer.id;
 }
 
+function toStripeSubscriptionId(
+  subscription: string | Stripe.Subscription | null | undefined,
+) {
+  if (typeof subscription === "string") {
+    return subscription;
+  }
+
+  return subscription?.id ?? null;
+}
+
+function getInvoiceSubscriptionId(invoice: Stripe.Invoice) {
+  if (invoice.parent?.type === "subscription_details") {
+    return toStripeSubscriptionId(
+      invoice.parent.subscription_details?.subscription,
+    );
+  }
+
+  const legacyInvoice = invoice as Stripe.Invoice & {
+    subscription?: string | Stripe.Subscription | null;
+  };
+
+  return toStripeSubscriptionId(legacyInvoice.subscription);
+}
+
+function getChargeInvoiceId(charge: Stripe.Charge) {
+  const legacyCharge = charge as Stripe.Charge & {
+    invoice?: string | null;
+  };
+
+  return typeof legacyCharge.invoice === "string" ? legacyCharge.invoice : null;
+}
+
 async function upsertSubscriptionFromStripeObject(
   subscription: Stripe.Subscription,
   tx: Prisma.TransactionClient,
@@ -275,10 +307,7 @@ export const stripeBillingService = {
       event.type === "invoice.payment_failed"
     ) {
       const invoice = event.data.object as Stripe.Invoice;
-      const subscriptionId =
-        typeof invoice.subscription === "string"
-          ? invoice.subscription
-          : invoice.subscription?.id;
+      const subscriptionId = getInvoiceSubscriptionId(invoice);
 
       if (subscriptionId) {
         const subscription =
@@ -290,15 +319,11 @@ export const stripeBillingService = {
     if (event.type === "charge.refunded") {
       const charge = event.data.object as Stripe.Charge;
       const isFullRefund = charge.amount_refunded >= charge.amount;
-      const invoiceId =
-        typeof charge.invoice === "string" ? charge.invoice : null;
+      const invoiceId = getChargeInvoiceId(charge);
 
       if (isFullRefund && invoiceId) {
         const invoice = await stripe.invoices.retrieve(invoiceId);
-        const subscriptionId =
-          typeof invoice.subscription === "string"
-            ? invoice.subscription
-            : invoice.subscription?.id;
+        const subscriptionId = getInvoiceSubscriptionId(invoice);
 
         if (subscriptionId) {
           const subscription =

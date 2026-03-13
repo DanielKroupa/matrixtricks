@@ -12,6 +12,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { useI18n } from "@/lib/i18n/client";
 import type { BlockType } from "@/types/social";
 
 import type {
@@ -35,18 +36,23 @@ const defaultBlockScopes: BlockScopes = {
   fanwallDelete: true,
 };
 
-function formatDateTime(value: string | null) {
+function formatDateTime(
+  value: string | null,
+  localeTag: string,
+  neverLabel: string,
+  unknownLabel: string,
+) {
   if (!value) {
-    return "Never";
+    return neverLabel;
   }
 
   const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return "Unknown";
+    return unknownLabel;
   }
 
-  return new Intl.DateTimeFormat("cs-CZ", {
+  return new Intl.DateTimeFormat(localeTag, {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
@@ -85,6 +91,9 @@ export function UserInfoBubble({
   children: ReactNode;
 }) {
   const router = useRouter();
+  const { dictionary, locale } = useI18n();
+  const { social } = dictionary;
+  const localeTag = locale === "cs" ? "cs-CZ" : "en-GB";
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -220,8 +229,8 @@ export function UserInfoBubble({
         if (!response.ok) {
           const message =
             typeof payload === "object" && payload && "error" in payload
-              ? payload.error || "Nepodařilo se načíst profil"
-              : "Nepodařilo se načíst profil";
+              ? payload.error || social.failedLoadProfile
+              : social.failedLoadProfile;
           throw new Error(message);
         }
 
@@ -233,7 +242,7 @@ export function UserInfoBubble({
           const message =
             loadError instanceof Error
               ? loadError.message
-              : "Nepodařilo se načíst profil";
+              : social.failedLoadProfile;
           setError(message);
         }
       } finally {
@@ -248,7 +257,7 @@ export function UserInfoBubble({
     return () => {
       isCancelled = true;
     };
-  }, [isOpen, userId]);
+  }, [isOpen, social.failedLoadProfile, userId]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -338,8 +347,8 @@ export function UserInfoBubble({
       if (!response.ok) {
         const message =
           typeof payload === "object" && payload && "error" in payload
-            ? payload.error || "Nepodařilo se změnit fan stav"
-            : "Nepodařilo se změnit fan stav";
+            ? payload.error || social.failedToggleFanStatus
+            : social.failedToggleFanStatus;
         throw new Error(message);
       }
 
@@ -359,7 +368,7 @@ export function UserInfoBubble({
       const message =
         toggleError instanceof Error
           ? toggleError.message
-          : "Nepodařilo se změnit fan stav";
+          : social.failedToggleFanStatus;
       setError(message);
     } finally {
       setFanLoading(false);
@@ -374,12 +383,12 @@ export function UserInfoBubble({
     const reason = blockReason.trim();
 
     if (reason.length < 3) {
-      setError("Block reason must have at least 3 characters.");
+      setError(social.blockReasonMinChars);
       return;
     }
 
     if (blockType === "temporary" && !blockUntil) {
-      setError("Please choose block end date and time.");
+      setError(social.chooseBlockEndDate);
       return;
     }
 
@@ -409,8 +418,8 @@ export function UserInfoBubble({
       if (!response.ok) {
         const message =
           typeof payload === "object" && payload && "error" in payload
-            ? payload.error || "Failed to block user"
-            : "Failed to block user";
+            ? payload.error || social.failedBlockUser
+            : social.failedBlockUser;
         throw new Error(message);
       }
 
@@ -441,7 +450,7 @@ export function UserInfoBubble({
       const message =
         blockError instanceof Error
           ? blockError.message
-          : "Failed to block user";
+          : social.failedBlockUser;
       setError(message);
     } finally {
       setBlockLoading(false);
@@ -453,9 +462,7 @@ export function UserInfoBubble({
       return;
     }
 
-    const confirmed = window.confirm(
-      "Do you really want to unblock this user?",
-    );
+    const confirmed = window.confirm(social.confirmUnblockUser);
     if (!confirmed) {
       return;
     }
@@ -471,7 +478,7 @@ export function UserInfoBubble({
       const payload = (await response.json()) as { error?: string };
 
       if (!response.ok) {
-        throw new Error(payload.error || "Failed to unblock user");
+        throw new Error(payload.error || social.failedUnblockUser);
       }
 
       setData((prev) => {
@@ -490,7 +497,7 @@ export function UserInfoBubble({
       const message =
         unblockError instanceof Error
           ? unblockError.message
-          : "Failed to unblock user";
+          : social.failedUnblockUser;
       setError(message);
     } finally {
       setBlockLoading(false);
@@ -532,7 +539,7 @@ export function UserInfoBubble({
 
             {loading ? (
               <div className="py-6 text-center text-sm text-neutral-500 dark:text-neutral-300">
-                Loading profile data...
+                {social.loadingProfileData}
               </div>
             ) : error ? (
               <div className="py-4 text-center text-sm text-red-500">
@@ -563,15 +570,21 @@ export function UserInfoBubble({
                 </div>
 
                 <div className="space-y-1 text-sm text-neutral-800 dark:text-neutral-100">
-                  <p className="text-left">Comments: {data.commentsGiven}</p>
-                  <p className="text-left">Shares: {data.sharesGiven}</p>
-                  <p className="text-left">Likes: {data.likesGiven}</p>
+                  <p className="text-left">
+                    {social.commentsGiven}: {data.commentsGiven}
+                  </p>
+                  <p className="text-left">
+                    {social.sharesGiven}: {data.sharesGiven}
+                  </p>
+                  <p className="text-left">
+                    {social.likesGiven}: {data.likesGiven}
+                  </p>
                 </div>
 
                 {showFanSection && (
                   <div className="space-y-2 border-t border-neutral-300 pt-3 dark:border-neutral-600">
                     <p className="text-sm text-neutral-800 dark:text-neutral-100">
-                      Fans: {data.fansCount ?? 0}
+                      {social.fans}: {data.fansCount ?? 0}
                     </p>
                     {!data.isSelf ? (
                       <button
@@ -581,18 +594,34 @@ export function UserInfoBubble({
                         className="w-full cursor-pointer rounded-md bg-cyan-700 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-600 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-600 dark:hover:bg-cyan-500"
                       >
                         {fanLoading
-                          ? "Working…"
+                          ? social.working
                           : data.isFan
-                            ? "Unfan"
-                            : `Become a fan (${data.fansCount ?? 0})`}
+                            ? social.unfan
+                            : `${social.becomeFan} (${data.fansCount ?? 0})`}
                       </button>
                     ) : null}
                   </div>
                 )}
 
                 <div className="space-y-1 border-t border-neutral-300 pt-3 text-xs text-neutral-600 dark:border-neutral-600 dark:text-neutral-300">
-                  <p>Registered: {formatDateTime(data.registeredAt)}</p>
-                  <p>Last comment: {formatDateTime(data.lastCommentAt)}</p>
+                  <p>
+                    {social.registered}:{" "}
+                    {formatDateTime(
+                      data.registeredAt,
+                      localeTag,
+                      social.never,
+                      social.unknown,
+                    )}
+                  </p>
+                  <p>
+                    {social.lastComment}:{" "}
+                    {formatDateTime(
+                      data.lastCommentAt,
+                      localeTag,
+                      social.never,
+                      social.unknown,
+                    )}
+                  </p>
                 </div>
 
                 <div className="flex items-center justify-center gap-2 border-t border-neutral-300 pt-3 dark:border-neutral-600">
@@ -603,13 +632,13 @@ export function UserInfoBubble({
                   >
                     <Image
                       src="/icons/mail.svg"
-                      alt="mail"
+                      alt={social.message}
                       width={24}
                       style={{ height: "auto" }}
                       height={20}
                       className="invert-50 dark:invert-0"
                     />
-                    Message
+                    {social.message}
                   </button>
 
                   {data.viewerIsAdmin && !data.isSelf ? (
@@ -620,7 +649,7 @@ export function UserInfoBubble({
                         disabled={blockLoading}
                         className="w-fit cursor-pointer rounded-md bg-red-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {blockLoading ? "Working…" : "Unblock User"}
+                        {blockLoading ? social.working : social.unblockUser}
                       </button>
                     ) : (
                       <button
@@ -629,7 +658,7 @@ export function UserInfoBubble({
                         disabled={blockLoading}
                         className="w-fit cursor-pointer rounded-md bg-red-700 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        Block User
+                        {social.blockUser}
                       </button>
                     )
                   ) : null}
@@ -637,10 +666,10 @@ export function UserInfoBubble({
 
                 {data.viewerIsAdmin && data.isBlocked ? (
                   <p className="text-center text-[11px] text-red-600 dark:text-red-300">
-                    Blocked{" "}
+                    {social.blockedStatus}{" "}
                     {data.blockedUntil
-                      ? `until ${formatDateTime(data.blockedUntil)}`
-                      : "permanently"}
+                      ? `${social.until} ${formatDateTime(data.blockedUntil, localeTag, social.never, social.unknown)}`
+                      : social.permanently}
                     {/* {data.blockedReason ? ` — ${data.blockedReason}` : null} */}
                   </p>
                 ) : null}

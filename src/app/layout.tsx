@@ -7,6 +7,8 @@ import DevBreakpointBadgeClient from "@/components/ui/DevBreakpointBadgeClient";
 import { AuthProvider } from "@/hooks/AuthContext";
 import { PresenceProvider } from "@/hooks/PresenceContext";
 import { getServerSession } from "@/lib/get-session";
+import { getMessages } from "@/lib/i18n/messages";
+import { getRequestLocale } from "@/lib/i18n/server";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -30,50 +32,57 @@ function getMetadataBase() {
   }
 }
 
-export const metadata: Metadata = {
-  metadataBase: getMetadataBase(),
-  title: "Matrix Tricks",
-  description:
-    "Matrix Tricks je social platforma s videi, texty a triky zaměřenými na komunitní obsah.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    siteName: "Matrix Tricks",
-    title: "Matrix Tricks",
-    description:
-      "Matrix Tricks je social platforma s videi, texty a triky zaměřenými na komunitní obsah.",
-    url: "/",
-    images: [
-      {
-        url: "/logos/matrix-tricks.png",
-        width: 512,
-        height: 512,
-        alt: "Matrix Tricks",
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const metadataMessages = getMessages(locale).metadata;
+
+  return {
+    metadataBase: getMetadataBase(),
+    title: metadataMessages.title,
+    description: metadataMessages.description,
+    alternates: {
+      canonical: locale === "en" ? "/en" : "/",
+      languages: {
+        "cs-CZ": "/",
+        "en-GB": "/en",
       },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Matrix Tricks",
-    description:
-      "Matrix Tricks je social platforma s videi, texty a triky zaměřenými na komunitní obsah.",
-    images: ["/logos/matrix-tricks.png"],
-  },
-};
+    },
+    openGraph: {
+      type: "website",
+      siteName: "Matrix Tricks",
+      title: metadataMessages.title,
+      description: metadataMessages.description,
+      url: locale === "en" ? "/en" : "/",
+      images: [
+        {
+          url: "/logos/matrix-tricks.png",
+          width: 512,
+          height: 512,
+          alt: "Matrix Tricks",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metadataMessages.title,
+      description: metadataMessages.description,
+      images: ["/logos/matrix-tricks.png"],
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getRequestLocale();
   const session = await getServerSession();
   const userId = session?.user?.id ?? null;
   const initialVisibilityEnabled = session?.user?.onlineVisibility ?? true;
 
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang={locale}>
       <body className={`${poppins.variable} mx-auto antialiased xl:container`}>
         <AuthProvider>
           <PresenceProvider

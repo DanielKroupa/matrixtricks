@@ -4,6 +4,7 @@ import { Heart, Pin, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLock } from "react-icons/fa6";
+import { useI18n } from "@/lib/i18n/client";
 
 // Using exact type would be better, but any for flexibility with Prisma includes
 interface VideoCardProps {
@@ -13,13 +14,15 @@ interface VideoCardProps {
 }
 
 export const VideoCard = ({ post }: VideoCardProps) => {
+  const { dictionary, localizeHref } = useI18n();
+  const { social } = dictionary;
   const videoMedia =
     // biome-ignore lint/suspicious/noExplicitAny: Media item type is polymorphic in current feed payload.
     post.media.find((media: any) => media.type === "video") || post.media[0];
   const thumbnailUrl = videoMedia?.url; // In real app, generate thumbnail. For now use same URL or placeholder if video.
   const rubricSlug =
     typeof post.rubric === "string" ? post.rubric.toLowerCase() : "videos";
-  const postHref = `/rubrics/${rubricSlug}/post/${post.id}`;
+  const postHref = localizeHref(`/rubrics/${rubricSlug}/post/${post.id}`);
   const isLocked = Boolean(post?.isLocked);
   // Ideally we have a thumbnail field or we use a video tag to show poster.
 
@@ -80,7 +83,7 @@ export const VideoCard = ({ post }: VideoCardProps) => {
             <div className="flex items-center gap-1">
               <Image
                 src="/icons/share.svg"
-                alt="Share"
+                alt={social.share}
                 width={16}
                 height={16}
               />

@@ -30,6 +30,7 @@ export type UserMinAggregateOutputType = {
   email: string | null
   emailVerified: boolean | null
   image: string | null
+  preferredLanguage: string | null
   role: string | null
   onlineVisibility: boolean | null
   pendingDeletionAt: Date | null
@@ -47,6 +48,7 @@ export type UserMaxAggregateOutputType = {
   email: string | null
   emailVerified: boolean | null
   image: string | null
+  preferredLanguage: string | null
   role: string | null
   onlineVisibility: boolean | null
   pendingDeletionAt: Date | null
@@ -64,6 +66,7 @@ export type UserCountAggregateOutputType = {
   email: number
   emailVerified: number
   image: number
+  preferredLanguage: number
   role: number
   onlineVisibility: number
   pendingDeletionAt: number
@@ -83,6 +86,7 @@ export type UserMinAggregateInputType = {
   email?: true
   emailVerified?: true
   image?: true
+  preferredLanguage?: true
   role?: true
   onlineVisibility?: true
   pendingDeletionAt?: true
@@ -100,6 +104,7 @@ export type UserMaxAggregateInputType = {
   email?: true
   emailVerified?: true
   image?: true
+  preferredLanguage?: true
   role?: true
   onlineVisibility?: true
   pendingDeletionAt?: true
@@ -117,6 +122,7 @@ export type UserCountAggregateInputType = {
   email?: true
   emailVerified?: true
   image?: true
+  preferredLanguage?: true
   role?: true
   onlineVisibility?: true
   pendingDeletionAt?: true
@@ -207,6 +213,7 @@ export type UserGroupByOutputType = {
   email: string
   emailVerified: boolean
   image: string | null
+  preferredLanguage: string
   role: string | null
   onlineVisibility: boolean
   pendingDeletionAt: Date | null
@@ -245,6 +252,7 @@ export type UserWhereInput = {
   email?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  preferredLanguage?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringNullableFilter<"User"> | string | null
   onlineVisibility?: Prisma.BoolFilter<"User"> | boolean
   pendingDeletionAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -285,6 +293,7 @@ export type UserOrderByWithRelationInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferredLanguage?: Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   onlineVisibility?: Prisma.SortOrder
   pendingDeletionAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,6 +339,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
+  preferredLanguage?: Prisma.StringFilter<"User"> | string
   role?: Prisma.StringNullableFilter<"User"> | string | null
   onlineVisibility?: Prisma.BoolFilter<"User"> | boolean
   pendingDeletionAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -368,6 +378,7 @@ export type UserOrderByWithAggregationInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferredLanguage?: Prisma.SortOrder
   role?: Prisma.SortOrderInput | Prisma.SortOrder
   onlineVisibility?: Prisma.SortOrder
   pendingDeletionAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -391,6 +402,7 @@ export type UserScalarWhereWithAggregatesInput = {
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  preferredLanguage?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   onlineVisibility?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   pendingDeletionAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -408,6 +420,7 @@ export type UserCreateInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -448,6 +461,7 @@ export type UserUncheckedCreateInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -488,6 +502,7 @@ export type UserUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -528,6 +543,7 @@ export type UserUncheckedUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -568,6 +584,7 @@ export type UserCreateManyInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -585,6 +602,7 @@ export type UserUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -602,6 +620,7 @@ export type UserUncheckedUpdateManyInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -619,6 +638,7 @@ export type UserCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  preferredLanguage?: Prisma.SortOrder
   role?: Prisma.SortOrder
   onlineVisibility?: Prisma.SortOrder
   pendingDeletionAt?: Prisma.SortOrder
@@ -636,6 +656,7 @@ export type UserMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  preferredLanguage?: Prisma.SortOrder
   role?: Prisma.SortOrder
   onlineVisibility?: Prisma.SortOrder
   pendingDeletionAt?: Prisma.SortOrder
@@ -653,6 +674,7 @@ export type UserMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrder
+  preferredLanguage?: Prisma.SortOrder
   role?: Prisma.SortOrder
   onlineVisibility?: Prisma.SortOrder
   pendingDeletionAt?: Prisma.SortOrder
@@ -1040,6 +1062,7 @@ export type UserCreateWithoutWriteBlocksReceivedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1079,6 +1102,7 @@ export type UserUncheckedCreateWithoutWriteBlocksReceivedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1123,6 +1147,7 @@ export type UserCreateWithoutWriteBlocksCreatedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1162,6 +1187,7 @@ export type UserUncheckedCreateWithoutWriteBlocksCreatedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1206,6 +1232,7 @@ export type UserCreateWithoutWriteBlocksRevokedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1245,6 +1272,7 @@ export type UserUncheckedCreateWithoutWriteBlocksRevokedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1300,6 +1328,7 @@ export type UserUpdateWithoutWriteBlocksReceivedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1339,6 +1368,7 @@ export type UserUncheckedUpdateWithoutWriteBlocksReceivedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1389,6 +1419,7 @@ export type UserUpdateWithoutWriteBlocksCreatedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1428,6 +1459,7 @@ export type UserUncheckedUpdateWithoutWriteBlocksCreatedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1478,6 +1510,7 @@ export type UserUpdateWithoutWriteBlocksRevokedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1517,6 +1550,7 @@ export type UserUncheckedUpdateWithoutWriteBlocksRevokedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1556,6 +1590,7 @@ export type UserCreateWithoutIdentityLogsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1595,6 +1630,7 @@ export type UserUncheckedCreateWithoutIdentityLogsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1650,6 +1686,7 @@ export type UserUpdateWithoutIdentityLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1689,6 +1726,7 @@ export type UserUncheckedUpdateWithoutIdentityLogsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1728,6 +1766,7 @@ export type UserCreateWithoutBlockAuditEventsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1767,6 +1806,7 @@ export type UserUncheckedCreateWithoutBlockAuditEventsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1822,6 +1862,7 @@ export type UserUpdateWithoutBlockAuditEventsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1861,6 +1902,7 @@ export type UserUncheckedUpdateWithoutBlockAuditEventsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1900,6 +1942,7 @@ export type UserCreateWithoutFansReceivedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1939,6 +1982,7 @@ export type UserUncheckedCreateWithoutFansReceivedInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -1983,6 +2027,7 @@ export type UserCreateWithoutFansGivenInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2022,6 +2067,7 @@ export type UserUncheckedCreateWithoutFansGivenInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2077,6 +2123,7 @@ export type UserUpdateWithoutFansReceivedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2116,6 +2163,7 @@ export type UserUncheckedUpdateWithoutFansReceivedInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2166,6 +2214,7 @@ export type UserUpdateWithoutFansGivenInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2205,6 +2254,7 @@ export type UserUncheckedUpdateWithoutFansGivenInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2244,6 +2294,7 @@ export type UserCreateWithoutSessionsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2283,6 +2334,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2338,6 +2390,7 @@ export type UserUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2377,6 +2430,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2416,6 +2470,7 @@ export type UserCreateWithoutAccountsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2455,6 +2510,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2510,6 +2566,7 @@ export type UserUpdateWithoutAccountsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2549,6 +2606,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2588,6 +2646,7 @@ export type UserCreateWithoutFanWallMessagesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2627,6 +2686,7 @@ export type UserUncheckedCreateWithoutFanWallMessagesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2682,6 +2742,7 @@ export type UserUpdateWithoutFanWallMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2721,6 +2782,7 @@ export type UserUncheckedUpdateWithoutFanWallMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2760,6 +2822,7 @@ export type UserCreateWithoutPostsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2799,6 +2862,7 @@ export type UserUncheckedCreateWithoutPostsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2854,6 +2918,7 @@ export type UserUpdateWithoutPostsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2893,6 +2958,7 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2932,6 +2998,7 @@ export type UserCreateWithoutPostSharesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -2971,6 +3038,7 @@ export type UserUncheckedCreateWithoutPostSharesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3026,6 +3094,7 @@ export type UserUpdateWithoutPostSharesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3065,6 +3134,7 @@ export type UserUncheckedUpdateWithoutPostSharesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3104,6 +3174,7 @@ export type UserCreateWithoutStripeCustomerInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3143,6 +3214,7 @@ export type UserUncheckedCreateWithoutStripeCustomerInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3198,6 +3270,7 @@ export type UserUpdateWithoutStripeCustomerInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3237,6 +3310,7 @@ export type UserUncheckedUpdateWithoutStripeCustomerInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3276,6 +3350,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3315,6 +3390,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3370,6 +3446,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3409,6 +3486,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3448,6 +3526,7 @@ export type UserCreateWithoutVipGrantsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3487,6 +3566,7 @@ export type UserUncheckedCreateWithoutVipGrantsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3542,6 +3622,7 @@ export type UserUpdateWithoutVipGrantsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3581,6 +3662,7 @@ export type UserUncheckedUpdateWithoutVipGrantsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3620,6 +3702,7 @@ export type UserCreateWithoutVipPriceAuditEventsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3659,6 +3742,7 @@ export type UserUncheckedCreateWithoutVipPriceAuditEventsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3714,6 +3798,7 @@ export type UserUpdateWithoutVipPriceAuditEventsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3753,6 +3838,7 @@ export type UserUncheckedUpdateWithoutVipPriceAuditEventsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3792,6 +3878,7 @@ export type UserCreateWithoutCommentsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3831,6 +3918,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -3886,6 +3974,7 @@ export type UserUpdateWithoutCommentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3925,6 +4014,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3964,6 +4054,7 @@ export type UserCreateWithoutPostLikesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4003,6 +4094,7 @@ export type UserUncheckedCreateWithoutPostLikesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4058,6 +4150,7 @@ export type UserUpdateWithoutPostLikesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4097,6 +4190,7 @@ export type UserUncheckedUpdateWithoutPostLikesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4136,6 +4230,7 @@ export type UserCreateWithoutCommentLikesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4175,6 +4270,7 @@ export type UserUncheckedCreateWithoutCommentLikesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4230,6 +4326,7 @@ export type UserUpdateWithoutCommentLikesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4269,6 +4366,7 @@ export type UserUncheckedUpdateWithoutCommentLikesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4308,6 +4406,7 @@ export type UserCreateWithoutPostPreferencesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4347,6 +4446,7 @@ export type UserUncheckedCreateWithoutPostPreferencesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4402,6 +4502,7 @@ export type UserUpdateWithoutPostPreferencesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4441,6 +4542,7 @@ export type UserUncheckedUpdateWithoutPostPreferencesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4480,6 +4582,7 @@ export type UserCreateWithoutChatThreadsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4519,6 +4622,7 @@ export type UserUncheckedCreateWithoutChatThreadsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4563,6 +4667,7 @@ export type UserCreateWithoutBlockedChatThreadsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4602,6 +4707,7 @@ export type UserUncheckedCreateWithoutBlockedChatThreadsInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4657,6 +4763,7 @@ export type UserUpdateWithoutChatThreadsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4696,6 +4803,7 @@ export type UserUncheckedUpdateWithoutChatThreadsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4746,6 +4854,7 @@ export type UserUpdateWithoutBlockedChatThreadsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4785,6 +4894,7 @@ export type UserUncheckedUpdateWithoutBlockedChatThreadsInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4824,6 +4934,7 @@ export type UserCreateWithoutChatMessagesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4863,6 +4974,7 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   email: string
   emailVerified?: boolean
   image?: string | null
+  preferredLanguage?: string
   role?: string | null
   onlineVisibility?: boolean
   pendingDeletionAt?: Date | string | null
@@ -4918,6 +5030,7 @@ export type UserUpdateWithoutChatMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4957,6 +5070,7 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onlineVisibility?: Prisma.BoolFieldUpdateOperationsInput | boolean
   pendingDeletionAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5216,6 +5330,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  preferredLanguage?: boolean
   role?: boolean
   onlineVisibility?: boolean
   pendingDeletionAt?: boolean
@@ -5257,6 +5372,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  preferredLanguage?: boolean
   role?: boolean
   onlineVisibility?: boolean
   pendingDeletionAt?: boolean
@@ -5274,6 +5390,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  preferredLanguage?: boolean
   role?: boolean
   onlineVisibility?: boolean
   pendingDeletionAt?: boolean
@@ -5291,6 +5408,7 @@ export type UserSelectScalar = {
   email?: boolean
   emailVerified?: boolean
   image?: boolean
+  preferredLanguage?: boolean
   role?: boolean
   onlineVisibility?: boolean
   pendingDeletionAt?: boolean
@@ -5302,7 +5420,7 @@ export type UserSelectScalar = {
   displayUsername?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "role" | "onlineVisibility" | "pendingDeletionAt" | "deleteAfterAt" | "createdAt" | "updatedAt" | "username" | "usernameNormalized" | "displayUsername", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "preferredLanguage" | "role" | "onlineVisibility" | "pendingDeletionAt" | "deleteAfterAt" | "createdAt" | "updatedAt" | "username" | "usernameNormalized" | "displayUsername", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -5365,6 +5483,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     email: string
     emailVerified: boolean
     image: string | null
+    preferredLanguage: string
     role: string | null
     onlineVisibility: boolean
     pendingDeletionAt: Date | null
@@ -5825,6 +5944,7 @@ export interface UserFieldRefs {
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly image: Prisma.FieldRef<"User", 'String'>
+  readonly preferredLanguage: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly onlineVisibility: Prisma.FieldRef<"User", 'Boolean'>
   readonly pendingDeletionAt: Prisma.FieldRef<"User", 'DateTime'>

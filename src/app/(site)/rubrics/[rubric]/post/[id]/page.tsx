@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 import { getPostDetails } from "@/actions/social";
 import { PostModalRoute } from "@/components/social/PostModalRoute";
 import { VipPaywall } from "@/components/social/VipPaywall";
+import { getMessages } from "@/lib/i18n/messages";
+import { getRequestLocale } from "@/lib/i18n/server";
 
-function toDescription(content: string | null | undefined, maxLength = 160) {
+function toDescription(
+  content: string | null | undefined,
+  fallback: string,
+  maxLength = 160,
+) {
   if (!content) {
-    return "Detail příspěvku na Matrix Tricks.";
+    return fallback;
   }
 
   const plainText = content
@@ -19,7 +25,7 @@ function toDescription(content: string | null | undefined, maxLength = 160) {
     .trim();
 
   if (!plainText) {
-    return "Detail příspěvku na Matrix Tricks.";
+    return fallback;
   }
 
   if (plainText.length <= maxLength) {
@@ -36,13 +42,15 @@ export async function generateMetadata({
     | { rubric: string; id: string }
     | Promise<{ rubric: string; id: string }>;
 }): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const { metadata } = getMessages(locale);
   const { rubric, id } = (await params) as { rubric: string; id: string };
   const post = await getPostDetails(id);
 
   if (!post) {
     return {
-      title: "Příspěvek nenalezen",
-      description: "Požadovaný příspěvek nebyl nalezen.",
+      title: metadata.postNotFoundTitle,
+      description: metadata.postNotFoundDescription,
       robots: {
         index: false,
         follow: false,
@@ -51,7 +59,10 @@ export async function generateMetadata({
   }
 
   const canonicalPath = `/rubrics/${rubric}/post/${post.id}`;
-  const description = toDescription(post.content);
+  const description = toDescription(
+    post.content,
+    metadata.postDetailFallbackDescription,
+  );
   const firstImage = post.media.find((item: (typeof post.media)[number]) =>
     item.type.startsWith("image"),
   )?.url;

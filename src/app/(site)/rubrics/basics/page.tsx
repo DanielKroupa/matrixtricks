@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import { getRubricPostsPage } from "@/actions/social";
 import { VideoFeed } from "@/components/social/VideoFeed";
+import { getMessages } from "@/lib/i18n/messages";
+import { getRequestLocale } from "@/lib/i18n/server";
 import { getEffectivePostPreference } from "@/lib/post-preferences";
 
-export const metadata: Metadata = {
-  title: "Basics | Matrix Tricks",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const { metadata } = getMessages(locale);
+
+  return {
+    title: metadata.rubricBasicsTitle,
+  };
+}
 
 export default async function Page() {
   const preference = await getEffectivePostPreference("BASICS");
